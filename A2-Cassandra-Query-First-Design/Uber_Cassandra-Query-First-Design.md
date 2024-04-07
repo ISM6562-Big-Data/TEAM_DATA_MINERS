@@ -12,18 +12,24 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 ### Relational Modelling
 
 ![alt text](images/uber_physical_design.png)
-_Figure 1-2. physical data model for Uber application_
+
+_Figure 1-2. Physical data model for Uber application_
 
 ## Query Analysis
 
 #### Transaction Processing Queries
 
-- Q1 (Passenger checking for Uber) Get all the available cars ( fare and arrival time) for the current location with a given radius grouped by car type with lowest arrival time
-- Q2 (System checking for available cars) get all the cars of a given type within radius of the given location
-- Q3 (System compute dynamic fare) : base fare + compute demand ( ratio of passenger waiting for car / number of available around a given location ) \*
-- Q4 (Drive checking passenger details before accepting ) Get passenger details with given passenger id
-- Q5 (Passenger checking Driver information) get driver details with given driver id
-- Q6 Compute the surge fare
+- Q1: (Passenger checking for Uber) Get all the available cars ( fare and arrival time) for the current location with a given radius grouped by car type with lowest arrival time.
+
+- Q2: (System checking for available cars) get all the cars of a given type within radius of the given location.
+
+- Q3: (System compute dynamic fare) : base fare + compute demand ( ratio of passenger waiting for car / number of available around a given location ).
+
+- Q4: (Drive checking passenger details before accepting ) Get passenger details with given passenger id.
+
+- Q5: (Passenger checking Driver information) get driver details with given driver id.
+
+- Q6: Compute the surge fare.
 
 #### Analytical Queries
 
