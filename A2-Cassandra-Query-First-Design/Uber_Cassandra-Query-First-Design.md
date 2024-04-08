@@ -35,6 +35,8 @@ Below are the use cases /queries team has designed.
 - Q9: View Passenger details.
 - Q10: Compute the surge fare.
 
+![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/3c508cc2-874e-4167-9437-106a32642157)
+
 #### Analytical Queries
 
 - Q7 (Compute Passenger rating) get all the past trips for a given Passenger
