@@ -60,8 +60,9 @@ _Figure 1-3. Uber Ride application queries_
 ## Below work flow diagram shows the worksteps for the applicaiton
 
 ## Cassandra Schema Design
+
 ![alt text](images/uber_cassandradesign.png)
-_Figure 1-1. Entity-relationship diagram for Uber application_
+_Figure 1-1. Cassandra diagram for Uber application_
 
 ## Discussion
 
