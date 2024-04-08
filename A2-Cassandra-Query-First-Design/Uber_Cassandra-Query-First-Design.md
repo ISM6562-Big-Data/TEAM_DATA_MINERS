@@ -12,6 +12,7 @@ The below ER diagram(figure1.1) show the high level design for the Uber passenge
 _Figure 1-1. Entity-relationship diagram for Uber application_
 
 ### Relational Modelling
+The below diagram is built considering the Data driven approach.
 
 ![alt text](images/uber_physical_design.png)
 
