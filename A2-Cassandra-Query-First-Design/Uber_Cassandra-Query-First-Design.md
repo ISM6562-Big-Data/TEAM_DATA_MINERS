@@ -24,16 +24,12 @@ Below are the use cases /queries team has designed.
 
 #### Transaction Processing Queries
 
-- Q1: Find nearby cars based on the passenger desitination 
-
-- Q2: Present all the avaialable cars to the passenger with price and avaialbility time.
-
-- Q3: (System compute dynamic fare) : base fare + compute demand ( ratio of passenger waiting for car / number of available around a given location ).
-
-- Q4: (Drive checking passenger details before accepting ) Get passenger details with given passenger id.
-
+- Q1: Load customer profile and allow user to select business or personal accounts.
+- Q2:  Find nearby cars based on the passenger desitination 
+- Q3: Present all the avaialable options to the passenger with price (econnomy options, example : Uber X Share)
+- Q4: Present all the avaialable cars to the passenger with price and avaialbility time.
+- Q5: (Drive checking passenger details before accepting ) Get passenger details with given passenger id.
 - Q5: (Passenger checking Driver information) get driver details with given driver id.
-
 - Q6: Compute the surge fare.
 
 #### Analytical Queries
