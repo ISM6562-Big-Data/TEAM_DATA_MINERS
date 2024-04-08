@@ -19,12 +19,14 @@ The below diagram is built considering the Data driven approach.
 _Figure 1-2. Physical data model for Uber application_
 
 ## Query Analysis
+Considering the query first approach team reviewed the fuctions and features of the Uber ride app and the flows. 
+Below are the use cases /queries team has designed. 
 
 #### Transaction Processing Queries
 
-- Q1: (Passenger checking for Uber) Get all the available cars ( fare and arrival time) for the current location with a given radius grouped by car type with lowest arrival time.
+- Q1: Find nearby cars based on the passenger desitination 
 
-- Q2: (System checking for available cars) get all the cars of a given type within radius of the given location.
+- Q2: Present all the avaialable cars to the passenger with price and avaialbility time.
 
 - Q3: (System compute dynamic fare) : base fare + compute demand ( ratio of passenger waiting for car / number of available around a given location ).
 
