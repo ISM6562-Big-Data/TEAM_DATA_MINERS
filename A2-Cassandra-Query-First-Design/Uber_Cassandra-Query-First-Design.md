@@ -5,7 +5,7 @@ In this group project team is analysing the Uber cusomter application and all th
 In the next sections of this document detailed step by step processes and steps  followed are explained.
 
 ## RDBMS Schema Analysis
-The below ER diagrams(figure1.1) show the high level design for the Uber passenger ride app, using which the Relationational modeling with the tables and the columns are built and presented in Relational Modelling section (figure 1.2).
+The below ER diagram(figure1.1) show the high level design for the Uber passenger ride app, using which the Relationational modeling with the tables and the columns are built and presented in Relational Modelling section (figure 1.2).
 ### Entity Relation
 
 ![alt text](images/uber_er.png)
