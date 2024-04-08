@@ -36,6 +36,7 @@ Below are the use cases /queries team has designed.
 - Q10: Compute the surge fare.
 
 ![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/3c508cc2-874e-4167-9437-106a32642157)
+
 _Figure 1-3. Uber Ride application queries_
 
 #### Analytical Queries
