@@ -25,7 +25,7 @@ Below are the use cases /queries team has designed.
 #### Transaction Processing Queries
 
 - Q1: Load customer profile and allow user to select business or personal accounts.
-- Q2: Find nearby cars based on the passenger desitination.
+- Q2: Find nearby cars based on the passenger Destination.
 - Q3: Show all the recommendation with avaialable options to the passenger with price (econnomy options, example : Uber X Share).
 - Q4: SShow  all the available cars with Affordable price/ pet friendly/New Cars/Extra leg room.
 - Q5: Show all the avaialable cars to the passenger with based on pick uptime.
@@ -33,7 +33,7 @@ Below are the use cases /queries team has designed.
 - Q7: Find confirmaiton by passsenger.
 - Q8: (Passenger checking Driver information) get driver details with given driver id.
 - Q9: View Passenger details.
-- Q10: Compute the surge fare.
+- Q10: Compute the surge fare based on factors time of day, demand etc.
 
 ![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/3c508cc2-874e-4167-9437-106a32642157)
 
@@ -60,12 +60,8 @@ _Figure 1-3. Uber Ride application queries_
 ## Below work flow diagram shows the worksteps for the applicaiton
 
 ## Cassandra Schema Design
-
-Sample Query
-
-```sql
-SELECT * FROM system_schema.keyspaces;
-```
+![alt text](images/uber_cassandradesign.png)
+_Figure 1-1. Entity-relationship diagram for Uber application_
 
 ## Discussion
 
