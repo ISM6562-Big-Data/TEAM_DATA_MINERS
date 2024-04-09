@@ -26,9 +26,9 @@ Below are the use cases /queries team has designed.
 
 - Q1: Load customer profile and allow user to select business or personal accounts.
 - Q2: Find nearby cars based on the passenger destination & Pick up location.
-- Q3: Show all the recommendation with available options to the passenger with price (econnomy options, example : Uber X Share).
-- Q4: Show  all the available cars with Affordable price/ Pet friendly/New Cars/Extra leg room.
-- Q5: Show all the avaialable cars to the passenger with based on pick uptime.
+-- Q3: Show all the recommendation with available options to the passenger with price (econnomy options, example : Uber X Share).
+-- Q4: Show  all the available cars with Affordable price/ Pet friendly/New Cars/Extra leg room.
+-- Q5: Show all the avaialable cars to the passenger with based on pick uptime.
 - Q6: View reservation by Confirmation number.
 - Q7: Find confirmaiton by passsenger.
 - Q8: (Passenger checking Driver information) get driver details with given driver id.
