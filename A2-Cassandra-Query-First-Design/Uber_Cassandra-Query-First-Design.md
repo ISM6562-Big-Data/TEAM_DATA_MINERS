@@ -47,7 +47,7 @@ _Figure 1-3. Uber Ride application queries_
 ## Cassandra Schema Design
 
 ![alt text](images/uber_cassandradesign.png)
-_Figure 1-1. Cassandra diagram_
+_Figure 1-3. Cassandra Logical Datamodel_
 
 ## Discussion
 
