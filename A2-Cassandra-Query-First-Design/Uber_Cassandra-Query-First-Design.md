@@ -25,25 +25,21 @@ Below are the use cases /queries team has designed.
 #### Transaction Processing Queries
 
 - Q1: Load customer profile and allow user to select business or personal accounts.
-- Q2: Find nearby cars based on the passenger destination & Pick up location.
--- Q3: Show all the recommendation with available options to the passenger with price (econnomy options, example : Uber X Share).
--- Q4: Show  all the available cars with Affordable price/ Pet friendly/New Cars/Extra leg room.
--- Q5: Show all the avaialable cars to the passenger with based on pick uptime.
-- Q6: View reservation by Confirmation number.
-- Q7: Find confirmaiton by passsenger.
-- Q8: (Passenger checking Driver information) get driver details with given driver id.
-- Q9: View Passenger details.
-- Q10: Compute the surge fare based on factors time of day, demand etc.
-
+- Q2: Find nearby cars based on the passenger destination & Pick up location(x miles).
+- Q3: Get Trip Details based on the Trip ID(How far is the driver, Confirmation number, Driver Name & Rating, Type of car, Drop off time,Fare)
+- Q4: (Passenger checking Driver information) get driver details with given driver id(Rating, miles driven)
+- Q5: Get Passenger details (Passenger ID, his rating).
+- Q6: Compute the surge fare based on factors demand.
+- Q7: How many miles 
+  
 ![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/3c508cc2-874e-4167-9437-106a32642157)
 
 _Figure 1-3. Uber Ride application queries_
 
 #### Analytical Queries
 
-- Q7 (Compute Passenger rating) get all the past trips for a given Passenger
-- Q8 (Compute Driver rating) get all the past trips for a given Driver
-  (Drive view, trip history ): get all the trips for a given Driver for a given day
+- Q7 (Compute Passenger rating) get all the past trips for a given Passenger 
+-
 - Q9 (Drive view, revenue): get total sum of revenue of given day
   (Company view, revenue): get total sum of revenue of given day, time slot, area
 
