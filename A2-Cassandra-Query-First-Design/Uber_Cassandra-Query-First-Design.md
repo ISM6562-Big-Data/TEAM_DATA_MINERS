@@ -136,7 +136,7 @@ WHERE trip_id = ?;
 ![alt text](images/Cassandra_RL.png)
 _Figure 1-3. Cassandra Logical Datamodel_
 
-## III Query Analysis: B) CQL Queries to Address the questions
+## Query Analysis: B) CQL Queries to Address the questions
 
 -- Q1: Load customer profile for a given user_id
 ```
