@@ -14,7 +14,7 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 ### Relational Modelling
 The below diagram is built considering the Data driven approach.
 
-![alt text](images/uber_physical_design.png)
+![alt text](images/Uber Logical Design.png)
 
 _Figure 1-2. Physical data model for Uber application_
 
@@ -36,7 +36,7 @@ Below are the use cases /queries team has designed.
 - Q10: Calculate Fare (based on wait time, diversion, stops)
 
   
-##![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
+![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
 
 
 _Figure 1-3. Uber Ride application queries_
