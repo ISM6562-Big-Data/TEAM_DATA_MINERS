@@ -8,7 +8,7 @@ In the next sections of this document detailed step by step processes and steps 
 The below ER diagram(figure1.1) show the high level design for the Uber passenger ride app, using which the Relationational modeling with the tables and the columns are built and presented in Relational Modelling section (figure 1.2).
 ### Entity Relation
 
-![alt text](images/Uber Logical Design.png)
+![alt text](images/Uber%20Logical%20Design.png)
 _Figure 1-1. Entity-relationship diagram for Uber application_
 
 ### Relational Modelling
