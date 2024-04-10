@@ -144,15 +144,17 @@ WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
       AND pick_location_long BETWEEN pax_long - Range AND pax_long + Range
 GROUP BY destination_address
 ORDER BY total_pickups DESC
-LIMIT 4;
+LIMIT 3;
 
 -- Q9: Identify the most common destination locations
 ```
-SELECT city, province, COUNT(*) AS total_destinations
-FROM destination_locations_analytics
-GROUP BY city, province
-ORDER BY total_destinations DESC
-LIMIT 1;
+SELECT destination_address, COUNT(*) AS total_pickups
+FROM pickup_locations_analytics
+WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
+      AND pick_location_long BETWEEN pax_long - Range AND pax_long + Range
+GROUP BY destination_address
+ORDER BY total_pickups DESC
+LIMIT 3;
 
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
