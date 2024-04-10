@@ -55,7 +55,7 @@ Below are the use cases /queries team has designed.
 
 #### Transaction Processing Queries
 
-- Q1: Load customer profile and allow user to select business or personal accounts.
+- Q1: Load customer profile and allow user.
 - Q2: Find nearby cars based on the passenger destination & Pick up location(x miles).
 - Q3: Get Trip Details based on the Trip ID (How far is the driver, Confirmation number, Driver Name & Rating, Type of car, Drop off time,Fare)
 - Q4: (Passenger checking Driver information) get driver details with given driver id(Rating, miles driven)
@@ -79,12 +79,11 @@ _Figure 1-3. Uber Ride application queries_
 
 -- Q1: Load customer profile for a given user_id
 ```
-SELECT first_name, last_name, email, mobile_number, account_type
-FROM user_profiles
+SELECT * FROM user_profiles
 WHERE user_id = 111222333;
 
 -- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
-```
+
 DELIMITER $$
 ```
 CREATE PROCEDURE nearbycars(
