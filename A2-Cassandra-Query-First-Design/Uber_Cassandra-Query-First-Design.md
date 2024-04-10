@@ -68,14 +68,20 @@ CREATE PROCEDURE nearbycars(
     IN pax_long DECIMAL(10,2)
 )
 BEGIN
-    SELECT car_id, driver_id
+    SELECT car_id, driver_id,
+           SQRT(
+               POW(location_lat - pax_lat, 2) +
+               POW(location_lon - pax_long, 2)
+           ) AS distance_to_pax
     FROM nearby_cars
     WHERE location_lat BETWEEN pax_lat - Range AND pax_lat + Range
       AND location_lon BETWEEN pax_long - Range AND pax_long + Range
-      AND is_available = TRUE;
+      AND is_available = TRUE
+    ORDER BY distance_to_pax ASC;
 END$$
 
 DELIMITER ;
+
 
 
 -- Q3: Get Trip Details for a given trip_id
