@@ -122,10 +122,10 @@ LIMIT 1;
 SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
 FROM fare_estimate
 WHERE trip_id = ?;
-
+```
 __
 
-#CQL Queries to Address the questions#
+## CQL Queries to Address the questions
 
 -- Q1: Load customer profile for a given user_id
 ```
