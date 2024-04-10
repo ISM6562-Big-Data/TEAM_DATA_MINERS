@@ -164,7 +164,7 @@ WHERE trip_id = ?;
 
 ## Cassandra Schema Design
 
-![alt text](images/Cassandra_RL.png)
+![alt text](images/uber_cassandradesign.png)
 _Figure 1-3. Cassandra Logical Datamodel_
 
 ## Query Analysis: B) CQL Queries to Address the questions
