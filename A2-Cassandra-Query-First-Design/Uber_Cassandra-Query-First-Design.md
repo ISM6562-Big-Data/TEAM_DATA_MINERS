@@ -18,7 +18,7 @@ The below diagram is built considering the Data driven approach.
 
 _Figure 1-2. Physical data model for Uber application_
 
-## Query Analysis
+## Section: III Query Analysis
 Considering the query first approach team reviewed the fuctions and features of the Uber ride app and the flows. 
 Below are the use cases /queries team has designed. 
 
@@ -35,18 +35,16 @@ Below are the use cases /queries team has designed.
 - Q9: What are the most common destination locations across all trips?
 - Q10: Calculate Fare (based on wait time, diversion, stops)
 
-  
+ ## Below is the work-flow diagram shows the work steps for the application
+ 
 ![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
 
 
 _Figure 1-3. Uber Ride application queries_
 
 
-## Below is the work-flow diagram shows the work steps for the application
 
-
-
-## III Query Analysis: A) SQL Queries to Address the Questions
+## A) SQL Queries to Address the Questions
 
 -- Q1: Load customer profile for a given user_id
 ```
