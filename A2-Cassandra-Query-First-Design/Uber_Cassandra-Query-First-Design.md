@@ -83,7 +83,7 @@ SELECT * FROM user_profiles
 WHERE user_id = 111222333;
 
 -- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
-
+```
 DELIMITER $$
 ```
 CREATE PROCEDURE nearbycars(
@@ -107,44 +107,44 @@ END$$
 DELIMITER ;
 
 
-
 -- Q3: Get Trip Details for a given trip_id
 ```
 SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare, driver_first_name, driver_last_name, driver_overall_rating
 FROM trip_details
-WHERE trip_id = 12233344455555;
+WHERE trip_id = 12233344455555;-- trip_id would come from App
 
 -- Q4: Get driver details for a given driver_id
 ```
 SELECT first_name, last_name, overall_rating, miles_driven
 FROM driver_information
-WHERE driver_id = ?;
+WHERE driver_id = 1212; -- driver_id would come from App
 
 -- Q5: Get Passenger details for a given user_id
 ```
 SELECT first_name, last_name, overall_rating, mobile_number, email
 FROM passenger_details
-WHERE user_id = ?;
+WHERE user_id = 1111; -- driver_id would come from App
 
 -- Q6: Compute the surge fare based on demand level
 ```
-SELECT multiplier
-FROM surge_pricing
-WHERE demand_level = ?;
+SELECT multiplier FROM surge_pricing
+WHERE demand_level = 'high'; -- demand_level would come from App
 
 -- Q7: Calculate Total Earnings for a driver within a date range
 ```
 SELECT SUM(fare + tips) AS total_earnings
 FROM driver_earnings
-WHERE driver_id = ? AND start_datetime BETWEEN ? AND ?;
+WHERE driver_id = 1122 AND start_datetime BETWEEN 0000 AND 2400; -- driver_id  would come from App
 
 -- Q8: Identify the most common pickup locations
 ```
-SELECT city, province, COUNT(*) AS total_pickups
+SELECT destination_address, COUNT(*) AS total_pickups
 FROM pickup_locations_analytics
-GROUP BY city, province
+WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
+      AND pick_location_long BETWEEN pax_long - Range AND pax_long + Range
+GROUP BY destination_address
 ORDER BY total_pickups DESC
-LIMIT 1;
+LIMIT 4;
 
 -- Q9: Identify the most common destination locations
 ```
