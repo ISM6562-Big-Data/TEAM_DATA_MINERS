@@ -62,20 +62,16 @@ WHERE user_id = 111222333;
 ```
 DELIMITER $$
 ```
-DELIMITER $$
-
-CREATE PROCEDURE nearbycars(Range DECIMAL(10,2))
+CREATE PROCEDURE nearbycars(
+    IN Range DECIMAL(10,2),
+    IN target_lat DECIMAL(10,2),
+    IN target_lon DECIMAL(10,2)
+)
 BEGIN
-    DECLARE target_lat DECIMAL(10,2);
-    DECLARE target_lon DECIMAL(10,2);
-    
-    SET pax_lat = 100; -- Example passenger latitude that would come from APP
-    SET pax_long = 200; -- Example passenger longitude that would come from APP
-
     SELECT car_id, driver_id
     FROM nearby_cars
-    WHERE location_lat BETWEEN pax_lat - Range AND pax_lat + Range
-      AND location_lon BETWEEN pax_long - Range AND pax_long + Range
+    WHERE location_lat BETWEEN target_lat - Range AND target_lat + Range
+      AND location_lon BETWEEN target_lon - Range AND target_lon + Range
       AND is_available = TRUE;
 END$$
 
