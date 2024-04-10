@@ -60,9 +60,17 @@ WHERE user_id = 111222333;
 
 -- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
 ```
-SELECT car_id, driver_id
-FROM nearby_cars
-WHERE location_lat = ? AND location_lon = ? AND is_available = true;
+DELIMITER $$
+
+CREATE PROCEDURE nearbycars()
+BEGIN
+    SELECT car_id, driver_id
+    FROM nearby_cars
+    WHERE location_lat = 100 AND location_lon = 200 AND is_available = TRUE;
+END$$
+
+DELIMITER ;
+
 
 -- Q3: Get Trip Details for a given trip_id
 ```
