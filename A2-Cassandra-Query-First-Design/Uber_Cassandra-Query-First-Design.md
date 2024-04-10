@@ -88,7 +88,7 @@ DELIMITER ;
 ```
 SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare, driver_first_name, driver_last_name, driver_overall_rating
 FROM trip_details
-WHERE trip_id = ?;
+WHERE trip_id = 12233344455555;
 
 -- Q4: Get driver details for a given driver_id
 ```
