@@ -61,6 +61,7 @@ WHERE user_id = 111222333;
 -- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
 ```
 DELIMITER $$
+```
 CREATE PROCEDURE nearbycars()
 BEGIN
     SELECT car_id, driver_id
