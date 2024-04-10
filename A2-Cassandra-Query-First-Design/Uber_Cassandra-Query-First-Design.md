@@ -30,17 +30,17 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **The ER diagram depicts various entities and their relationships:**
 
-**Passenger**: Contains details about the passengers including UserID, Name, Gender, and Overall Rating.
+- **Passenger Table**: Contains details about the passengers including UserID, Name, Gender, and Overall Rating.
 
-**Driver**: Stores information about the drivers, such as DriverID, Name, Gender, and Overall Rating.
+- **Driver Table**: Stores information about the drivers, such as DriverID, Name, Gender, and Overall Rating.
 
-**Car**: Holds data on the cars, including a unique CarID, CAR VIN number, Plate Number, and a foreign key to DriverID.
+- **Car Table**: Holds data on the cars, including a unique CarID, CAR VIN number, Plate Number, and a foreign key to DriverID.
 
-**Car Location**: Tracks the current locations of cars, referenced by CarID, CAR VIN number, Plate Number, and DriverID.
+- **Car Location Table**: Tracks the current locations of cars, referenced by CarID, CAR VIN number, Plate Number, and DriverID.
 
-**Request**: Represents ride requests made by passengers, detailing the RequestID, number of seats requested, ride type, pickup and drop locations, and estimated fare.
+- **Request Table**: Represents ride requests made by passengers, detailing the RequestID, number of seats requested, ride type, pickup and drop locations, and estimated fare.
 
-**Trip**: Records details of trips, including TripID, Start Time, Duration, Fare, and Driver Rating, along with foreign keys to DriverID and RequestID.
+- **Trip Table**: Records details of trips, including TripID, Start Time, Duration, Fare, and Driver Rating, along with foreign keys to DriverID and RequestID.
 
 ### Relational Modelling
 The below diagram is built considering the Data driven approach.
