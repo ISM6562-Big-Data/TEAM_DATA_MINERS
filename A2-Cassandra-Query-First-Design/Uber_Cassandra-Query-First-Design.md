@@ -36,7 +36,7 @@ Below are the use cases /queries team has designed.
 - Q10: Calculate Fare (based on wait time, diversion, stops)
 
   
-![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
+##![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
 
 
 _Figure 1-3. Uber Ride application queries_
