@@ -44,10 +44,6 @@ _Figure 1-3. Uber Ride application queries_
 
 ## Below is the work-flow diagram shows the work steps for the application
 
-## Cassandra Schema Design
-
-![alt text](images/Cassandra_RL.png)
-_Figure 1-3. Cassandra Logical Datamodel_
 
 
 ## III Query Analysis: A) SQL Queries to Address the Questions
@@ -136,6 +132,11 @@ SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distan
 FROM fare_estimate
 WHERE trip_id = ?;
 ```
+
+## Cassandra Schema Design
+
+![alt text](images/Cassandra_RL.png)
+_Figure 1-3. Cassandra Logical Datamodel_
 
 ## III Query Analysis: B) CQL Queries to Address the questions
 
