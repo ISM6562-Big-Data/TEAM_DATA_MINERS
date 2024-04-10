@@ -42,7 +42,7 @@ Below are the use cases /queries team has designed.
 _Figure 1-3. Uber Ride application queries_
 
 
-## Below work flow diagram shows the worksteps for the applicaiton
+## Below is the work-flow diagram shows the work steps for the application
 
 ## Cassandra Schema Design
 
@@ -50,7 +50,7 @@ _Figure 1-3. Uber Ride application queries_
 _Figure 1-3. Cassandra Logical Datamodel_
 
 
-## SQL Queries to Address the questions
+## III Query Analysis: A) SQL Queries to Address the Questions
 
 -- Q1: Load customer profile for a given user_id
 ```
@@ -137,7 +137,7 @@ FROM fare_estimate
 WHERE trip_id = ?;
 ```
 
-## CQL Queries to Address the questions
+## III Query Analysis: B) CQL Queries to Address the questions
 
 -- Q1: Load customer profile for a given user_id
 ```
