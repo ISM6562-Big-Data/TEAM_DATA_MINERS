@@ -51,8 +51,9 @@ _Figure 1-3. Cassandra Logical Datamodel_
 
 
 ## SQL Queries to Address the questions
+
 -- Q1: Load customer profile for a given user_id
--- SELECT first_name, last_name, email, mobile_number, account_type
+```SELECT first_name, last_name, email, mobile_number, account_type
 FROM user_profiles
 WHERE user_id = ?;
 
