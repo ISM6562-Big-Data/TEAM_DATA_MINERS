@@ -123,6 +123,91 @@ SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distan
 FROM fare_estimate
 WHERE trip_id = ?;
 
+## CQL Queries to Address the questions
+-- Q1: Load customer profile for a given user_id
+```
+SELECT first_name, last_name, email, mobile_number, account_type
+FROM user_profiles
+WHERE user_id = 111222333
+
+-- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
+```
+SELECT car_id, driver_id FROM nearby_cars
+WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTERING;
+
+-- Q3: Get Trip Details for a given trip_id
+```
+SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare
+FROM trip_details
+WHERE trip_id = ?;
+
+-- Q4: Get driver details for a given driver_id
+```
+SELECT first_name, last_name, overall_rating, miles_driven
+FROM driver_information
+WHERE driver_id = ?;
+
+-- Q5: Get Passenger details for a given user_id
+```
+SELECT first_name, last_name, overall_rating, mobile_number, email
+FROM passenger_details
+WHERE user_id = ?;
+
+-- Q6: Compute the surge fare based on demand level
+```
+SELECT surge_factor AS multiplier
+FROM surge_pricing
+WHERE location_lat = ? AND location_lon = ? AND demand_level = ? ALLOW FILTERING;
+
+-- Q7: Calculate Total Earnings for a driver within a date range
+```
+In SQL, we can add up all the earnings for a driver over a specific period using the SUM() function. 
+In Cassandra, it does not allow you to sum across multiple rows from different partitions by default. This is because such an operation could potentially involve gathering data from many different nodes in the cluster, which would be very slow and inefficient.
+Instead, we will have to handle this by either:
+•	When we insert earnings data, we could also update a separate record (Example: Total) that keeps a running total of the earnings for each driver for the date range in question. Something like 
+•	I am assuming we will have a table structure to hold monthly or daily totals, we can query directly for the total earnings in a specific period.
+
+SELECT total_earnings 
+FROM driver_monthly_earnings 
+WHERE driver_id = ? AND year_month = '2024-04';
+
+-- Q8: Identify the most common pickup locations
+```
+In SQL, To find the most common pickup locations we can use a GROUP BY statement along with COUNT () and ORDER BY to group records by location and count them.
+In Cassandra, GROUP BY clause is available but it’s has limited functionality.
+Instead
+•	We could maintain a counter for each location that increments every time a pickup is made. Then we can easily query to find the highest counters, make sense?
+CREATE TABLE pickup_location_counters (
+    city TEXT,
+    province TEXT,
+    pickups counter,
+    PRIMARY KEY (city, province)
+);
+UPDATE pickup_location_counters 
+SET pickups = pickups + 1 
+WHERE city = 'CityName' AND province = 'ProvinceName';
+
+-- Q9: Identify the most common destination locations
+```
+Same as in Q8, identifying the most common destination locations would require aggregation over multiple records to count occurrences.
+Instead
+•	Maintain counters: A counter table to keep track of the number of times a destination is used.
+CREATE TABLE destination_location_counters (
+    city TEXT,
+    province TEXT,
+    dropoffs counter,
+    PRIMARY KEY (city, province)
+);
+UPDATE destination_location_counters 
+SET dropoffs = dropoffs + 1 
+WHERE city = 'CityName' AND province = 'ProvinceName';
+
+-- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
+```
+SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
+FROM fare_details
+WHERE trip_id = ?;
+
 ## Discussion
 
 ## Conclusion
