@@ -123,7 +123,6 @@ SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distan
 FROM fare_estimate
 WHERE trip_id = ?;
 ```
-__
 
 ## CQL Queries to Address the questions
 
