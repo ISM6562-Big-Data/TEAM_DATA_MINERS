@@ -175,8 +175,9 @@ SELECT first_name, last_name, email, mobile_number, account_type
 FROM user_profiles
 WHERE user_id = 111222333
 
--- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
-```
+
+Q2: Find nearby cars based on location(requires a function or stored procedure to calculate distance)
+
 SELECT car_id, driver_id FROM nearby_cars
 WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTERING;
 
