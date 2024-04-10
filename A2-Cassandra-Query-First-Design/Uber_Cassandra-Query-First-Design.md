@@ -1,7 +1,7 @@
 # UBER : Cassandra Query First Design
 
 ## Section: I Introduction
-**Problem Statement**: In the context of Big Data, traditional relational databases face scalability and performance constraints. Uber's Ride Sharing application requires a database solution that overcomes these limitations. Therefore, to overcome the limitations of SQL databases in handling big data, this project focuses on a schema design using a NoSQL database called Cassandra. 
+**Problem Statement**: In the context of Big Data, traditional relational databases face scalability and performance constraints. Uber's Ride Sharing application requires a database solution that overcomes these limitations. Therefore, to overcome the limitations of SQL databases in handling Big Data, this project focuses on a schema design using a NoSQL database called Cassandra. 
 
 **Objectives:**
 The objectives of this project are the following: 
@@ -15,14 +15,14 @@ The following approach is adopted to reach the project objectives:
 - Identify and prioritize queries essential for ride-sharing functionality.
 - Design the Cassandra schema to efficiently address these queries.
 
-**Anticipated Outcomes:**
-
-A Cassandra schema that leverages fault tolerance, decentralization, and horizontal scaling.
-Insight into the challenges and trade-offs during the translation process from RDBMS to NoSQL.
-A final database design that showcases enhanced performance and scalability suitable for high-volume applications like Uber's Ride Sharing service.
+**Outcomes:**
+The following results and outcomes were obtained as a part of the Big Data Analysis:
+- Develop a Cassandra schema that leverages fault tolerance, decentralization, and horizontal scaling.
+- Insight into the challenges and trade-offs during the translation process from RDBMS to NoSQL.
+- A final database design that showcases enhanced performance and scalability suitable for high-volume applications like Uber's Ride Sharing service.
 
 ## Section: II RDBMS Schema Analysis
-The below ER diagram(figure1.1) show the high level design for the Uber passenger ride app, using which the Relationational modeling with the tables and the columns are built and presented in Relational Modelling section (figure 1.2).
+The below ER diagram(figure1.1) shows the high-level design for the Uber passenger ride app, using which the Relationational modeling with the tables and the columns are built and presented in the Relational Modelling section (figure 1.2).
 ### Entity Relation
 
 ![alt text](images/Uber%20Logical%20Design.png)
