@@ -64,14 +64,14 @@ DELIMITER $$
 ```
 CREATE PROCEDURE nearbycars(
     IN Range DECIMAL(10,2),
-    IN target_lat DECIMAL(10,2),
-    IN target_lon DECIMAL(10,2)
+    IN pax_lat DECIMAL(10,2),
+    IN pax_long DECIMAL(10,2)
 )
 BEGIN
     SELECT car_id, driver_id
     FROM nearby_cars
-    WHERE location_lat BETWEEN target_lat - Range AND target_lat + Range
-      AND location_lon BETWEEN target_lon - Range AND target_lon + Range
+    WHERE location_lat BETWEEN pax_lat - Range AND pax_lat + Range
+      AND location_lon BETWEEN pax_long - Range AND pax_long + Range
       AND is_available = TRUE;
 END$$
 
