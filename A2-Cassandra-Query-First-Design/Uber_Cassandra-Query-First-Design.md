@@ -1,19 +1,19 @@
 # UBER : Cassandra Query First Design
 
 ## Section: I Introduction
-**Problem Statement**: In the context of Big Data, traditional relational databases face scalability and performance constraints. Uber's Ride Sharing application requires a database solution that overcomes these limitations.
+**Problem Statement**: In the context of Big Data, traditional relational databases face scalability and performance constraints. Uber's Ride Sharing application requires a database solution that overcomes these limitations. Therefore, to overcome the limitations of SQL databases in handling big data, this project focuses on a schema design using a NoSQL database called Cassandra. 
 
 **Objectives:**
-
-Construct a Physical Relational Data Model from a public domain ER diagram.
-Align database design with the "Query First" approach, focusing on application functionality.
-Translate the RDBMS schema into a NoSQL Cassandra database model.
+The objectives of this project are the following: 
+- Construct a Physical Relational Data Model from a public domain ER diagram.
+- Align database design with the "Query First" approach, focusing on application functionality.
+- Translate the RDBMS schema into a NoSQL Cassandra database model.
 
 **Approach:**
-
-Analyze the existing RDBMS schema derived from the ER diagram.
-Identify and prioritize queries essential for ride-sharing functionality.
-Design the Cassandra schema to efficiently address these queries.
+The following approach is adopted to reach the project objectives:
+- Analyze the existing RDBMS schema derived from the ER diagram.
+- Identify and prioritize queries essential for ride-sharing functionality.
+- Design the Cassandra schema to efficiently address these queries.
 
 **Anticipated Outcomes:**
 
