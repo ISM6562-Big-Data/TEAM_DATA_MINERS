@@ -49,6 +49,62 @@ _Figure 1-3. Uber Ride application queries_
 ![alt text](images/Cassandra_RL.png)
 _Figure 1-3. Cassandra Logical Datamodel_
 
+
+## SQL Queries to Address the questions
+-- Q1: Load customer profile for a given user_id
+SELECT first_name, last_name, email, mobile_number, account_type
+FROM user_profiles
+WHERE user_id = ?;
+
+-- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
+SELECT car_id, driver_id
+FROM nearby_cars
+WHERE location_lat = ? AND location_lon = ? AND is_available = true;
+
+-- Q3: Get Trip Details for a given trip_id
+SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare, driver_first_name, driver_last_name, driver_overall_rating
+FROM trip_details
+WHERE trip_id = ?;
+
+-- Q4: Get driver details for a given driver_id
+SELECT first_name, last_name, overall_rating, miles_driven
+FROM driver_information
+WHERE driver_id = ?;
+
+-- Q5: Get Passenger details for a given user_id
+SELECT first_name, last_name, overall_rating, mobile_number, email
+FROM passenger_details
+WHERE user_id = ?;
+
+-- Q6: Compute the surge fare based on demand level
+SELECT multiplier
+FROM surge_pricing
+WHERE demand_level = ?;
+
+-- Q7: Calculate Total Earnings for a driver within a date range
+SELECT SUM(fare + tips) AS total_earnings
+FROM driver_earnings
+WHERE driver_id = ? AND start_datetime BETWEEN ? AND ?;
+
+-- Q8: Identify the most common pickup locations
+SELECT city, province, COUNT(*) AS total_pickups
+FROM pickup_locations_analytics
+GROUP BY city, province
+ORDER BY total_pickups DESC
+LIMIT 1;
+
+-- Q9: Identify the most common destination locations
+SELECT city, province, COUNT(*) AS total_destinations
+FROM destination_locations_analytics
+GROUP BY city, province
+ORDER BY total_destinations DESC
+LIMIT 1;
+
+-- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
+SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
+FROM fare_estimate
+WHERE trip_id = ?;
+
 ## Discussion
 
 ## Conclusion
