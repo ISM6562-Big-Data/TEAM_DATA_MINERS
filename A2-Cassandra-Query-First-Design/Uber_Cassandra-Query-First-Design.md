@@ -75,17 +75,17 @@ _Figure 1-3. Uber Ride application queries_
 
 
 
-## A) SQL Queries to Address the Questions
+## Query Analysis: A) SQL Queries to Address the Questions
 
 -- Q1: Load customer profile for a given user_id
 ```
 SELECT * FROM user_profiles
 WHERE user_id = 111222333;
-
+```
 -- Q2: Find nearby cars based on location (requires a function or stored procedure to calculate distance)
 ```
 DELIMITER $$
-```
+
 CREATE PROCEDURE nearbycars(
     IN Range DECIMAL(10,2),
     IN pax_lat DECIMAL(10,2),
@@ -94,8 +94,8 @@ CREATE PROCEDURE nearbycars(
 BEGIN
     SELECT car_id, driver_id,
            SQRT(
-               POW(location_lat - pax_lat, 2) +
-               POW(location_lon - pax_long, 2)
+               POW(driver_location_lat - pax_lat, 2) +
+               POW(driver_location_long - pax_long, 2)
            ) AS distance_to_pax
     FROM nearby_cars
     WHERE location_lat BETWEEN pax_lat - Range AND pax_lat + Range
@@ -106,36 +106,36 @@ END$$
 
 DELIMITER ;
 
-
+```
 -- Q3: Get Trip Details for a given trip_id
 ```
 SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare, driver_first_name, driver_last_name, driver_overall_rating
 FROM trip_details
 WHERE trip_id = 12233344455555;-- trip_id would come from App
-
+```
 -- Q4: Get driver details for a given driver_id
 ```
 SELECT first_name, last_name, overall_rating, miles_driven
 FROM driver_information
 WHERE driver_id = 1212; -- driver_id would come from App
-
+```
 -- Q5: Get Passenger details for a given user_id
 ```
 SELECT first_name, last_name, overall_rating, mobile_number, email
 FROM passenger_details
 WHERE user_id = 1111; -- driver_id would come from App
-
+```
 -- Q6: Compute the surge fare based on demand level
 ```
 SELECT multiplier FROM surge_pricing
 WHERE demand_level = 'high'; -- demand_level would come from App
-
+```
 -- Q7: Calculate Total Earnings for a driver within a date range
 ```
 SELECT SUM(fare + tips) AS total_earnings
 FROM driver_earnings
 WHERE driver_id = 1122 AND start_datetime BETWEEN 0000 AND 2400; -- driver_id  would come from App
-
+```
 -- Q8: Identify the most common pickup locations
 ```
 SELECT destination_address, COUNT(*) AS total_pickups
@@ -145,7 +145,7 @@ WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
 GROUP BY destination_address
 ORDER BY total_pickups DESC
 LIMIT 3;
-
+```
 -- Q9: Identify the most common destination locations
 ```
 SELECT destination_address, COUNT(*) AS total_pickups
@@ -155,7 +155,7 @@ WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
 GROUP BY destination_address
 ORDER BY total_pickups DESC
 LIMIT 3;
-
+```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
 SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
@@ -170,42 +170,45 @@ _Figure 1-3. Cassandra Logical Datamodel_
 
 ## Query Analysis: B) CQL Queries to Address the questions
 
+
 -- Q1: Load customer profile for a given user_id
 ```
 SELECT first_name, last_name, email, mobile_number, account_type
 FROM user_profiles
 WHERE user_id = 111222333
 
-
+```
 Q2: Find nearby cars based on location(requires a function or stored procedure to calculate distance)
-
+```
 SELECT car_id, driver_id FROM nearby_cars
 WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTERING;
-
+```
 -- Q3: Get Trip Details for a given trip_id
 ```
 SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare
 FROM trip_details
 WHERE trip_id = ?;
-
+```
 -- Q4: Get driver details for a given driver_id
 ```
 SELECT first_name, last_name, overall_rating, miles_driven
 FROM driver_information
 WHERE driver_id = ?;
-
+```
 -- Q5: Get Passenger details for a given user_id
 ```
 SELECT first_name, last_name, overall_rating, mobile_number, email
 FROM passenger_details
 WHERE user_id = ?;
-
+```
 -- Q6: Compute the surge fare based on demand level
 ```
 SELECT surge_factor AS multiplier
 FROM surge_pricing
 WHERE location_lat = ? AND location_lon = ? AND demand_level = ? ALLOW FILTERING;
 
+
+```
 -- Q7: Calculate Total Earnings for a driver within a date range
 ```
 In SQL, we can add up all the earnings for a driver over a specific period using the SUM() function. 
@@ -217,7 +220,7 @@ Instead, we will have to handle this by either:
 SELECT total_earnings 
 FROM driver_monthly_earnings 
 WHERE driver_id = ? AND year_month = '2024-04';
-
+```
 -- Q8: Identify the most common pickup locations
 ```
 In SQL, To find the most common pickup locations we can use a GROUP BY statement along with COUNT () and ORDER BY to group records by location and count them.
@@ -233,7 +236,7 @@ CREATE TABLE pickup_location_counters (
 UPDATE pickup_location_counters 
 SET pickups = pickups + 1 
 WHERE city = 'CityName' AND province = 'ProvinceName';
-
+```
 -- Q9: Identify the most common destination locations
 ```
 Same as in Q8, identifying the most common destination locations would require aggregation over multiple records to count occurrences.
@@ -248,13 +251,117 @@ CREATE TABLE destination_location_counters (
 UPDATE destination_location_counters 
 SET dropoffs = dropoffs + 1 
 WHERE city = 'CityName' AND province = 'ProvinceName';
-
+```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
 SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
 FROM fare_details
 WHERE trip_id = ?;
+```
+## Section: IV Cassandra Schema
+```
+CREATE KEYSPACE Uber
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+CREATE TABLE user_profiles (
+  user_id UUID PRIMARY KEY,
+  account_type TEXT,
+  profile_type TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  mobile_number INT
+);
+CREATE TABLE destination_locations_analytics (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((location_lat, location_long))
+);
+CREATE TABLE nearby_cars (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  is_available BOOLEAN,
+  location_id UUID,
+  car_id UUID,
+  driver_id UUID,
+  PRIMARY KEY ((location_lat, location_long), is_available)
+) WITH CLUSTERING ORDER BY (is_available ASC);
 
-## Section: IV Discussion
+CREATE TABLE fare_estimate (
+  surge_pricing UUID,
+  trip_id UUID,
+  start_time TIMESTAMP,
+  base_fare FLOAT,
+  estimated_distance FLOAT,
+  number_of_stops INT,
+  diversion_length FLOAT,
+  wait_time_fees FLOAT,
+  car_type TEXT,
+  tolls FLOAT,
+  pricing_per_mile FLOAT,
+  PRIMARY KEY (surge_pricing, trip_id)
+);
+CREATE TABLE surge_pricing (
+  surge_pricing UUID PRIMARY KEY,
+  demand_level TEXT,
+  multiplier FLOAT
+);
+CREATE TABLE trip_details (
+  trip_id UUID PRIMARY KEY,
+  car_type TEXT,
+  user_id UUID,
+  driver_id UUID,
+  car_id UUID,
+  start_datetime TIMESTAMP,
+  estimated_drop_off_time TIMESTAMP,
+  fare FLOAT,
+  driver_first_name TEXT,
+  driver_last_name TEXT,
+  driver_overall_rating FLOAT,
+  pickup_lat DOUBLE,
+  pickup_long DOUBLE,
+  drop_lat DOUBLE,
+  drop_lon DOUBLE,
+  post_trip_fare FLOAT
+);
+CREATE TABLE pickup_locations_analytics (
+  pick_location_lat DOUBLE,
+  pick_location_long DOUBLE,
+  destination_address TEXT,
+  trip_id UUID,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((pick_location_lat, pick_location_long))
+);
+CREATE TABLE driver_information (
+  driver_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  dl_number INT,
+  miles_driven FLOAT
+);
+CREATE TABLE passenger_details (
+  user_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  mobile_number INT,
+  email TEXT
+);
+CREATE TABLE driver_earnings (
+  driver_id UUID,
+  start_datetime TIMESTAMP,
+  trip_id UUID,
+  tips FLOAT,
+  fare FLOAT,
+  PRIMARY KEY (driver_id, start_datetime)
+) WITH CLUSTERING ORDER BY (start_datetime DESC);
 
-## Section: V Conclusion
+```
+## Section: V Discussion
+
+## Section: VI Conclusion
