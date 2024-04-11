@@ -183,6 +183,14 @@ Cassandra doesn't support stored procedures, and it's not ideal for calculating 
 
 SELECT car_id, driver_id FROM nearby_cars
 WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTERING;
+
+if we use "geo hash" the query could be something like this
+
+SELECT car_id, driver_id, driver_location_lat, driver_location_lon
+FROM nearby_cars
+WHERE geohash = ?
+AND is_available = true;
+ Note: we should replace ? with the actual geohash value that corresponds to the latitude and longitude of the passenger (this would be calculated in our application).
 ```
 -- Q3: Get Trip Details for a given trip_id
 ```
@@ -233,14 +241,8 @@ In Cassandra, GROUP BY clause is available but it’s has limited functionality.
 Instead
 •	We could maintain a counter for each location that increments every time a pickup is made. Then we can easily query to find the highest counters, make sense?
 
-CREATE TABLE pickup_location_counters (
-    city TEXT,
-    province TEXT,
-    pickups counter,
-    PRIMARY KEY (city, province)
-);
-UPDATE pickup_location_counters 
-SET pickups = pickups + 1 
+SELECT city, province, pickups 
+FROM pickup_location_counters 
 WHERE city = 'CityName' AND province = 'ProvinceName';
 
 ```
@@ -249,15 +251,11 @@ WHERE city = 'CityName' AND province = 'ProvinceName';
 Same as in Q8, identifying the most common destination locations would require aggregation over multiple records to count occurrences.
 Instead
 •	Maintain counters: A counter table to keep track of the number of times a destination is used.
-CREATE TABLE destination_location_counters (
-    city TEXT,
-    province TEXT,
-    dropoffs counter,
-    PRIMARY KEY (city, province)
-);
-UPDATE destination_location_counters 
-SET dropoffs = dropoffs + 1 
+
+SELECT city, province, dropoffs 
+FROM destination_location_counters 
 WHERE city = 'CityName' AND province = 'ProvinceName';
+
 ```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
@@ -316,7 +314,7 @@ CREATE TABLE fare_estimate (
 CREATE TABLE surge_pricing (
   surge_pricing UUID PRIMARY KEY,
   demand_level TEXT,
-  multiplier FLOAT
+  multiplier FLOAT --for higher precision can use DOUBLE
 );
 CREATE TABLE trip_details (
   trip_id UUID PRIMARY KEY,
@@ -351,7 +349,7 @@ CREATE TABLE driver_information (
   overall_rating FLOAT,
   first_name TEXT,
   last_name TEXT,
-  dl_number INT,
+  dl_number TEXT,
   miles_driven FLOAT
 );
 CREATE TABLE passenger_details (
