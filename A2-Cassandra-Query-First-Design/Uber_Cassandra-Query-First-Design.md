@@ -157,7 +157,7 @@ LIMIT 3; -- pax_live_location_lat and pax_live_location_long would come from App
 ```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
-SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
+SELECT ((base_fare + tolls) + (estimated_distance * pricing_per_mile))*tax_rate AS total_fare
 FROM fare_estimate
 WHERE trip_id = 887766; -- trip_id  would come from App
 ```
