@@ -68,7 +68,7 @@ Below are the use cases /queries team has designed.
 
  ## Below is the work-flow diagram shows the work steps for the application
  
-![alt text](images/FlowDiagram)
+![alt text](images/FlowDiagram.png)
 
 _Figure 1-3. Uber Ride application queries_
 
