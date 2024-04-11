@@ -137,23 +137,23 @@ WHERE driver_id = 1122 AND start_datetime BETWEEN 0000 AND 2400; -- driver_id  w
 ```
 -- Q8: Identify the most common pickup locations for drivers
 ```
-SELECT COUNT(DISTINCT pickup_address) AS popular_pickup_locations
+SELECT pickup_address, COUNT(*) AS popular_pickup_locations
 FROM pickup_locations_analytics
-WHERE pickup_lat  BETWEEN driver_live_location_lat  - Range AND driver_live_location_lat + Range
+WHERE pickup_lat BETWEEN driver_live_location_lat - Range AND driver_live_location_lat + Range
       AND pickup_long BETWEEN driver_live_location_long - Range AND driver_live_location_long + Range
 GROUP BY pickup_address
 ORDER BY popular_pickup_locations DESC
-LIMIT 3;
+LIMIT 3;-- driver_live_location_lat and driver_live_location_long would come from App which would be compared with pickup_lat and pickup_long from the database
 ```
 -- Q9: Identify the most common destination locations for passengers
 ```
-SELECT COUNT(DISTINCT destination_address) AS popular_destinations
+SELECT destination_address, COUNT(*) AS popular_destinations
 FROM destination_locations_analytics
 WHERE destination_lat BETWEEN pax_live_location_lat - Range AND pax_live_location_lat + Range
       AND destination_long BETWEEN pax_live_location_long - Range AND pax_live_location_long + Range
 GROUP BY destination_address
 ORDER BY popular_destinations DESC
-LIMIT 3; -- pax_live_location_lat and pax_live_location_long would come from App
+LIMIT 3; -- pax_live_location_lat and pax_live_location_long would come from App which would be compared with destination_lat and destination_long from the database
 ```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
