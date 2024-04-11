@@ -97,13 +97,13 @@ BEGIN
                POW(driver_location_long - pax_long, 2)
            ) AS distance_to_pax
     FROM nearby_cars
-    WHERE location_lat BETWEEN pax_lat - Range AND pax_lat + Range
-      AND location_lon BETWEEN pax_long - Range AND pax_long + Range
+    WHERE driver_location_lat BETWEEN pax_live_lat - Range AND pax_live_lat + Range
+      AND driver_location_long BETWEEN pax_live_long - Range AND pax_live_long + Range
       AND is_available = TRUE
     ORDER BY distance_to_pax ASC;
 END$$
 
-DELIMITER ;
+DELIMITER ; -- pax_live_lat and pax_live_long come from the APP; assuming Earth is flat for short distances (for using Euclidean Geometry)
 
 ```
 -- Q3: Get Trip Details for a given trip_id
