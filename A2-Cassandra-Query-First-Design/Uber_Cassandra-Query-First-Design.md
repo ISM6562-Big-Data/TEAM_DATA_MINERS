@@ -135,22 +135,22 @@ SELECT SUM(fare + tips) AS total_earnings
 FROM driver_earnings
 WHERE driver_id = 1122 AND start_datetime BETWEEN 0000 AND 2400; -- driver_id  would come from App
 ```
--- Q8: Identify the most common pickup locations
+-- Q8: Identify the most common pickup locations for drivers
 ```
-SELECT destination_address, COUNT(*) AS total_pickups
+SELECT pickup_address, COUNT(*) AS popular_pickup_locations
 FROM pickup_locations_analytics
-WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
-      AND pick_location_long BETWEEN pax_long - Range AND pax_long + Range
-GROUP BY destination_address
-ORDER BY total_pickups DESC
+WHERE driver_location_lat  BETWEEN driver_location_lat  - Range AND driver_location_lat + Range
+      AND driver_location_long BETWEEN driver_location_long - Range AND driver_location_long + Range
+GROUP BY pickup_address
+ORDER BY popular_pickup_locations DESC
 LIMIT 3;
 ```
--- Q9: Identify the most common destination locations
+-- Q9: Identify the most common destination locations for passengers
 ```
 SELECT destination_address, COUNT(*) AS popular_destinations
 FROM destination_locations_analytics
-WHERE pick_location_lat BETWEEN pax_lat - Range AND pax_lat + Range
-      AND pick_location_long BETWEEN pax_long - Range AND pax_long + Range
+WHERE pax_location_lat BETWEEN pax_location_lat - Range AND pax_location_lat + Range
+      AND pax_location_long BETWEEN pax_location_long - Range AND pax_location_long + Range
 GROUP BY destination_address
 ORDER BY popular_destinations DESC
 LIMIT 3;
