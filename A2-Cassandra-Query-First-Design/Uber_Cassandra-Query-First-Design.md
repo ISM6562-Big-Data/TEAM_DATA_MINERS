@@ -179,6 +179,8 @@ WHERE user_id = 111222333
 ```
 Q2: Find nearby cars based on location(requires a function or stored procedure to calculate distance)
 ```
+Cassandra doesn't support stored procedures, and it's not ideal for calculating distances within queries because that would require filtering across many partitions. We  should maybe pre-calculate a "geo hash" or use some bucketing strategy, but I'll provide a general CQL that assumes some form of pre-calculation has been done.
+
 SELECT car_id, driver_id FROM nearby_cars
 WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTERING;
 ```
@@ -186,26 +188,28 @@ WHERE location_lat = ? AND location_lon = ? AND is_available = true ALLOW FILTER
 ```
 SELECT trip_id, driver_id, car_type, estimated_drop_off_time, fare
 FROM trip_details
-WHERE trip_id = ?;
+WHERE trip_id = 12233344455555;
 ```
 -- Q4: Get driver details for a given driver_id
 ```
 SELECT first_name, last_name, overall_rating, miles_driven
 FROM driver_information
-WHERE driver_id = ?;
+WHERE driver_id = 1212;
 ```
 -- Q5: Get Passenger details for a given user_id
 ```
 SELECT first_name, last_name, overall_rating, mobile_number, email
 FROM passenger_details
-WHERE user_id = ?;
+WHERE user_id = 1111;
 ```
 -- Q6: Compute the surge fare based on demand level
 ```
+In Cassandra, we can't filter on non-primary key columns without a secondary index or using ALLOW FILTERING. The proper way would be to ensure demand_level is part of the primary key if you want to filter on it directly. Here's the query with ALLOW FILTERING, but it should be optimized in a real-world application:
+
 SELECT surge_factor AS multiplier
 FROM surge_pricing
-WHERE location_lat = ? AND location_lon = ? AND demand_level = ? ALLOW FILTERING;
-
+WHERE demand_level = 'high'
+ALLOW FILTERING;
 
 ```
 -- Q7: Calculate Total Earnings for a driver within a date range
@@ -213,12 +217,13 @@ WHERE location_lat = ? AND location_lon = ? AND demand_level = ? ALLOW FILTERING
 In SQL, we can add up all the earnings for a driver over a specific period using the SUM() function. 
 In Cassandra, it does not allow you to sum across multiple rows from different partitions by default. This is because such an operation could potentially involve gathering data from many different nodes in the cluster, which would be very slow and inefficient.
 Instead, we will have to handle this by either:
+
 •	When we insert earnings data, we could also update a separate record (Example: Total) that keeps a running total of the earnings for each driver for the date range in question. Something like 
 •	I am assuming we will have a table structure to hold monthly or daily totals, we can query directly for the total earnings in a specific period.
 
 SELECT total_earnings 
 FROM driver_monthly_earnings 
-WHERE driver_id = ? AND year_month = '2024-04';
+WHERE driver_id = 1122  AND year_month = '2024-04';
 ```
 -- Q8: Identify the most common pickup locations
 ```
@@ -226,6 +231,7 @@ In SQL, To find the most common pickup locations we can use a GROUP BY statement
 In Cassandra, GROUP BY clause is available but it’s has limited functionality.
 Instead
 •	We could maintain a counter for each location that increments every time a pickup is made. Then we can easily query to find the highest counters, make sense?
+
 CREATE TABLE pickup_location_counters (
     city TEXT,
     province TEXT,
@@ -235,6 +241,7 @@ CREATE TABLE pickup_location_counters (
 UPDATE pickup_location_counters 
 SET pickups = pickups + 1 
 WHERE city = 'CityName' AND province = 'ProvinceName';
+
 ```
 -- Q9: Identify the most common destination locations
 ```
@@ -253,9 +260,12 @@ WHERE city = 'CityName' AND province = 'ProvinceName';
 ```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
-SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
-FROM fare_details
-WHERE trip_id = ?;
+CQL doesn't support arithmetic operations within the SELECT statement. You must fetch the individual components and perform the calculation in the application layer.
+
+SELECT base_fare, tolls, pricing_per_mile 
+FROM fare_estimate
+WHERE trip_id = 12233344455555;
+
 ```
 ## Section: IV Cassandra Schema
 ```
