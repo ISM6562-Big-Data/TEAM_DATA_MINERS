@@ -68,8 +68,7 @@ Below are the use cases /queries team has designed.
 
  ## Below is the work-flow diagram shows the work steps for the application
  
-![image](https://github.com/ISM6562-Big-Data/TEAM_DATA_MINERS/assets/151387182/a9f2f20d-08d9-4426-945f-ac3f362ae813)
-
+![alt text](images/FlowDiagram)
 
 _Figure 1-3. Uber Ride application queries_
 
