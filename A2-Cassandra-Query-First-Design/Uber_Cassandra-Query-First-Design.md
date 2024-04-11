@@ -220,6 +220,7 @@ Instead, we will have to handle this by either:
 
 •	When we insert earnings data, we could also update a separate record (Example: Total) that keeps a running total of the earnings for each driver for the date range in question. Something like 
 •	I am assuming we will have a table structure to hold monthly or daily totals, we can query directly for the total earnings in a specific period.
+In short : we must maintain the totals in the application layer or through Cassandra counters.
 
 SELECT total_earnings 
 FROM driver_monthly_earnings 
