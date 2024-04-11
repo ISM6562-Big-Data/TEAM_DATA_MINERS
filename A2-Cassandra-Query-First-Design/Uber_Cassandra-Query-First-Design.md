@@ -137,29 +137,29 @@ WHERE driver_id = 1122 AND start_datetime BETWEEN 0000 AND 2400; -- driver_id  w
 ```
 -- Q8: Identify the most common pickup locations for drivers
 ```
-SELECT pickup_address, COUNT(*) AS popular_pickup_locations
+SELECT COUNT(DISTINCT pickup_address) AS popular_pickup_locations
 FROM pickup_locations_analytics
-WHERE driver_location_lat  BETWEEN driver_location_lat  - Range AND driver_location_lat + Range
-      AND driver_location_long BETWEEN driver_location_long - Range AND driver_location_long + Range
+WHERE pickup_lat  BETWEEN driver_live_location_lat  - Range AND driver_live_location_lat + Range
+      AND pickup_long BETWEEN driver_live_location_long - Range AND driver_live_location_long + Range
 GROUP BY pickup_address
 ORDER BY popular_pickup_locations DESC
 LIMIT 3;
 ```
 -- Q9: Identify the most common destination locations for passengers
 ```
-SELECT destination_address, COUNT(*) AS popular_destinations
+SELECT COUNT(DISTINCT destination_address) AS popular_destinations
 FROM destination_locations_analytics
-WHERE pax_location_lat BETWEEN pax_location_lat - Range AND pax_location_lat + Range
-      AND pax_location_long BETWEEN pax_location_long - Range AND pax_location_long + Range
+WHERE destination_lat BETWEEN pax_live_location_lat - Range AND pax_live_location_lat + Range
+      AND destination_long BETWEEN pax_live_location_long - Range AND pax_live_location_long + Range
 GROUP BY destination_address
 ORDER BY popular_destinations DESC
-LIMIT 3;
+LIMIT 3; -- pax_live_location_lat and pax_live_location_long would come from App
 ```
 -- Q10: Calculate Fare for a trip (Assuming necessary data like tolls, tax rate, etc., are provided)
 ```
 SELECT (base_fare + tolls + (tax_rate * (base_fare + tolls)) + (estimated_distance * pricing_per_mile)) AS total_fare
 FROM fare_estimate
-WHERE trip_id = ?;
+WHERE trip_id = 887766; -- trip_id  would come from App
 ```
 
 ## Cassandra Schema Design
