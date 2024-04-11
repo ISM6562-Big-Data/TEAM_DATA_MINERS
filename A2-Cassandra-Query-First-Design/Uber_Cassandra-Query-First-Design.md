@@ -332,7 +332,7 @@ CREATE TABLE trip_details (
   pickup_lat DOUBLE,
   pickup_long DOUBLE,
   drop_lat DOUBLE,
-  drop_lon DOUBLE,
+  drop_long DOUBLE,
   post_trip_fare FLOAT
 );
 CREATE TABLE pickup_locations_analytics (
