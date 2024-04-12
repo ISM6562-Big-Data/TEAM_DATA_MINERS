@@ -560,22 +560,22 @@ CREATE TABLE driver_earnings (
 
 ```
 
-## Section: V Discussion
+# Section: V Discussion
 The project successfully transitioned the relational data model from an ER diagram to a Cassandra-based NoSQL schema, emphasizing the "Query First" design approach. Throughout the project, several key observations and challenges were noted:
 
-# Design Philosophies:
+## Design Philosophies:
 The shift from a normalized relational database model to a denormalized Cassandra model required a fundamental change in thinking. Instead of focusing on data relationships and integrity, the priority shifted towards optimizing access patterns for scalability and performance.
 
-# Scalability and Performance:
+## Scalability and Performance:
 By prioritizing queries and structuring the Cassandra schema around them, the design effectively supports high scalability and performance. This approach allows Uber's ride-sharing service to handle large volumes of data transactions distributed across multiple nodes, which is crucial for real-time applications.
 
-# Trade-offs:
+## Trade-offs:
 The transition involved trade-offs, particularly in terms of transactional consistency and data redundancy. While Cassandra enhances availability and partition tolerance, it does so at the expense of strong consistency. Moreover, data redundancy increases due to denormalization, which can lead to higher storage requirements.
 
-# Application Functionality:
+## Application Functionality:
 Aligning the database design with specific application queries ensured that the database efficiently supports the core functionalities of the Uber ride-sharing application, such as real-time ride tracking, fare calculations, and efficient matching of drivers and passengers.
 
-# Challenges in NoSQL Implementation:
+## Challenges in NoSQL Implementation:
 Implementing Cassandra posed challenges, particularly in handling complex queries that are typically straightforward in SQL databases, such as joins and complex aggregations. Designing the schema to efficiently support these operations required creative strategies, such as using pre-computed aggregates and carefully designed partition keys.
 
 Overall, the project illuminated the intricacies of using a NoSQL database like Cassandra in a real-world, high-demand application. It also highlighted the importance of a detailed query analysis to drive schema design, ensuring that the database aligns with application requirements and performance expectations.
