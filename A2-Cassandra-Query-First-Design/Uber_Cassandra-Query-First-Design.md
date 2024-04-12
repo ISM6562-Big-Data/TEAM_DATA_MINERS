@@ -88,11 +88,11 @@ Below is a detailed analysis of the queries and their significance in the applic
 
  - Once the trip is booked the user and the drivers can retrieve the information about the particular trip. It contains information like trip confirmation number, driver details, car details, pickup time, and location. It also has the trip fare. 
 
- Q6: Get Driver details with given driver id.
+**Q6:  Get Driver details with given driver id.**
 
- - Passenger uses this feature to view the driver details.
+- Passenger uses this feature to view the driver details.
 
- Q7: Get Passenger details with given passenger id.
+ **Q7: Get Passenger details with given passenger id.**
 
 - Driver uses this feature to view the passenger details.
 
