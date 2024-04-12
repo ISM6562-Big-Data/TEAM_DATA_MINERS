@@ -69,16 +69,38 @@ Below are the use cases /queries team has designed.
 
 #### Transaction Processing Queries
 
+#### Transaction Processing Queries
+Below is the flow of scenarios where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
 - Q1: Find and load user profile.
-- Q2: Find nearby cars based on the passenger destination & Pick up location(x miles).
-- Q3: Compute total Fare (based on wait time, diversion, stops).
-- Q4: Compute the surge fare based on demand.
+  This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
+  
+- Q2: Find nearby cars based on the passenger destination & pick up location.
+  This query searches for available cars that are near the passenger's current location or given pickup location.
+  
+- Q3: Get the total Fare (based on wait time, diversion, stops).
+  This query calculates the total fare of a ride.
+
+- Q4: Get the surge fare based on demand.
+  When demand for rides is high, surge pricing may be applied. This step gets the surge multiplier based on the time and the Uber type.
+
 - Q5: Get Trip details based on the trip id
+  Once the trip is booked the user and the drivers can retrieve the information about the particular trip. It contains information like trip confirmation number, driver details, car details, pickup time, and location. It also has the trip fare. 
+
 - Q6: Get Driver details with given driver id.
-- Q7: Get Passenger details with given passsenget id.
+  Passenger uses this feature to view the driver details.
+
+- Q7: Get Passenger details with given passenger id.
+Driver uses this feature to view the passenger details.
+
 - Q8: Get driver earnings report for a day or date range.
-- Q9: Recomend most common pickup locations across all trips.
-- Q10: Recomend most common destination locations across all trips.
+This is a report generated for drivers to view their earnings over a specified period, such as a day or a set range of dates.
+
+- Q9: Recommend most common pickup locations across all trips.
+  This query is used by the driver to identify the most common pickup locations in the nearby vicinity where frequency of passenger availability is high.
+
+- Q10: Recommend most common destination locations across all trips.
+  This feature is for the passengers to identify nearby popular destinations based on the frequency of past visits. This can also be used for analytical purposes.
+
 
 ## Below is the work-flow diagram shows the work steps for the application
 
