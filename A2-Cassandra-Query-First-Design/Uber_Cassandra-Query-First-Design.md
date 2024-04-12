@@ -92,7 +92,7 @@ Below is a detailed analysis of the queries and their significance in the applic
 
 - Passenger uses this feature to view the driver details.
 
-  **Q7: Get Passenger details with given passenger id.**
+**Q7: Get Passenger details with given passenger id.**
 
 - Driver uses this feature to view the passenger details.
 
@@ -128,15 +128,9 @@ Capture the post-ride feedback from both drivers and passengers to maintain serv
 
 Optimize the route during the trip based on current traffic conditions to reduce travel time and enhance user satisfaction.
 
-## Below is the work-flow diagram shows the work steps for the application
+## Section: IV Cassandra Schema
 
-![alt text](images/FlowDiagram.png)
-
-_Figure 1-3. Uber Ride application queries_
-
-## Query Analysis:
-
-## Cassandra Schema Design
+### Design
 
 In transitioning from a Relational Database Management System (RDBMS) schema to a Cassandra schema, the primary focus is on optimizing data access patterns rather than normalizing data. Cassandra is designed to offer high availability and scalability, often at the expense of some transactional consistency that is inherent to RDBMS. The "Query First" approach in Cassandra involves designing the schema based on the queries you intend to run, which contrasts with the RDBMS approach of designing the schema based on the relationships between the data.
 
@@ -204,30 +198,7 @@ RDBMS: User profiles would be stored in a users table, likely indexed by a user 
 
 Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
 
-**Cassandra Schema**
-
-```
-CREATE KEYSPACE Uber-ride_sharing
-WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
-CREATE TABLE user_profiles (
-  user_id UUID PRIMARY KEY,
-  account_type TEXT,
-  profile_type TEXT,
-  first_name TEXT,
-  last_name TEXT,
-  email TEXT,
-  mobile_number INT
-);
-
-```
-
-![alt text](images/Cassandra_RL.png)
-_Figure 1-3. Cassandra Logical Datamodel_
-
-RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
-Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
-
-## Section: IV Cassandra Schema
+### Schema
 
 ```
 CREATE KEYSPACE Uber
@@ -333,33 +304,33 @@ CREATE TABLE driver_earnings (
 
 ```
 
-# Section: V Discussion
+## Section: V Discussion
 
 The project successfully transitioned the relational data model from an ER diagram to a Cassandra-based NoSQL schema, emphasizing the "Query First" design approach. Throughout the project, several key observations and challenges were noted:
 
-## Design Philosophies:
+### Design Philosophies:
 
 The shift from a normalized relational database model to a denormalized Cassandra model required a fundamental change in thinking. Instead of focusing on data relationships and integrity, the priority shifted towards optimizing access patterns for scalability and performance.
 
-## Scalability and Performance:
+### Scalability and Performance:
 
 By prioritizing queries and structuring the Cassandra schema around them, the design effectively supports high scalability and performance. This approach allows Uber's ride-sharing service to handle large volumes of data transactions distributed across multiple nodes, which is crucial for real-time applications.
 
-## Trade-offs:
+### Trade-offs:
 
 The transition involved trade-offs, particularly in terms of transactional consistency and data redundancy. While Cassandra enhances availability and partition tolerance, it does so at the expense of strong consistency. Moreover, data redundancy increases due to denormalization, which can lead to higher storage requirements.
 
-## Application Functionality:
+### Application Functionality:
 
 Aligning the database design with specific application queries ensured that the database efficiently supports the core functionalities of the Uber ride-sharing application, such as real-time ride tracking, fare calculations, and efficient matching of drivers and passengers.
 
-## Challenges in NoSQL Implementation:
+### Challenges in NoSQL Implementation:
 
 Implementing Cassandra posed challenges, particularly in handling complex queries that are typically straightforward in SQL databases, such as joins and complex aggregations. Designing the schema to efficiently support these operations required creative strategies, such as using pre-computed aggregates and carefully designed partition keys.
 
 Overall, the project illuminated the intricacies of using a NoSQL database like Cassandra in a real-world, high-demand application. It also highlighted the importance of a detailed query analysis to drive schema design, ensuring that the database aligns with application requirements and performance expectations.
 
-# Section: VI Conclusion
+## Section: VI Conclusion
 
 This project demonstrated the effective application of the "Query First" design philosophy in transitioning Uber's ride-sharing service to a Cassandra NoSQL database. The new schema supports enhanced performance and scalability, addressing the critical needs of handling Big Data in a real-time operational environment.
 
@@ -369,16 +340,16 @@ Key achievements include:
 - Improved handling of dynamic, high-volume data transactions across a distributed system.
 - Alignment of database functionality with core business operations, optimizing for common queries to enhance user experience.
 
-## Future Directions:
+### Future Directions:
 
 Continuous monitoring and optimization of the schema as new queries and data access patterns emerge.
 Exploration of additional NoSQL features and tools to further enhance data retrieval and analytics capabilities.
 Incremental improvements in data consistency mechanisms while maintaining the high availability and performance that Cassandra offers.
 In conclusion, this project not only supports the operational needs of Uber's ride-sharing platform but also serves as a valuable case study for similar applications looking to leverage NoSQL solutions for Big Data challenges.
 
-# Section: VII Appendix
+## Section: VII Appendix
 
-## SQL Queries to Address the Questions
+### SQL Queries to Address the Questions
 
 -- Q1: Load customer profile for a given user_id
 
@@ -485,7 +456,7 @@ FROM fare_estimate
 WHERE trip_id = 887766; -- trip_id  would come from App
 ```
 
-## CQL Queries to Address the questions
+### CQL Queries to Address the questions
 
 -- Q1: Load customer profile for a given user_id
 
