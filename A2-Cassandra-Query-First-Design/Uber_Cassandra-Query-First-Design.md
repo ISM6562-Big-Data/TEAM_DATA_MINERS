@@ -63,9 +63,11 @@ The below diagram is built considering the Data driven approach.
 _Figure 1-2. Physical data model for Uber application_
 
 ## Section: III Query Analysis
+
 In the dynamic world of ride-sharing applications, quick and reliable access to data is key to a smooth experience for both riders and drivers.To build an application that meets these needs, our team has carefully considered which queries are most important for its operation. This isn't just about making sure we can show users the information they want when they want it; it's about laying the foundation for our database design. With Cassandra as our chosen database, we start with the queries first to make sure we're setting it up in a way that will be fast, efficient, and scalable. These queries form the core of the application’s functionality, driving the interaction between passengers and drivers. To design an efficient schema for a distributed database like Cassandra, it is essential to identify and analyze these key queries.Here, we present the essential queries that will drive the functionality of our application, ensuring users can find rides, get fare estimates, and drivers can manage their earnings effectively.
 
 **Query Descriptions**
+
 Below is a detailed analysis of the queries and their significance in the application workflow  where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
 
  **Q1: Find and load user profile.**
