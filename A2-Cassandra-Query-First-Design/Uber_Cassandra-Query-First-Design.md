@@ -56,7 +56,7 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 The below diagram is built considering the Data driven approach.
 
-![alt text](images/Uber_Physical_Design.png)
+![alt text](images/uber_physical_design.png)
 
 _Figure 1-2. Physical data model for Uber application_
 
