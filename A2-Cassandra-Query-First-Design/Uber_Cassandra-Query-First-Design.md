@@ -32,6 +32,7 @@ The below ER diagram(figure1.1) shows the high-level design for the Uber passeng
 ### Entity Relation
 
 ![alt text](images/Uber_Logical_Design.png)
+
 _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **The ER diagram depicts various entities and their relationships:**
@@ -49,6 +50,7 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 **Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
 ### Assumptions and Constraints
+
 - **Assumptions**: Each entity is uniquely identified by its primary key. Relationships are managed through foreign keys, ensuring data integrity across transactions.
 - **Data Integrity**: Enforced by primary and foreign keys, along with not null and unique constraints that ensure the accuracy and uniqueness of data entries.
 - **Normalization**: The schema adheres to the third normal form to minimize redundancy and dependencies.
@@ -65,7 +67,7 @@ _Figure 1-2. Physical data model for Uber application_
 
 In the dynamic world of ride-sharing applications, quick and reliable access to data is key to a smooth experience for both riders and drivers.To build an application that meets these needs, our team has carefully considered which queries are most important for its operation. This isn't just about making sure we can show users the information they want when they want it; it's about laying the foundation for our database design. With Cassandra as our chosen database, we start with the queries first to make sure we're setting it up in a way that will be fast, efficient, and scalable. These queries form the core of the application’s functionality, driving the interaction between passengers and drivers. To design an efficient schema for a distributed database like Cassandra, it is essential to identify and analyze these key queries.Here, we present the essential queries that will drive the functionality of our application, ensuring users can find rides, get fare estimates, and drivers can manage their earnings effectively.
 
-**Query Descriptions**
+### Query Descriptions
 
 Below is a detailed analysis of the queries and their significance in the application workflow where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare.
 
@@ -109,7 +111,7 @@ Below is a detailed analysis of the queries and their significance in the applic
 
 - This feature is for the passengers to identify nearby popular destinations based on the frequency of past visits. This can also be used for analytical purposes.
 
-**Additional Essential Queries**
+### Additional Essential Queries
 
 While the core queries outlined earlier are fundamental to our application's primary functions, the inclusion of supplementary queries is imperative for a well-rounded feature set and insightful analytics:
 
@@ -199,103 +201,115 @@ RDBMS: User profiles would be stored in a users table, likely indexed by a user 
 
 Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
 
-**Cassandra Schema**
+### Schema
 
 ```
 CREATE KEYSPACE Uber_ridesharing
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
-CREATE TABLE user_profiles (
-  user_id UUID PRIMARY KEY,
+CREATE TABLE Uber_ridesharing.user_profiles (
+  user_id UUID,
   account_type TEXT,
   profile_type TEXT,
   first_name TEXT,
   last_name TEXT,
   email TEXT,
-  mobile_number INT
-);
-CREATE TABLE nearby_cars (
+  mobile_number INT,
+  PRIMARY KEY ((user_id), account_type)
+) WITH CLUSTERING ORDER BY (account_type ASC);
+
+CREATE TABLE Uber_ridesharing.nearby_cars (
   driver_location_lat DOUBLE,
   driver_location_long DOUBLE,
   is_available BOOLEAN,
   location_id UUID,
   car_id UUID,
   driver_id UUID,
-  PRIMARY KEY ((location_lat, location_long), is_available)
-) WITH CLUSTERING ORDER BY (is_available ASC);
+  PRIMARY KEY ((location_lat, location_long,is_available), car_id)
+);
 
-CREATE TABLE fare_base (
-  car_type UUID PRIMARY KEY,
+CREATE TABLE Uber_ridesharing.fare_base (
+  car_type UUID,
   base_fare FLOAT,
-  wait_time_fees INT,
+  wait_time_fees FLOAT,
   pricing_per_mile FLOAT,
   PRIMARY KEY (car_type)
 );
-CREATE TABLE surge_pricing (
- car_type UUID PRIMARY KEY,
-  request_time PK
+
+CREATE TABLE Uber_ridesharing.surge_pricing (
+  car_type UUID,
+  request_time TIME,
   demand_level TEXT,
-  surge_multiplier FLOAT --for higher precision can use DOUBLE
+  surge_multiplier FLOAT,
+  PRIMARY KEY (car_type,request_time)
 );
-CREATE TABLE trip_details (
-  trip_id UUID PRIMARY KEY,
+
+CREATE TABLE Uber_ridesharing.trip_details (
+  trip_id UUID,
   car_type TEXT,
   user_id UUID,
   driver_id UUID,
   car_id UUID,
-  start_datetime TIMESTAMP,
-  estimated_drop_off_time TIMESTAMP,
+  start_date_time TIMESTAMP,
+  drop_off_date_time TIMESTAMP,
   fare FLOAT,
-  driver_first_name TEXT,
-  driver_last_name TEXT,
   driver_overall_rating FLOAT,
   pickup_lat DOUBLE,
   pickup_long DOUBLE,
   drop_lat DOUBLE,
   drop_long DOUBLE,
-  post_trip_fare FLOAT
+  post_trip_fare FLOAT,
+  PRIMARY KEY (trip_id)
 );
-CREATE TABLE driver_information (
-  driver_id UUID PRIMARY KEY,
+
+CREATE TABLE Uber_ridesharing.driver_information (
+  driver_id UUID,
   overall_rating FLOAT,
   first_name TEXT,
   last_name TEXT,
   dl_number TEXT,
-  miles_driven FLOAT
+  miles_driven FLOAT,
+  PRIMARY KEY (driver_id)
 );
-CREATE TABLE passenger_details (
-  user_id UUID PRIMARY KEY,
+
+CREATE TABLE Uber_ridesharing.passenger_details (
+  user_id UUID,
   overall_rating FLOAT,
   first_name TEXT,
   last_name TEXT,
   mobile_number INT,
-  email TEXT
+  email TEXT,
+  PRIMARY KEY (user_id)
 );
-CREATE TABLE driver_earnings (
-  driver_id UUID,PRIMARY KEY
-  start_date PK, TIMESTAMP,
+
+CREATE TABLE Uber_ridesharing.driver_earnings (
+  driver_id UUID,
+  start_date TIMESTAMP,
   trip_id UUID,
   tips FLOAT,
   fare FLOAT,
-  PRIMARY KEY (driver_id, start_date)
+  PRIMARY KEY ((driver_id, start_date),trip_id)
 ) WITH CLUSTERING ORDER BY (start_date DESC);
-CREATE TABLE pickup_locations_analytics (
+
+CREATE TABLE Uber_ridesharing.pickup_locations_analytics (
   pick_location_lat DOUBLE,
   pick_location_long DOUBLE,
- pickup_address TEXT,
+  pickup_address TEXT,
   trip_id UUID,
   city TEXT,
   province TEXT,
   postal_code INT,
-  PRIMARY KEY ((pick_location_lat, pick_location_long))
+  PRIMARY KEY ((pick_location_lat, pick_location_long),trip_id)
 );
+
 CREATE TABLE destination_locations_analytics (
   location_lat DOUBLE,
   location_long DOUBLE,
   destination_address TEXT,
+  trip_id UUID,
   city TEXT,
   province TEXT,
   postal_code INT,
-  PRIMARY KEY ((location_lat, location_long))
+  PRIMARY KEY ((location_lat, location_long),trip_id)
 );
 
 ```
