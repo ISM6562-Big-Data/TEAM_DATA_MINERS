@@ -35,18 +35,40 @@ The below ER diagram(figure1.1) shows the high-level design for the Uber passeng
 _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **The ER diagram depicts various entities and their relationships:**
+**Passenger Table**: This table captures the details of the users who utilize the ride service, identifiable by a unique UserID (Primary Key). It includes fields for the Name, Gender, and an Overall Rating given to them by drivers.
 
- **Passenger Table**: Contains details about the passengers, represented by columns such as UserID (Primary Key), Name, Gender, and Overall Rating.
+**Driver Table:** Holds records for individuals who drive for the service. Each driver has a unique DriverID (Primary Key) and the table stores their Name, Gender, and an Overall Rating based on feedback from passengers.
 
-**Driver Table**: Stores information about the drivers. The columns include DriverID (Primary Key), Name, Gender, and Overall Rating.
+**Car Table**: Details the vehicles available for the ride service, each assigned a unique CarID (Primary Key). It includes the CAR VIN number, Plate Number, and other descriptors like Make, Model, and UberType. Each car is linked to a driver via a DriverID .
 
-**Car Table**: Holds data on the cars, represented by CarID (Primary Key), CAR VIN number, Plate Number, and DriverID (Foreign Key linking to the Driver table).
+**Request Table:** Captures ride requests from passengers, identified by a unique RequestID (Primary Key). It contains the number of Seats required, the Ride_type, locations for Pick up and Drop, and associates each request with a passenger through UserID .
 
-**Car Location Table**: Tracks the current locations of cars with the following columns: CarID (Primary Key, also Foreign Key from Car table), CAR VIN number, Plate Number, and DriverID (Foreign Key from Driver table).
+**Trip Table**: Logs completed trips, each identified by a unique TripID (Primary Key). It records the Start_Time, Duration of the trip, the Driver Rating given post-ride, the DistanceCovered, and any Tolls paid. It associates each trip with the driver through DriverID .
 
-**Request Table**: Represents ride requests made by passengers, detailing RequestID (Primary Key), Seats (number of seats requested), Ride_type, Pick up location, Drop location, and Estimated Fare, with a foreign key UserID linking to the Passenger table.
+**Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
-**Trip Table**: Records the details of the trips, including TripID (Primary Key), Start_Time, Duration, Fare, Driver Rating, and foreign keys DriverID (linking to the Driver table) and RequestID (linking to the Request table)..
+**Relationships:**
+**ADDS**: Indicates that a Passenger may add several Requests.
+
+**RECEIVES**: Shows that a Driver may receive multiple Requests.
+
+**ACCEPTS**: Connects a Request to a Trip when a Driver accepts it, signifying a progression from a request to an actual trip.
+
+**HAS**: Reflects that each Driver is associated with one Car.
+
+**USES:** Denotes that Trips utilize the Fare Base information for fare calculations, which varies based on the UberType.
+
+**Assumptions:**
+- A one-to-one correspondence exists between a Driver and a Car, suggesting exclusive use.
+
+- Fare calculation is dynamic and influenced by ride type, distance, and external costs like tolls.
+
+- Passengers and drivers participate in a mutual rating system.
+
+- Passengers may have multiple ride requests, potentially including simultaneous requests.
+
+- Each trip is uniquely identified and associated with a single driver and request, and fares vary by the type of service selected.
+
 
 ### Relational Modelling
 
