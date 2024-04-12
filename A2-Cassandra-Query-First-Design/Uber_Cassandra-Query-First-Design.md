@@ -245,8 +245,96 @@ WHERE trip_id = 887766; -- trip_id  would come from App
 
 ## Cassandra Schema Design
 
+In transitioning from a Relational Database Management System (RDBMS) schema to a Cassandra schema, the primary focus is on optimizing data access patterns rather than normalizing data. Cassandra is designed to offer high availability and scalability, often at the expense of some transactional consistency that is inherent to RDBMS. The "Query First" approach in Cassandra involves designing the schema based on the queries you intend to run, which contrasts with the RDBMS approach of designing the schema based on the relationships between the data.
+
 ![alt text](images/Cassandra_RL.png)
 _Figure 1-3. Cassandra Logical Datamodel_
+
+Here's how the "Query First" design philosophy impacts schema design for the given queries:
+
+**Find and load user profile (Q1):**
+
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
+**Find nearby cars based on passenger destination & pick up location (Q2):**
+
+RDBMS: This would involve a spatial query joining a locations table and cars table.
+
+Cassandra: A geospatial index is not natively supported, so we often pre-calculate "grid cells" or "zones" and use those as partition keys. Queries are made against a table partitioned by these zones.
+
+**Get the total Fare (Q3):**
+
+RDBMS: Would aggregate fare components on the fly, possibly using a view or stored procedure.
+
+Cassandra: Pre-compute fare and store it in a denormalized form, fetching directly without the need for complex transactions or joins.
+
+**Get the surge fare based on demand (Q4):**
+
+RDBMS: Might use a complex query with possibly real-time computation based on demand.
+
+Cassandra: Store pre-computed surge prices in a table, looked up by demand level or time period as the partition key.
+
+**Get Trip details based on the trip id (Q5):**
+
+RDBMS: A trips table with a primary key of trip_id would suffice.
+
+Cassandra: Direct lookup by trip_id, with all details denormalized in the trip details table.
+
+**Get Driver details with given driver id (Q6):**
+
+RDBMS: A drivers table with a primary key of driver_id.
+
+Cassandra: Similar to the RDBMS, but with no need for joins to fetch related information.
+
+**Get Passenger details with given passenger id (Q7):**
+
+RDBMS: Similar to users table, indexed by passenger_id.
+
+Cassandra: Same approach as drivers; direct lookup by user_id, which is equivalent to passenger_id.
+
+**Get driver earnings report for a day or date range (Q8):**
+
+RDBMS: Would typically use date functions on a datetime column.
+
+Cassandra: Pre-calculate daily earnings and store them with a partition key of driver_id and a clustering column of the date.
+
+**Recommend most common pickup locations (Q9) and destination locations (Q10):**
+
+RDBMS: Uses a GROUP BY on the locations with a COUNT to find the most common locations.
+
+Cassandra: Store counters in tables where location is the partition key, incremented with each trip.
+
+**Recommend most common destination locations (Q10):**
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
+**Cassandra Schema**
+
+```
+CREATE KEYSPACE Uber-ride_sharing
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+CREATE TABLE user_profiles (
+  user_id UUID PRIMARY KEY,
+  account_type TEXT,
+  profile_type TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  mobile_number INT
+);
+
+```
+![alt text](images/Cassandra_RL.png)
+_Figure 1-3. Cassandra Logical Datamodel_
+
+
+
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
 
 ## Query Analysis: B) CQL Queries to Address the questions
 
