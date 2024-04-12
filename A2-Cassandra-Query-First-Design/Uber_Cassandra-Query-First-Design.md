@@ -48,11 +48,9 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
-
 **Assumptions:**
 
 - Each trip is uniquely identified and associated with a single driver and request, and fares vary by the type of service selected.
-
 
 ### Relational Modelling
 
@@ -68,33 +66,33 @@ In the dynamic world of ride-sharing applications, quick and reliable access to 
 
 **Query Descriptions**
 
-Below is a detailed analysis of the queries and their significance in the application workflow  where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
+Below is a detailed analysis of the queries and their significance in the application workflow where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare.
 
- **Q1: Find and load user profile.**
+**Q1: Find and load user profile.**
 
 - This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
-  
+
 **Q2: Find nearby cars based on the passenger destination & pick up location.**
 
- - This query searches for available cars that are near the passenger's current location or given pickup location.
-  
+- This query searches for available cars that are near the passenger's current location or given pickup location.
+
 **Q3: Get the total Fare (based on wait time, diversion, stops).**
 
- - This query calculates the total fare of a ride.
+- This query calculates the total fare of a ride.
 
 **Q4: Get the surge fare based on demand.**
 
- - When demand for rides is high, surge pricing may be applied. This step gets the surge multiplier based on the time and the Uber type.
+- When demand for rides is high, surge pricing may be applied. This step gets the surge multiplier based on the time and the Uber type.
 
 **Q5: Get Trip details based on the trip id**
 
- - Once the trip is booked the user and the drivers can retrieve the information about the particular trip. It contains information like trip confirmation number, driver details, car details, pickup time, and location. It also has the trip fare. 
+- Once the trip is booked the user and the drivers can retrieve the information about the particular trip. It contains information like trip confirmation number, driver details, car details, pickup time, and location. It also has the trip fare.
 
-**Q6:  Get Driver details with given driver id.**
+**Q6: Get Driver details with given driver id.**
 
 - Passenger uses this feature to view the driver details.
 
- **Q7: Get Passenger details with given passenger id.**
+  **Q7: Get Passenger details with given passenger id.**
 
 - Driver uses this feature to view the passenger details.
 
@@ -104,11 +102,11 @@ Below is a detailed analysis of the queries and their significance in the applic
 
 **Q9: Recommend most common pickup locations across all trips.**
 
- - This query is used by the driver to identify the most common pickup locations in the nearby vicinity where frequency of passenger availability is high.
+- This query is used by the driver to identify the most common pickup locations in the nearby vicinity where frequency of passenger availability is high.
 
 **Q10: Recommend most common destination locations across all trips.**
 
- - This feature is for the passengers to identify nearby popular destinations based on the frequency of past visits. This can also be used for analytical purposes.
+- This feature is for the passengers to identify nearby popular destinations based on the frequency of past visits. This can also be used for analytical purposes.
 
 **Additional Essential Queries**
 
@@ -136,7 +134,251 @@ Optimize the route during the trip based on current traffic conditions to reduce
 
 _Figure 1-3. Uber Ride application queries_
 
-## Query Analysis: A) SQL Queries to Address the Questions
+## Query Analysis:
+
+## Cassandra Schema Design
+
+In transitioning from a Relational Database Management System (RDBMS) schema to a Cassandra schema, the primary focus is on optimizing data access patterns rather than normalizing data. Cassandra is designed to offer high availability and scalability, often at the expense of some transactional consistency that is inherent to RDBMS. The "Query First" approach in Cassandra involves designing the schema based on the queries you intend to run, which contrasts with the RDBMS approach of designing the schema based on the relationships between the data.
+
+![alt text](images/Cassandra_RL.png)
+_Figure 1-3. Cassandra Logical Datamodel_
+
+Here's how the "Query First" design philosophy impacts schema design for the given queries:
+
+**Find and load user profile (Q1):**
+
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
+**Find nearby cars based on passenger destination & pick up location (Q2):**
+
+RDBMS: This would involve a spatial query joining a locations table and cars table.
+
+Cassandra: A geospatial index is not natively supported, so we often pre-calculate "grid cells" or "zones" and use those as partition keys. Queries are made against a table partitioned by these zones.
+
+**Get the total Fare (Q3):**
+
+RDBMS: Would aggregate fare components on the fly, possibly using a view or stored procedure.
+
+Cassandra: Pre-compute fare and store it in a denormalized form, fetching directly without the need for complex transactions or joins.
+
+**Get the surge fare based on demand (Q4):**
+
+RDBMS: Might use a complex query with possibly real-time computation based on demand.
+
+Cassandra: Store pre-computed surge prices in a table, looked up by demand level or time period as the partition key.
+
+**Get Trip details based on the trip id (Q5):**
+
+RDBMS: A trips table with a primary key of trip_id would suffice.
+
+Cassandra: Direct lookup by trip_id, with all details denormalized in the trip details table.
+
+**Get Driver details with given driver id (Q6):**
+
+RDBMS: A drivers table with a primary key of driver_id.
+
+Cassandra: Similar to the RDBMS, but with no need for joins to fetch related information.
+
+**Get Passenger details with given passenger id (Q7):**
+
+RDBMS: Similar to users table, indexed by passenger_id.
+
+Cassandra: Same approach as drivers; direct lookup by user_id, which is equivalent to passenger_id.
+
+**Get driver earnings report for a day or date range (Q8):**
+
+RDBMS: Would typically use date functions on a datetime column.
+
+Cassandra: Pre-calculate daily earnings and store them with a partition key of driver_id and a clustering column of the date.
+
+**Recommend most common pickup locations (Q9) and destination locations (Q10):**
+
+RDBMS: Uses a GROUP BY on the locations with a COUNT to find the most common locations.
+
+Cassandra: Store counters in tables where location is the partition key, incremented with each trip.
+
+**Recommend most common destination locations (Q10):**
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
+**Cassandra Schema**
+
+```
+CREATE KEYSPACE Uber-ride_sharing
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+CREATE TABLE user_profiles (
+  user_id UUID PRIMARY KEY,
+  account_type TEXT,
+  profile_type TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  mobile_number INT
+);
+
+```
+
+![alt text](images/Cassandra_RL.png)
+_Figure 1-3. Cassandra Logical Datamodel_
+
+RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
+Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
+
+## Section: IV Cassandra Schema
+
+```
+CREATE KEYSPACE Uber
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+CREATE TABLE user_profiles (
+  user_id UUID PRIMARY KEY,
+  account_type TEXT,
+  profile_type TEXT,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  mobile_number INT
+);
+CREATE TABLE destination_locations_analytics (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((location_lat, location_long))
+);
+CREATE TABLE nearby_cars (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  is_available BOOLEAN,
+  location_id UUID,
+  car_id UUID,
+  driver_id UUID,
+  PRIMARY KEY ((location_lat, location_long), is_available)
+) WITH CLUSTERING ORDER BY (is_available ASC);
+
+CREATE TABLE fare_estimate (
+  surge_pricing UUID,
+  trip_id UUID,
+  start_time TIMESTAMP,
+  base_fare FLOAT,
+  estimated_distance FLOAT,
+  number_of_stops INT,
+  diversion_length FLOAT,
+  wait_time_fees FLOAT,
+  car_type TEXT,
+  tolls FLOAT,
+  pricing_per_mile FLOAT,
+  PRIMARY KEY (surge_pricing, trip_id)
+);
+CREATE TABLE surge_pricing (
+  surge_pricing UUID PRIMARY KEY,
+  demand_level TEXT,
+  multiplier FLOAT --for higher precision can use DOUBLE
+);
+CREATE TABLE trip_details (
+  trip_id UUID PRIMARY KEY,
+  car_type TEXT,
+  user_id UUID,
+  driver_id UUID,
+  car_id UUID,
+  start_datetime TIMESTAMP,
+  estimated_drop_off_time TIMESTAMP,
+  fare FLOAT,
+  driver_first_name TEXT,
+  driver_last_name TEXT,
+  driver_overall_rating FLOAT,
+  pickup_lat DOUBLE,
+  pickup_long DOUBLE,
+  drop_lat DOUBLE,
+  drop_long DOUBLE,
+  post_trip_fare FLOAT
+);
+CREATE TABLE pickup_locations_analytics (
+  pick_location_lat DOUBLE,
+  pick_location_long DOUBLE,
+  destination_address TEXT,
+  trip_id UUID,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((pick_location_lat, pick_location_long))
+);
+CREATE TABLE driver_information (
+  driver_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  dl_number TEXT,
+  miles_driven FLOAT
+);
+CREATE TABLE passenger_details (
+  user_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  mobile_number INT,
+  email TEXT
+);
+CREATE TABLE driver_earnings (
+  driver_id UUID,
+  start_datetime TIMESTAMP,
+  trip_id UUID,
+  tips FLOAT,
+  fare FLOAT,
+  PRIMARY KEY (driver_id, start_datetime)
+) WITH CLUSTERING ORDER BY (start_datetime DESC);
+
+```
+
+# Section: V Discussion
+
+The project successfully transitioned the relational data model from an ER diagram to a Cassandra-based NoSQL schema, emphasizing the "Query First" design approach. Throughout the project, several key observations and challenges were noted:
+
+## Design Philosophies:
+
+The shift from a normalized relational database model to a denormalized Cassandra model required a fundamental change in thinking. Instead of focusing on data relationships and integrity, the priority shifted towards optimizing access patterns for scalability and performance.
+
+## Scalability and Performance:
+
+By prioritizing queries and structuring the Cassandra schema around them, the design effectively supports high scalability and performance. This approach allows Uber's ride-sharing service to handle large volumes of data transactions distributed across multiple nodes, which is crucial for real-time applications.
+
+## Trade-offs:
+
+The transition involved trade-offs, particularly in terms of transactional consistency and data redundancy. While Cassandra enhances availability and partition tolerance, it does so at the expense of strong consistency. Moreover, data redundancy increases due to denormalization, which can lead to higher storage requirements.
+
+## Application Functionality:
+
+Aligning the database design with specific application queries ensured that the database efficiently supports the core functionalities of the Uber ride-sharing application, such as real-time ride tracking, fare calculations, and efficient matching of drivers and passengers.
+
+## Challenges in NoSQL Implementation:
+
+Implementing Cassandra posed challenges, particularly in handling complex queries that are typically straightforward in SQL databases, such as joins and complex aggregations. Designing the schema to efficiently support these operations required creative strategies, such as using pre-computed aggregates and carefully designed partition keys.
+
+Overall, the project illuminated the intricacies of using a NoSQL database like Cassandra in a real-world, high-demand application. It also highlighted the importance of a detailed query analysis to drive schema design, ensuring that the database aligns with application requirements and performance expectations.
+
+# Section: VI Conclusion
+
+This project demonstrated the effective application of the "Query First" design philosophy in transitioning Uber's ride-sharing service to a Cassandra NoSQL database. The new schema supports enhanced performance and scalability, addressing the critical needs of handling Big Data in a real-time operational environment.
+
+Key achievements include:
+
+- Successful translation of an RDBMS schema to a NoSQL Cassandra model.
+- Improved handling of dynamic, high-volume data transactions across a distributed system.
+- Alignment of database functionality with core business operations, optimizing for common queries to enhance user experience.
+
+## Future Directions:
+
+Continuous monitoring and optimization of the schema as new queries and data access patterns emerge.
+Exploration of additional NoSQL features and tools to further enhance data retrieval and analytics capabilities.
+Incremental improvements in data consistency mechanisms while maintaining the high availability and performance that Cassandra offers.
+In conclusion, this project not only supports the operational needs of Uber's ride-sharing platform but also serves as a valuable case study for similar applications looking to leverage NoSQL solutions for Big Data challenges.
+
+# Section: VII Appendix
+
+## SQL Queries to Address the Questions
 
 -- Q1: Load customer profile for a given user_id
 
@@ -243,100 +485,7 @@ FROM fare_estimate
 WHERE trip_id = 887766; -- trip_id  would come from App
 ```
 
-## Cassandra Schema Design
-
-In transitioning from a Relational Database Management System (RDBMS) schema to a Cassandra schema, the primary focus is on optimizing data access patterns rather than normalizing data. Cassandra is designed to offer high availability and scalability, often at the expense of some transactional consistency that is inherent to RDBMS. The "Query First" approach in Cassandra involves designing the schema based on the queries you intend to run, which contrasts with the RDBMS approach of designing the schema based on the relationships between the data.
-
-![alt text](images/Cassandra_RL.png)
-_Figure 1-3. Cassandra Logical Datamodel_
-
-Here's how the "Query First" design philosophy impacts schema design for the given queries:
-
-**Find and load user profile (Q1):**
-
-RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
-
-Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
-
-**Find nearby cars based on passenger destination & pick up location (Q2):**
-
-RDBMS: This would involve a spatial query joining a locations table and cars table.
-
-Cassandra: A geospatial index is not natively supported, so we often pre-calculate "grid cells" or "zones" and use those as partition keys. Queries are made against a table partitioned by these zones.
-
-**Get the total Fare (Q3):**
-
-RDBMS: Would aggregate fare components on the fly, possibly using a view or stored procedure.
-
-Cassandra: Pre-compute fare and store it in a denormalized form, fetching directly without the need for complex transactions or joins.
-
-**Get the surge fare based on demand (Q4):**
-
-RDBMS: Might use a complex query with possibly real-time computation based on demand.
-
-Cassandra: Store pre-computed surge prices in a table, looked up by demand level or time period as the partition key.
-
-**Get Trip details based on the trip id (Q5):**
-
-RDBMS: A trips table with a primary key of trip_id would suffice.
-
-Cassandra: Direct lookup by trip_id, with all details denormalized in the trip details table.
-
-**Get Driver details with given driver id (Q6):**
-
-RDBMS: A drivers table with a primary key of driver_id.
-
-Cassandra: Similar to the RDBMS, but with no need for joins to fetch related information.
-
-**Get Passenger details with given passenger id (Q7):**
-
-RDBMS: Similar to users table, indexed by passenger_id.
-
-Cassandra: Same approach as drivers; direct lookup by user_id, which is equivalent to passenger_id.
-
-**Get driver earnings report for a day or date range (Q8):**
-
-RDBMS: Would typically use date functions on a datetime column.
-
-Cassandra: Pre-calculate daily earnings and store them with a partition key of driver_id and a clustering column of the date.
-
-**Recommend most common pickup locations (Q9) and destination locations (Q10):**
-
-RDBMS: Uses a GROUP BY on the locations with a COUNT to find the most common locations.
-
-Cassandra: Store counters in tables where location is the partition key, incremented with each trip.
-
-**Recommend most common destination locations (Q10):**
-RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
-
-Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
-
-**Cassandra Schema**
-
-```
-CREATE KEYSPACE Uber-ride_sharing
-WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
-CREATE TABLE user_profiles (
-  user_id UUID PRIMARY KEY,
-  account_type TEXT,
-  profile_type TEXT,
-  first_name TEXT,
-  last_name TEXT,
-  email TEXT,
-  mobile_number INT
-);
-
-```
-![alt text](images/Cassandra_RL.png)
-_Figure 1-3. Cassandra Logical Datamodel_
-
-
-
-RDBMS: User profiles would be stored in a users table, likely indexed by a user ID.
-Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
-
-
-## Query Analysis: B) CQL Queries to Address the questions
+## CQL Queries to Address the questions
 
 -- Q1: Load customer profile for a given user_id
 
@@ -453,143 +602,3 @@ FROM fare_estimate
 WHERE trip_id = 12233344455555;
 
 ```
-
-## Section: IV Cassandra Schema
-
-```
-CREATE KEYSPACE Uber
-WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
-CREATE TABLE user_profiles (
-  user_id UUID PRIMARY KEY,
-  account_type TEXT,
-  profile_type TEXT,
-  first_name TEXT,
-  last_name TEXT,
-  email TEXT,
-  mobile_number INT
-);
-CREATE TABLE destination_locations_analytics (
-  location_lat DOUBLE,
-  location_long DOUBLE,
-  city TEXT,
-  province TEXT,
-  postal_code INT,
-  PRIMARY KEY ((location_lat, location_long))
-);
-CREATE TABLE nearby_cars (
-  location_lat DOUBLE,
-  location_long DOUBLE,
-  is_available BOOLEAN,
-  location_id UUID,
-  car_id UUID,
-  driver_id UUID,
-  PRIMARY KEY ((location_lat, location_long), is_available)
-) WITH CLUSTERING ORDER BY (is_available ASC);
-
-CREATE TABLE fare_estimate (
-  surge_pricing UUID,
-  trip_id UUID,
-  start_time TIMESTAMP,
-  base_fare FLOAT,
-  estimated_distance FLOAT,
-  number_of_stops INT,
-  diversion_length FLOAT,
-  wait_time_fees FLOAT,
-  car_type TEXT,
-  tolls FLOAT,
-  pricing_per_mile FLOAT,
-  PRIMARY KEY (surge_pricing, trip_id)
-);
-CREATE TABLE surge_pricing (
-  surge_pricing UUID PRIMARY KEY,
-  demand_level TEXT,
-  multiplier FLOAT --for higher precision can use DOUBLE
-);
-CREATE TABLE trip_details (
-  trip_id UUID PRIMARY KEY,
-  car_type TEXT,
-  user_id UUID,
-  driver_id UUID,
-  car_id UUID,
-  start_datetime TIMESTAMP,
-  estimated_drop_off_time TIMESTAMP,
-  fare FLOAT,
-  driver_first_name TEXT,
-  driver_last_name TEXT,
-  driver_overall_rating FLOAT,
-  pickup_lat DOUBLE,
-  pickup_long DOUBLE,
-  drop_lat DOUBLE,
-  drop_long DOUBLE,
-  post_trip_fare FLOAT
-);
-CREATE TABLE pickup_locations_analytics (
-  pick_location_lat DOUBLE,
-  pick_location_long DOUBLE,
-  destination_address TEXT,
-  trip_id UUID,
-  city TEXT,
-  province TEXT,
-  postal_code INT,
-  PRIMARY KEY ((pick_location_lat, pick_location_long))
-);
-CREATE TABLE driver_information (
-  driver_id UUID PRIMARY KEY,
-  overall_rating FLOAT,
-  first_name TEXT,
-  last_name TEXT,
-  dl_number TEXT,
-  miles_driven FLOAT
-);
-CREATE TABLE passenger_details (
-  user_id UUID PRIMARY KEY,
-  overall_rating FLOAT,
-  first_name TEXT,
-  last_name TEXT,
-  mobile_number INT,
-  email TEXT
-);
-CREATE TABLE driver_earnings (
-  driver_id UUID,
-  start_datetime TIMESTAMP,
-  trip_id UUID,
-  tips FLOAT,
-  fare FLOAT,
-  PRIMARY KEY (driver_id, start_datetime)
-) WITH CLUSTERING ORDER BY (start_datetime DESC);
-
-```
-
-# Section: V Discussion
-The project successfully transitioned the relational data model from an ER diagram to a Cassandra-based NoSQL schema, emphasizing the "Query First" design approach. Throughout the project, several key observations and challenges were noted:
-
-## Design Philosophies:
-The shift from a normalized relational database model to a denormalized Cassandra model required a fundamental change in thinking. Instead of focusing on data relationships and integrity, the priority shifted towards optimizing access patterns for scalability and performance.
-
-## Scalability and Performance:
-By prioritizing queries and structuring the Cassandra schema around them, the design effectively supports high scalability and performance. This approach allows Uber's ride-sharing service to handle large volumes of data transactions distributed across multiple nodes, which is crucial for real-time applications.
-
-## Trade-offs:
-The transition involved trade-offs, particularly in terms of transactional consistency and data redundancy. While Cassandra enhances availability and partition tolerance, it does so at the expense of strong consistency. Moreover, data redundancy increases due to denormalization, which can lead to higher storage requirements.
-
-## Application Functionality:
-Aligning the database design with specific application queries ensured that the database efficiently supports the core functionalities of the Uber ride-sharing application, such as real-time ride tracking, fare calculations, and efficient matching of drivers and passengers.
-
-## Challenges in NoSQL Implementation:
-Implementing Cassandra posed challenges, particularly in handling complex queries that are typically straightforward in SQL databases, such as joins and complex aggregations. Designing the schema to efficiently support these operations required creative strategies, such as using pre-computed aggregates and carefully designed partition keys.
-
-Overall, the project illuminated the intricacies of using a NoSQL database like Cassandra in a real-world, high-demand application. It also highlighted the importance of a detailed query analysis to drive schema design, ensuring that the database aligns with application requirements and performance expectations.
-# Section: VI Conclusion
-This project demonstrated the effective application of the "Query First" design philosophy in transitioning Uber's ride-sharing service to a Cassandra NoSQL database. The new schema supports enhanced performance and scalability, addressing the critical needs of handling Big Data in a real-time operational environment.
-
-Key achievements include:
-
-- Successful translation of an RDBMS schema to a NoSQL Cassandra model.
-- Improved handling of dynamic, high-volume data transactions across a distributed system.
-- Alignment of database functionality with core business operations, optimizing for common queries to enhance user experience.
-
-## Future Directions:
-Continuous monitoring and optimization of the schema as new queries and data access patterns emerge.
-Exploration of additional NoSQL features and tools to further enhance data retrieval and analytics capabilities.
-Incremental improvements in data consistency mechanisms while maintaining the high availability and performance that Cassandra offers.
-In conclusion, this project not only supports the operational needs of Uber's ride-sharing platform but also serves as a valuable case study for similar applications looking to leverage NoSQL solutions for Big Data challenges.
