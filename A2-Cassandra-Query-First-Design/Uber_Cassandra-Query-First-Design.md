@@ -63,44 +63,70 @@ The below diagram is built considering the Data driven approach.
 _Figure 1-2. Physical data model for Uber application_
 
 ## Section: III Query Analysis
+In the dynamic world of ride-sharing applications, quick and reliable access to data is key to a smooth experience for both riders and drivers.To build an application that meets these needs, our team has carefully considered which queries are most important for its operation. This isn't just about making sure we can show users the information they want when they want it; it's about laying the foundation for our database design. With Cassandra as our chosen database, we start with the queries first to make sure we're setting it up in a way that will be fast, efficient, and scalable. These queries form the core of the application’s functionality, driving the interaction between passengers and drivers. To design an efficient schema for a distributed database like Cassandra, it is essential to identify and analyze these key queries.Here, we present the essential queries that will drive the functionality of our application, ensuring users can find rides, get fare estimates, and drivers can manage their earnings effectively.
 
-Considering the query first approach team reviewed the fuctions and features of the Uber ride app and the flows.
-Below are the use cases /queries team has designed.
+**Query Descriptions**
+Below is a detailed analysis of the queries and their significance in the application workflow  where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
 
+ **Q1: Find and load user profile.**
 
-#### Transaction Processing Queries
-Below is the flow of scenarios where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
-
- Q1: Find and load user profile.
- - This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
+- This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
   
-Q2: Find nearby cars based on the passenger destination & pick up location.
+**Q2: Find nearby cars based on the passenger destination & pick up location.**
+
  - This query searches for available cars that are near the passenger's current location or given pickup location.
   
-Q3: Get the total Fare (based on wait time, diversion, stops).
+**Q3: Get the total Fare (based on wait time, diversion, stops).**
+
  - This query calculates the total fare of a ride.
 
-Q4: Get the surge fare based on demand.
+**Q4: Get the surge fare based on demand.**
+
  - When demand for rides is high, surge pricing may be applied. This step gets the surge multiplier based on the time and the Uber type.
 
-Q5: Get Trip details based on the trip id
+**Q5: Get Trip details based on the trip id**
+
  - Once the trip is booked the user and the drivers can retrieve the information about the particular trip. It contains information like trip confirmation number, driver details, car details, pickup time, and location. It also has the trip fare. 
 
  Q6: Get Driver details with given driver id.
+
  - Passenger uses this feature to view the driver details.
 
  Q7: Get Passenger details with given passenger id.
+
 - Driver uses this feature to view the passenger details.
 
-Q8: Get driver earnings report for a day or date range.
+**Q8: Get driver earnings report for a day or date range.**
+
 - This is a report generated for drivers to view their earnings over a specified period, such as a day or a set range of dates.
 
-Q9: Recommend most common pickup locations across all trips.
+**Q9: Recommend most common pickup locations across all trips.**
+
  - This query is used by the driver to identify the most common pickup locations in the nearby vicinity where frequency of passenger availability is high.
 
-Q10: Recommend most common destination locations across all trips.
+**Q10: Recommend most common destination locations across all trips.**
+
  - This feature is for the passengers to identify nearby popular destinations based on the frequency of past visits. This can also be used for analytical purposes.
 
+**Additional Essential Queries**
+
+While the core queries outlined earlier are fundamental to our application's primary functions, the inclusion of supplementary queries is imperative for a well-rounded feature set and insightful analytics:
+
+**Passenger Ride Request Status:**
+
+Monitor the status of passenger ride requests, including pending, accepted, en-route, and completed states.
+
+**Real-Time Ride Tracking:**
+
+Provide real-time updates on the ride's progress, ensuring both passenger and driver are informed throughout the journey.
+
+**Feedback and Rating System:**
+
+Capture the post-ride feedback from both drivers and passengers to maintain service quality and trust.
+
+**Dynamic Route Optimization:**
+
+Optimize the route during the trip based on current traffic conditions to reduce travel time and enhance user satisfaction.
 
 ## Below is the work-flow diagram shows the work steps for the application
 
