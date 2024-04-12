@@ -207,7 +207,7 @@ Cassandra: The table is designed with the query in mind. If the primary query is
 **Cassandra Schema**
 
 ```
-CREATE KEYSPACE Uber-ride_sharing
+CREATE KEYSPACE Uber_ridesharing
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
 CREATE TABLE user_profiles (
   user_id UUID PRIMARY KEY,
@@ -217,6 +217,90 @@ CREATE TABLE user_profiles (
   last_name TEXT,
   email TEXT,
   mobile_number INT
+);
+CREATE TABLE nearby_cars (
+  driver_location_lat DOUBLE,
+  driver_location_long DOUBLE,
+  is_available BOOLEAN,
+  location_id UUID,
+  car_id UUID,
+  driver_id UUID,
+  PRIMARY KEY ((location_lat, location_long), is_available)
+) WITH CLUSTERING ORDER BY (is_available ASC);
+
+CREATE TABLE fare_base (
+  car_type UUID PRIMARY KEY,
+  base_fare FLOAT,
+  wait_time_fees INT,
+  pricing_per_mile FLOAT,
+  PRIMARY KEY (car_type)
+);
+CREATE TABLE surge_pricing (
+ car_type UUID PRIMARY KEY,
+request_time PK
+  demand_level TEXT,
+  surge_multiplier FLOAT --for higher precision can use DOUBLE
+);
+CREATE TABLE trip_details (
+  trip_id UUID PRIMARY KEY,
+  car_type TEXT,
+  user_id UUID,
+  driver_id UUID,
+  car_id UUID,
+  start_datetime TIMESTAMP,
+  estimated_drop_off_time TIMESTAMP,
+  fare FLOAT,
+  driver_first_name TEXT,
+  driver_last_name TEXT,
+  driver_overall_rating FLOAT,
+  pickup_lat DOUBLE,
+  pickup_long DOUBLE,
+  drop_lat DOUBLE,
+  drop_long DOUBLE,
+  post_trip_fare FLOAT
+);
+CREATE TABLE driver_information (
+  driver_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  dl_number TEXT,
+  miles_driven FLOAT
+);
+CREATE TABLE passenger_details (
+  user_id UUID PRIMARY KEY,
+  overall_rating FLOAT,
+  first_name TEXT,
+  last_name TEXT,
+  mobile_number INT,
+  email TEXT
+);
+CREATE TABLE driver_earnings (
+  driver_id UUID,PRIMARY KEY
+  start_date PK, TIMESTAMP,
+  trip_id UUID,
+  tips FLOAT,
+  fare FLOAT,
+  PRIMARY KEY (driver_id, start_date)
+) WITH CLUSTERING ORDER BY (start_date DESC);
+CREATE TABLE pickup_locations_analytics (
+  pick_location_lat DOUBLE,
+  pick_location_long DOUBLE,
+ pickup_address TEXT,
+  trip_id UUID,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((pick_location_lat, pick_location_long))
+);
+CREATE TABLE destination_locations_analytics (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  destination_address TEXT,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((location_lat, location_long))
 );
 
 ```
