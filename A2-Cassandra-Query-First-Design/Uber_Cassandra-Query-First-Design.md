@@ -36,19 +36,17 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **The ER diagram depicts various entities and their relationships:**
 
-- **Passenger Table**: Contains details about the passengers including UserID, Name, Gender, and Overall Rating.
+ **Passenger Table**: Contains details about the passengers, represented by columns such as UserID (Primary Key), Name, Gender, and Overall Rating.
 
-- **Driver Table**: Stores information about the drivers, such as DriverID, Name, Gender, and Overall Rating.
+**Driver Table**: Stores information about the drivers. The columns include DriverID (Primary Key), Name, Gender, and Overall Rating.
 
-- **Car Table**: Holds data on the cars, including a unique CarID, CAR VIN number, Plate Number, and a foreign key to DriverID.
+**Car Table**: Holds data on the cars, represented by CarID (Primary Key), CAR VIN number, Plate Number, and DriverID (Foreign Key linking to the Driver table).
 
-- **Car Location Table**: Tracks the current locations of cars, referenced by CarID, CAR VIN number, Plate Number, and DriverID.
+**Car Location Table**: Tracks the current locations of cars with the following columns: CarID (Primary Key, also Foreign Key from Car table), CAR VIN number, Plate Number, and DriverID (Foreign Key from Driver table).
 
-- **Request Table**: Represents ride requests made by passengers, detailing the RequestID, number of seats requested, ride type, pickup and drop locations, and estimated fare.
+**Request Table**: Represents ride requests made by passengers, detailing RequestID (Primary Key), Seats (number of seats requested), Ride_type, Pick up location, Drop location, and Estimated Fare, with a foreign key UserID linking to the Passenger table.
 
-- **Trip Table**: Records details of trips, including TripID, Start Time, Duration, Fare, and Driver Rating, along with foreign keys to DriverID and RequestID.
-
-**Base Fare Table**: Store the base fare for all Uber types.
+**Trip Table**: Records the details of the trips, including TripID (Primary Key), Start_Time, Duration, Fare, Driver Rating, and foreign keys DriverID (linking to the Driver table) and RequestID (linking to the Request table)..
 
 ### Relational Modelling
 
