@@ -48,6 +48,7 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 **Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
 **Relationships:**
+
 **ADDS**: Indicates that a Passenger may add several Requests.
 
 **RECEIVES**: Shows that a Driver may receive multiple Requests.
