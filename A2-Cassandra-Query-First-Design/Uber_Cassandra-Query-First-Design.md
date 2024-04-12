@@ -48,26 +48,8 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
-**Relationships:**
-
-**ADDS**: Indicates that a Passenger may add several Requests.
-
-**RECEIVES**: Shows that a Driver may receive multiple Requests.
-
-**ACCEPTS**: Connects a Request to a Trip when a Driver accepts it, signifying a progression from a request to an actual trip.
-
-**HAS**: Reflects that each Driver is associated with one Car.
-
-**USES:** Denotes that Trips utilize the Fare Base information for fare calculations, which varies based on the UberType.
 
 **Assumptions:**
-- A one-to-one correspondence exists between a Driver and a Car, suggesting exclusive use.
-
-- Fare calculation is dynamic and influenced by ride type, distance, and external costs like tolls.
-
-- Passengers and drivers participate in a mutual rating system.
-
-- Passengers may have multiple ride requests, potentially including simultaneous requests.
 
 - Each trip is uniquely identified and associated with a single driver and request, and fares vary by the type of service selected.
 
