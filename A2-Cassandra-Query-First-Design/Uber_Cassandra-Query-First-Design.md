@@ -56,7 +56,7 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 The below diagram is built considering the Data driven approach.
 
-![alt text](images/Uber_Physical_Design.png)
+![alt text](images/uber_physical_design.png)
 
 _Figure 1-2. Physical data model for Uber application_
 
@@ -198,10 +198,10 @@ RDBMS: User profiles would be stored in a users table, likely indexed by a user 
 
 Cassandra: The table is designed with the query in mind. If the primary query is to fetch user details by user ID, the user ID becomes the partition key. No joins are required as denormalization is expected.
 
-### Schema
+**Cassandra Schema**
 
 ```
-CREATE KEYSPACE Uber
+CREATE KEYSPACE Uber_ridesharing
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
 CREATE TABLE user_profiles (
   user_id UUID PRIMARY KEY,
@@ -212,17 +212,9 @@ CREATE TABLE user_profiles (
   email TEXT,
   mobile_number INT
 );
-CREATE TABLE destination_locations_analytics (
-  location_lat DOUBLE,
-  location_long DOUBLE,
-  city TEXT,
-  province TEXT,
-  postal_code INT,
-  PRIMARY KEY ((location_lat, location_long))
-);
 CREATE TABLE nearby_cars (
-  location_lat DOUBLE,
-  location_long DOUBLE,
+  driver_location_lat DOUBLE,
+  driver_location_long DOUBLE,
   is_available BOOLEAN,
   location_id UUID,
   car_id UUID,
@@ -230,24 +222,18 @@ CREATE TABLE nearby_cars (
   PRIMARY KEY ((location_lat, location_long), is_available)
 ) WITH CLUSTERING ORDER BY (is_available ASC);
 
-CREATE TABLE fare_estimate (
-  surge_pricing UUID,
-  trip_id UUID,
-  start_time TIMESTAMP,
+CREATE TABLE fare_base (
+  car_type UUID PRIMARY KEY,
   base_fare FLOAT,
-  estimated_distance FLOAT,
-  number_of_stops INT,
-  diversion_length FLOAT,
-  wait_time_fees FLOAT,
-  car_type TEXT,
-  tolls FLOAT,
+  wait_time_fees INT,
   pricing_per_mile FLOAT,
-  PRIMARY KEY (surge_pricing, trip_id)
+  PRIMARY KEY (car_type)
 );
 CREATE TABLE surge_pricing (
-  surge_pricing UUID PRIMARY KEY,
+ car_type UUID PRIMARY KEY,
+  request_time PK
   demand_level TEXT,
-  multiplier FLOAT --for higher precision can use DOUBLE
+  surge_multiplier FLOAT --for higher precision can use DOUBLE
 );
 CREATE TABLE trip_details (
   trip_id UUID PRIMARY KEY,
@@ -267,16 +253,6 @@ CREATE TABLE trip_details (
   drop_long DOUBLE,
   post_trip_fare FLOAT
 );
-CREATE TABLE pickup_locations_analytics (
-  pick_location_lat DOUBLE,
-  pick_location_long DOUBLE,
-  destination_address TEXT,
-  trip_id UUID,
-  city TEXT,
-  province TEXT,
-  postal_code INT,
-  PRIMARY KEY ((pick_location_lat, pick_location_long))
-);
 CREATE TABLE driver_information (
   driver_id UUID PRIMARY KEY,
   overall_rating FLOAT,
@@ -294,13 +270,32 @@ CREATE TABLE passenger_details (
   email TEXT
 );
 CREATE TABLE driver_earnings (
-  driver_id UUID,
-  start_datetime TIMESTAMP,
+  driver_id UUID,PRIMARY KEY
+  start_date PK, TIMESTAMP,
   trip_id UUID,
   tips FLOAT,
   fare FLOAT,
-  PRIMARY KEY (driver_id, start_datetime)
-) WITH CLUSTERING ORDER BY (start_datetime DESC);
+  PRIMARY KEY (driver_id, start_date)
+) WITH CLUSTERING ORDER BY (start_date DESC);
+CREATE TABLE pickup_locations_analytics (
+  pick_location_lat DOUBLE,
+  pick_location_long DOUBLE,
+ pickup_address TEXT,
+  trip_id UUID,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((pick_location_lat, pick_location_long))
+);
+CREATE TABLE destination_locations_analytics (
+  location_lat DOUBLE,
+  location_long DOUBLE,
+  destination_address TEXT,
+  city TEXT,
+  province TEXT,
+  postal_code INT,
+  PRIMARY KEY ((location_lat, location_long))
+);
 
 ```
 
