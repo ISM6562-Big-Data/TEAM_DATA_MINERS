@@ -48,6 +48,8 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 - **Trip Table**: Records details of trips, including TripID, Start Time, Duration, Fare, and Driver Rating, along with foreign keys to DriverID and RequestID.
 
+**Base Fare Table**: Store the base fare for all Uber types.
+
 ### Relational Modelling
 
 The below diagram is built considering the Data driven approach.
@@ -65,14 +67,14 @@ Below are the use cases /queries team has designed.
 
 - Q1: Find and load user profile.
 - Q2: Find nearby cars based on the passenger destination & Pick up location(x miles).
-- Q6: Compute the surge fare based on demand.
-- Q10: Compute total Fare (based on wait time, diversion, stops).
-- Q3: Get Trip details based on the trip id
-- Q4: Get Driver details with given driver id.
-- Q5: Get Passenger details with given passsenget id.
-- Q7: Get driver earnings report for a day or date range.
-- Q8: Recomend most common pickup locations across all trips.
-- Q9: Recomend most common destination locations across all trips.
+- Q3: Compute the surge fare based on demand.
+- Q4: Compute total Fare (based on wait time, diversion, stops).
+- Q5: Get Trip details based on the trip id
+- Q6: Get Driver details with given driver id.
+- Q7: Get Passenger details with given passsenget id.
+- Q8: Get driver earnings report for a day or date range.
+- Q9: Recomend most common pickup locations across all trips.
+- Q10: Recomend most common destination locations across all trips.
 
 ## Below is the work-flow diagram shows the work steps for the application
 
