@@ -579,7 +579,7 @@ Aligning the database design with specific application queries ensured that the 
 Implementing Cassandra posed challenges, particularly in handling complex queries that are typically straightforward in SQL databases, such as joins and complex aggregations. Designing the schema to efficiently support these operations required creative strategies, such as using pre-computed aggregates and carefully designed partition keys.
 
 Overall, the project illuminated the intricacies of using a NoSQL database like Cassandra in a real-world, high-demand application. It also highlighted the importance of a detailed query analysis to drive schema design, ensuring that the database aligns with application requirements and performance expectations.
-## Section: VI Conclusion
+# Section: VI Conclusion
 This project demonstrated the effective application of the "Query First" design philosophy in transitioning Uber's ride-sharing service to a Cassandra NoSQL database. The new schema supports enhanced performance and scalability, addressing the critical needs of handling Big Data in a real-time operational environment.
 
 Key achievements include:
