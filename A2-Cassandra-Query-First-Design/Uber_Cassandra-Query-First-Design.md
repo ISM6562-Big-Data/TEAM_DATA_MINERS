@@ -35,6 +35,7 @@ The below ER diagram(figure1.1) shows the high-level design for the Uber passeng
 _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **The ER diagram depicts various entities and their relationships:**
+
 **Passenger Table**: This table captures the details of the users who utilize the ride service, identifiable by a unique UserID (Primary Key). It includes fields for the Name, Gender, and an Overall Rating given to them by drivers.
 
 **Driver Table:** Holds records for individuals who drive for the service. Each driver has a unique DriverID (Primary Key) and the table stores their Name, Gender, and an Overall Rating based on feedback from passengers.
