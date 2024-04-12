@@ -72,9 +72,8 @@ Below are the use cases /queries team has designed.
 Below is the flow of scenarios where a passenger is requesting a ride from pick up location to a destination location using Uber rideshare app. The passenger is looking for various options such as nearest pickup location/ shortest pickup time along with the cheapest fare. 
 
 - Q1: Find and load user profile.
- ```
-   This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
-  ```
+ - This step involves retrieving the profile details of a user which includes personal information, ride history, and preferences.
+  
 - Q2: Find nearby cars based on the passenger destination & pick up location.
   This query searches for available cars that are near the passenger's current location or given pickup location.
   
