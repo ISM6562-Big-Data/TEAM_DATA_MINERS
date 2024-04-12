@@ -67,8 +67,8 @@ Below are the use cases /queries team has designed.
 
 - Q1: Find and load user profile.
 - Q2: Find nearby cars based on the passenger destination & Pick up location(x miles).
-- Q3: Compute the surge fare based on demand.
-- Q4: Compute total Fare (based on wait time, diversion, stops).
+- Q3: Compute total Fare (based on wait time, diversion, stops).
+- Q4: Compute the surge fare based on demand.
 - Q5: Get Trip details based on the trip id
 - Q6: Get Driver details with given driver id.
 - Q7: Get Passenger details with given passsenget id.
