@@ -48,9 +48,10 @@ _Figure 1-1. Entity-relationship diagram for Uber application_
 
 **Fare Base Table**: Maintains the fare structure, identified by fareBaseId (Primary Key). It includes the BaseFare, cost farePerMile, applicable Tax, and is associated with a specific UberType.
 
-**Assumptions:**
-
-- Each trip is uniquely identified and associated with a single driver and request, and fares vary by the type of service selected.
+### Assumptions and Constraints
+- **Assumptions**: Each entity is uniquely identified by its primary key. Relationships are managed through foreign keys, ensuring data integrity across transactions.
+- **Data Integrity**: Enforced by primary and foreign keys, along with not null and unique constraints that ensure the accuracy and uniqueness of data entries.
+- **Normalization**: The schema adheres to the third normal form to minimize redundancy and dependencies.
 
 ### Relational Modelling
 
