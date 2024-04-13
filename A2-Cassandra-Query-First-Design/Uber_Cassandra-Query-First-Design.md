@@ -113,7 +113,7 @@ Below is a detailed analysis of the queries and their significance in the applic
 
 ### Additional Essential Queries
 
-While the core queries outlined earlier are fundamental to our application's primary functions, the inclusion of supplementary queries is imperative for a well-rounded feature set and insightful analytics:
+While the core queries outlined earlier are fundamental to our application's primary functions, the inclusion of supplementary queries is imperative for a well-rounded feature set and insightful analytics (not covered within the scope of this project):
 
 **Passenger Ride Request Status:**
 
