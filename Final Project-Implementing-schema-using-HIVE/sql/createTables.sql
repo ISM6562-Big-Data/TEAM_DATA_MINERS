@@ -1,71 +1,81 @@
 Create TABLE Passenger (
-  userID CHAR(5) PRIMARY KEY NOT NULL,
-  overall_rating FLOAT,
-  first_name VARCHAR(20),
+  userID CHAR(6) PRIMARY KEY NOT NULL,
+  first_name VARCHAR(30),
   last_name VARCHAR(30),
-  mobile_number CHAR(10),
+  gender varchar(25),
+  overall_rating DECIMAL(10,1),
+  mobile_number CHAR(25),
   email VARCHAR(30)
 )
 
-Create TABLE Request (
-  RequestID CHAR(5) PRIMARY KEY NOT NULL,
-  Ride_Type CHAR(5),
-  Pickup_lat FLOAT,
-  Pickup_long FLOAT,
-  Drop_lat FLOAT,
-  Drop_long FLOAT,
-  Seats INT,
-  FOREIGN KEY (userID)			
-	  REFERENCES Passenger(userID)
+CREATE TABLE Request (
+  requestID CHAR(6) PRIMARY KEY NOT NULL,
+  userID CHAR(6),  
+  ride_type VARCHAR(20),
+  pickup_lat FLOAT,
+  pickup_long FLOAT,
+  drop_lat FLOAT,
+  drop_long FLOAT,
+  seats INT,
+  FOREIGN KEY (userID) 
+  REFERENCES Passenger(userID)
 )
 
 Create TABLE Driver (
-  DriverID CHAR(5) PRIMARY KEY NOT NULL,
-  overall_rating FLOAT,
-  first_name VARCHAR(20),
+  driverID CHAR(5) PRIMARY KEY NOT NULL,
+  first_name VARCHAR(30),
   last_name VARCHAR(30),
-  mobile_number CHAR(10),
-  gender CHAR(1),
+  gender VARCHAR(25),
+  overall_rating DECIMAL(10,1),
+  mobile_number CHAR(25),
   email VARCHAR(30)
 )
 
-Create TABLE Request_to_Driver (
-  RequestDriverID CHAR(5) PRIMARY KEY NOT NULL,
-  isAccepted BOOLEAN
-  FOREIGN KEY (DriverID)			
-	  REFERENCES Driver(DriverID),
-  FOREIGN KEY (userID)			
-	  REFERENCES Passenger(userID)
-)
 
-Create TABLE Car (
-  CarID CHAR(5) PRIMARY KEY NOT NULL,
-  CarVIN_No CHAR(20),
-  Plate_number CHAR(5),
-  Make CHAR(10),
-  Model CHAR(10),
-  Seats INT,
-  UberType CHAR(5),
-  FOREIGN KEY (DriverID)			
-	  REFERENCES Driver(DriverID)
-)
-
-Create TABLE CarLocation (
-  CarID CHAR(5) PRIMARY KEY NOT NULL,
-  Drop_lat FLOAT,
-  Drop_long FLOAT,
-  FOREIGN KEY (CarID)			
-	  REFERENCES Car(CarID)
+CREATE TABLE Request_to_Driver (
+  requestdriverID CHAR(6) PRIMARY KEY NOT NULL,
+  is_accepted BIT NOT NULL,
+  driverID CHAR(5) NOT NULL,  
+  requestID CHAR(6) NOT NULL,    
+  FOREIGN KEY (driverID) 
+  REFERENCES Driver(driverID),
+  FOREIGN KEY (requestID) 
+  REFERENCES Request(requestID)
 )
 
 Create TABLE Trip (
-  TripID CHAR(5) PRIMARY KEY NOT NULL,
-  Start_Time TIMESTAMP,
-  Duration int,
-  Driver_Rating int,
-  Passenger_Rating int,
-  FOREIGN KEY (DriverID)			
-	  REFERENCES Driver(DriverID),
-  FOREIGN KEY (RequestID)			
-	  REFERENCES Request(RequestID)
+  tripID CHAR(6) PRIMARY KEY NOT NULL,
+  start_time DateTime2,
+  duration varchar(20),  --- Not sure about this 
+  driver_rating DECIMAL(10,1),
+  passenger_rating DECIMAL(10,1),
+  driverID CHAR(5) NOT NULL,  
+  requestID CHAR(6) NOT NULL,
+  FOREIGN KEY (driverID)			
+	  REFERENCES Driver(driverID),
+  FOREIGN KEY (requestID)			
+	  REFERENCES Request(requestID)
+)
+
+
+Create TABLE Car (
+  carID CHAR(5) PRIMARY KEY NOT NULL,
+  carVIN_No CHAR(20),
+  plate_number CHAR(5),
+  make CHAR(10),
+  model CHAR(10),
+  seats INT,
+  uberType CHAR(5),
+  driverID CHAR(5) NOT NULL,
+  FOREIGN KEY (driverID)			
+	  REFERENCES Driver(driverID)
+)
+
+Create TABLE CarLocation (
+  carlocationID CHAR(5) PRIMARY KEY NOT NULL,
+  carID CHAR(5),
+  drop_lat FLOAT,
+  drop_long FLOAT,
+  FOREIGN KEY (carID)			
+	  REFERENCES Car(carID)
 )
