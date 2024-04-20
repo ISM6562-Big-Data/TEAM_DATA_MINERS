@@ -2,13 +2,13 @@ Create TABLE Passenger (
   userID CHAR(6) PRIMARY KEY NOT NULL,
   first_name VARCHAR(30),
   last_name VARCHAR(30),
-  gender varchar(25),
+  gender VARCHAR(25),
   overall_rating DECIMAL(10,1),
   mobile_number CHAR(25),
   email VARCHAR(30)
 )
 
-CREATE TABLE Request (
+CREATE TABLE Request (   -- Need to store the first line of the address too . 
   requestID CHAR(6) PRIMARY KEY NOT NULL,
   userID CHAR(6),  
   ride_type VARCHAR(20),
@@ -74,7 +74,7 @@ Create TABLE Car (
 Create TABLE CarLocation (
   carlocationID CHAR(5) PRIMARY KEY NOT NULL,
   carID CHAR(5),
-  drop_lat FLOAT,
+  drop_lat FLOAT,   -- this needs to be current lat , long
   drop_long FLOAT,
   FOREIGN KEY (carID)			
 	  REFERENCES Car(carID)
