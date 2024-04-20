@@ -43,7 +43,7 @@ CREATE TABLE Request_to_Driver (
   REFERENCES Request(requestID)
 )
 
-Create TABLE Trip (
+Create TABLE Trip (   -- trip fare needs to be stored 
   tripID CHAR(6) PRIMARY KEY NOT NULL,
   start_time DateTime2,
   duration varchar(20),  --- Not sure about this 
