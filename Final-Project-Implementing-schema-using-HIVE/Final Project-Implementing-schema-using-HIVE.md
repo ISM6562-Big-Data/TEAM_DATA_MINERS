@@ -79,9 +79,10 @@ Q5  Recommend most common pickup locations across all trips
 Q6 Get driver earnings report for a day or date range
 
 **Modifications and Rationale**
-Partitioning helps in optimizing query performance by reducing the amount of data scanned during query execution.
 
-Bucketing improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
+**Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
+
+**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
 
 
 ## Section: III Data Manipulation and Querying
