@@ -17,3 +17,4 @@ WHERE
 		(cl.[drop_lat ]  BETWEEN (@pax_lat-@Range) AND (@pax_lat+@Range)) AND (cl.drop_long BETWEEN (@pax_long-@Range) AND (@pax_long+@Range)) 
 GROUP BY 
 		cc.ubertype
+
