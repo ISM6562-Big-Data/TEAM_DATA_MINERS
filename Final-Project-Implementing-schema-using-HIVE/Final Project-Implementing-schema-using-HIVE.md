@@ -78,6 +78,11 @@ Q5  Recommend most common pickup locations across all trips
 
 Q6 Get driver earnings report for a day or date range
 
+**Modifications and Rationale**
+Partitioning helps in optimizing query performance by reducing the amount of data scanned during query execution.
+
+Bucketing improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
+
 
 ## Section: III Data Manipulation and Querying
 
@@ -85,8 +90,59 @@ Q6 Get driver earnings report for a day or date range
 
 ## Section: IV Performance Considerations
 
+In transitioning the RDBMS schema to Apache Hive, evaluating performance considerations is crucial. Hive, structured atop Hadoop, offers unique advantages and challenges when it comes to processing and managing big data. Here are the key performance factors we examined:
+
+**Query Execution Time:**
+
+**Batch Processing vs. Real-Time:** Hive is optimized for batch processing rather than real-time query execution. We analyzed the response times of typical queries and observed that while Hive handles complex analytical queries across large datasets efficiently, it is slower compared to traditional RDBMS for quick, transactional queries.
+
+**Effect of Partitioning and Bucketing:** Implementing partitioning and bucketing significantly improved query performance by minimizing the amount of data read during query execution. This was particularly noticeable in data-heavy operations such as joins and aggregations.
+
+**Data Throughput:**
+
+**Handling Large Volumes:** One of Hive's strengths is its ability to process large volumes of data. We tested data throughput under various scenarios to determine how well Hive performs under load, especially when compared to RDBMS and Cassandra. Hive's performance shines in scenarios involving massive datasets that are well-partitioned.
+
+**Resource Utilization:**
+
+**MapReduce Efficiency:** Hive queries translate into MapReduce jobs, and thus the efficiency of these jobs heavily influences overall performance. We explored optimizations such as tuning the number of mappers and reducers to enhance resource utilization.
+
+**Comparison with RDBMS and Cassandra:**
+
+**Scalability:** Unlike RDBMS systems, which may struggle with horizontal scaling, Hive scales out effectively due to its Hadoop backbone.
+
+**Write Efficiency:** While Cassandra excels in write-heavy scenarios due to its design, Hive is less efficient in this respect but offers superior capabilities for complex analytical tasks over large datasets.
+
 ## Section: V Challenges and Learnings
+The project of implementing an RDBMS schema in Hive was both challenging and enlightening. Here are some of the key challenges we faced and the learnings we derived from them:
+
+**Schema Translation Complexity:**
+
+**Challenge:** Adapting relational schemas to fit Hive's model required thoughtful consideration, especially in deciding how to handle data normalization and denormalization.
+
+**Learning:** We learned the importance of schema design in big data environments and how strategic decisions like partitioning can impact performance.
+
+**Query Optimization:**
+
+**Challenge:** Optimizing HiveQL queries for performance required a different approach compared to traditional SQL queries.
+
+**Learning:** We gained practical experience in writing efficient HiveQL and understanding the underlying mechanics of how Hive processes these queries.
+
+**Handling Updates and Deletes:**
+
+**Challenge:** Hive’s traditional limitations on transactional features like updates and deletes posed difficulties.
+
+**Learning:** We explored Hive’s newer capabilities, such as ACID transactions and Merge statements, to handle data modifications more effectively.
 
 ## Section: VI Conclusion
+
+The project allowed us to deeply explore Apache Hive's capabilities and limitations within the context of big data warehousing. The hands-on experience has been invaluable in teaching us about the architectural considerations and performance optimizations necessary for effectively utilizing Hive in real-world data warehousing scenarios.
+
+**Insights Gained:** We have come to appreciate Hive's role in big data analytics, particularly its robust handling of large-scale data analysis and its integration with the Hadoop ecosystem.
+
+**Real-world Applications:**  The knowledge gained through this project enhances our ability to design and implement data solutions that are scalable, efficient, and suitable for the evolving needs of businesses handling large volumes of data.
+
+**Comparative Reflection:** Comparing Hive with Cassandra and traditional RDBMS has provided us with a broader perspective on data management technologies, informing our future choices in selecting the right tool for specific data scenarios.
+
+In conclusion, the project not only reinforced our understanding of data warehousing principles but also prepared us to tackle complex data challenges in our future careers, leveraging Apache Hive and other big data technologies
 
 ## Section: VII Appendix
