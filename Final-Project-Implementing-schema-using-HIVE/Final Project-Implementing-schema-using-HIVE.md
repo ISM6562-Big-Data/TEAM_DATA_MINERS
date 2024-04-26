@@ -16,7 +16,7 @@ Handling big data involves challenges like managing large volumes of data, ensur
 
 The project's goal is to translate a traditional RDBMS schema into Apache Hive, providing a hands-on exploration of Hive's data warehousing capabilities within a big data context. This exercise is crafted to yield comprehensive learning outcomes
 
-****Schema Adaptation and Optimization:****
+**Schema Adaptation and Optimization:**
 
 **Transition from RDBMS to Hive:** We aim to understand how relational schemas can be adapted for big data environments, including necessary modifications for Hive optimization. 
 
