@@ -46,39 +46,105 @@ File needs to be added in to HDFS
 
 #### Create Table 
 
+
+
+
+**Passenger**
+
+[Passenger Data File](data/Passenger.csv)
+
+![alt text](images/createPassengerTableStep01.png)
+
+![alt text](images/createPassengerTableStep02.png)
+
+![alt text](images/createPassengerTableStep03.png)
+
+**Car**
+
+[Car Data File](data/Car.csv)
+
+![alt text](images/createCarTableStep01.png)
+
+![alt text](images/createCarTableStep02.png)
+
+![alt text](images/createCarTableStep03.png)
+
+
+**Car Location**
+
+[Car Location Data File](data/CarLocation.csv)
+
+![alt text](images/createCarLocationTableStep01.png)
+
+![alt text](images/createCarLocationTableStep02.png)
+
+![alt text](images/createCarLocationTableStep03.png)
+
+**Driver**
+
+[Driver Data File](data/Driver.csv)
+
+![alt text](images/createDriverTableStep01.png)
+
+![alt text](images/createDriverTableStep02.png)
+
+![alt text](images/createDriverTableStep03.png)
+
+**Request**
+
+[Request Data File](data/Request.csv)
+
+![alt text](images/createRequestTableStep01.png)
+
+![alt text](images/createRequestTableStep02.png)
+
+![alt text](images/createRequestTableStep03.png)
+
+
+**Request To Driver**
+
+[Request To Driver Data File](data/Request_to_Driver.csv)
+
+![alt text](images/createRequestToDriverTableStep01.png)
+
+![alt text](images/createRequestToDriverTableStep02.png)
+
+![alt text](images/createRequestToDriverTableStep03.png)
+
+**Trip**
+
+[Trip Data File](data/Trip.csv)
+
+![alt text](images/createTripTableStep01.png)
+
+![alt text](images/createTripTableStep02.png)
+
+![alt text](images/createTripTableStep03.png)
+
+
+
 #### Alter Table
+
+Query to add clusting buckets for passenger table
+
 ```
 ALTER TABLE Passenger CLUSTERED BY (userID)
 INTO 10 BUCKETS;
 ```
+
 ### HiveQL statements
 Q1 Book a request to drivers 
-```
---1) SQL Query for Booking a Request
--- Assumption: Below variable definitions come from the app
-SET hivevar:userID = 'PAS101';
-SET hivevar:ride_type= 'Uber Green';
-SET hivevar:pickup_lat  = 40.000023459;
-SET hivevar:pickup_long  = 45.000023459;
-SET hivevar:drop_lat  = 100.000023459;
-SET hivevar:drop_long = 80.000023459;
-SET hivevar:seats = 5;
 
-SET hivevar:NextRequestID;
-SET hivevar:MaxNumber;
- 
--- Find the highest request number by extracting the numeric part of the requestID and incrementing it by 1
-SELECT ${hivevar:MaxNumber} = ISNULL(MAX(CAST(SUBSTRING(requestID, 4, LEN(requestID) - 3) AS INT)), 0)
-FROM Request;
-SET ${hivevar:MaxNumber} = ${hivevar:MaxNumber} + 1;
+Assumption: Below variable definitions come from the app
 
--- Construct the next requestID with the incremented number
-SET ${hivevar:NextRequestID} = 'REQ' + RIGHT('000' + CAST(hivevar:NextRequestID), 3);
- 
--- Insert a new ride request
-INSERT INTO Request (requestID, userID, ride_type, pickup_lat, pickup_long, drop_lat, drop_long, seats)
-VALUES (${hivevar:NextRequestID}, ${hivevar:userID}, ${hivevar:ride_type}, ${hivevar:pickup_lat}, ${hivevar:pickup_long}, ${hivevar:drop_lat}, ${hivevar:drop_long}, ${hivevar:seats});
 ```
+-- Inserting Data in Request Table
+INSERT INTO TABLE Request VALUES ('REQ304',  'Uber Green', 40.000023459, -75.000023459,'11112 Sage Canyon Dr', 100.000023459, -75.000023459, 5,'PAS101');
+
+SELECT * FROM Request where requestid='REQ304'
+```
+![alt text](images/Q1_result.png)
+
 Q2 Update Driver response 
 
 Q3 Update Car location
@@ -99,7 +165,7 @@ WHERE cl.current_lat BETWEEN (${hivevar:pax_lat} - ${hivevar:Range}) AND (${hive
   AND cl.current_long BETWEEN (${hivevar:pax_long} - ${hivevar:Range}) AND (${hivevar:pax_long} + ${hivevar:Range})
 GROUP BY cc.ubertype;
 ```
-
+![alt text](images/Q1_result.png)
 
 Q5  Recommend most common pickup locations across all trips
 
