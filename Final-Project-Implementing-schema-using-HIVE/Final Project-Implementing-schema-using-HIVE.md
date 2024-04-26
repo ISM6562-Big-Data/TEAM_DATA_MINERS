@@ -56,12 +56,12 @@ Q1 Book a request to drivers
 ```
 --1) SQL Query for Booking a Request
 -- Assumption: Below variable definitions come from the app
-SET hivevar:userID = PAS101;
-SET hivevar:ride_type VARCHAR(20) = Uber Green;
-SET hivevar:pickup_lat FLOAT = 40.000023459;
-SET hivevar:pickup_long FLOAT = 45.000023459;
-SET hivevar:drop_lat FLOAT = 100.000023459;
-SET hivevar:drop_long FLOAT = 80.000023459;
+SET hivevar:userID = 'PAS101';
+SET hivevar:ride_type= 'Uber Green';
+SET hivevar:pickup_lat  = 40.000023459;
+SET hivevar:pickup_long  = 45.000023459;
+SET hivevar:drop_lat  = 100.000023459;
+SET hivevar:drop_long = 80.000023459;
 SET hivevar:seats INT = 5;
 
 SET hivevar:NextRequestID;
@@ -77,7 +77,7 @@ SET ${hivevar:NextRequestID} = 'REQ' + RIGHT('000' + CAST(hivevar:NextRequestID)
  
 -- Insert a new ride request
 INSERT INTO Request (requestID, userID, ride_type, pickup_lat, pickup_long, drop_lat, drop_long, seats)
-VALUES (@NextRequestID, @userID, @ride_type, @pickup_lat, @pickup_long, @drop_lat, @drop_long, @seats);
+VALUES (${hivevar:NextRequestID}, ${hivevar:userID}, @ride_type, @pickup_lat, @pickup_long, @drop_lat, @drop_long, @seats);
 ```
 Q2 Update Driver response 
 
