@@ -62,7 +62,7 @@ SET hivevar:pickup_lat  = 40.000023459;
 SET hivevar:pickup_long  = 45.000023459;
 SET hivevar:drop_lat  = 100.000023459;
 SET hivevar:drop_long = 80.000023459;
-SET hivevar:seats INT = 5;
+SET hivevar:seats = 5;
 
 SET hivevar:NextRequestID;
 SET hivevar:MaxNumber;
@@ -77,7 +77,7 @@ SET ${hivevar:NextRequestID} = 'REQ' + RIGHT('000' + CAST(hivevar:NextRequestID)
  
 -- Insert a new ride request
 INSERT INTO Request (requestID, userID, ride_type, pickup_lat, pickup_long, drop_lat, drop_long, seats)
-VALUES (${hivevar:NextRequestID}, ${hivevar:userID}, @ride_type, @pickup_lat, @pickup_long, @drop_lat, @drop_long, @seats);
+VALUES (${hivevar:NextRequestID}, ${hivevar:userID}, ${hivevar:ride_type}, ${hivevar:pickup_lat}, ${hivevar:pickup_long}, ${hivevar:drop_lat}, ${hivevar:drop_long}, ${hivevar:seats});
 ```
 Q2 Update Driver response 
 
