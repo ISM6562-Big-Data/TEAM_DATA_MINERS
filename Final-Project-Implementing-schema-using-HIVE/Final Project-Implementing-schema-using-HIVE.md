@@ -49,9 +49,27 @@ When moving from a traditional RDBMS to Hive, it's essential to get acquainted w
 Process Overview:
 
 **Defining the Schema:** We started by identifying the necessary columns and data types based on our RDBMS schema. In the Hive context, we need to consider the data types that Hive supports, which might differ slightly from traditional SQL databases.
+
 **Table Creation:** Using the Hive interface, we defined the Passenger table. Here's the HiveQL statement that encapsulates our table definition
+
 ```
+CREATE TABLE IF NOT EXISTS Passenger (
+    requestID STRING,
+    ride_type STRING,
+    pickup_lat FLOAT,
+    pickup_long FLOAT,
+    pickup_address STRING,
+    drop_lat FLOAT,
+    drop_long FLOAT,
+    seats TINYINT,
+    userID STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
 ```
+This statement sets up a table that matches the columns of the RDBMS schema. We have chosen a text-based storage format, using commas as delimiters, which is frequently used for importing data from CSV files.
 
 **Importing Data:**  With the structure in place, we imported the data from a CSV file into Hive. The interface allowed us to specify the delimiter and preview the data import to ensure accuracy.
 
