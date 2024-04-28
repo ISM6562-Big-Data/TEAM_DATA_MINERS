@@ -190,6 +190,7 @@ Post-import, we engaged in rigorous data validation efforts, querying the CarLoc
 **Challenges Addressed:**
 
 **Geospatial Data Handling:** One of the challenges we navigated was the effective representation and storage of geospatial data, which often requires precise data types and storage considerations.
+
 **Data Import Workflow:** Importing data from CSV and ensuring its correctness in Hive presented a learning curve, necessitating attention to detail in schema mapping and data transformation.
 
 [Car Location Data File](data/CarLocation.csv)
@@ -202,13 +203,59 @@ Post-import, we engaged in rigorous data validation efforts, querying the CarLoc
 
 **Driver**
 
+The Driver table is a key part of our transportation data model in Hive, designed to store detailed information about drivers, crucial for both operational management and analytical purposes.
+
 [Driver Data File](data/Driver.csv)
 
 ![alt text](images/createDriverTableStep01.png)
 
+**Process Steps:**
+
+**Designing the Schema:**
+We identified the essential attributes of a driver that need to be captured, based on our RDBMS schema and the nature of the queries we anticipate.
+**HiveQL Table Definition:**
+The following HiveQL statement was crafted to define the Driver table in our Hive database
+```
+CREATE TABLE Driver (
+    driverID STRING,
+    first_name STRING,
+    last_name STRING,
+    overall_rating FLOAT,
+    gender STRING,
+    mobile_number STRING,
+    email STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+```
+This HiveQL command outlines the structure of the Driver table, indicating the use of commas as field separators, in line with the CSV format of our data.
+
 ![alt text](images/createDriverTableStep02.png)
 
+**Data Import from CSV:**
+
+We proceeded with the data import process by selecting our CSV file located within the HDFS, specifying the file path and ensuring that the import data checkbox was selected. This imports the data into the Driver table post-creation.
+
+**Data Verification:**
+After the import was completed, a series of data integrity checks were performed. We ran sample queries to ensure that the data was accurately reflected in Hive and that there were no discrepancies from the source CSV.
+
+**Rationale for Data Types and Structure:**
+
+1. We chose STRING for most fields to ensure that all textual data, including potentially alphanumeric identifiers, are accurately captured.
+   
+2. FLOAT was selected for the overall_rating to represent driver ratings with decimal precision.
+   
+3. The use of TEXTFILE format facilitates straightforward inspection and debugging of raw data.
+
 ![alt text](images/createDriverTableStep03.png)
+
+**Challenges Encountered:**
+
+**Ensuring Data Type Compatibility:**  Matching the CSV data types with those supported by Hive and ensuring accurate data representation was a key challenge.
+
+**Data Quality Assurance:**  Post-import, we needed to validate the data quality, which included checking for any import errors or data corruption.
+
 
 **Request**
 
