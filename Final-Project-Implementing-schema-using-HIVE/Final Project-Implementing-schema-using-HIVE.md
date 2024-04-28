@@ -53,7 +53,7 @@ When moving from a traditional RDBMS to Hive, it's essential to get acquainted w
 **Table Creation:** Using the Hive interface, we defined the Passenger table. Here's the HiveQL statement that encapsulates our table definition
 
 ```
-CREATE TABLE IF NOT EXISTS Passenger (
+CREATE TABLE Passenger (
     requestID STRING,
     ride_type STRING,
     pickup_lat FLOAT,
@@ -108,7 +108,7 @@ The Car table was conceived to encapsulate the various attributes of vehicles in
 Leveraging HiveQL, we executed the following statement to create the Car table, with consideration for Hive's data types and the nature of our data
 
 ```
-CREATE TABLE IF NOT EXISTS Car (
+CREATE TABLE Car (
     car_id STRING,
     car_vin_no STRING,
     plate_number STRING,
