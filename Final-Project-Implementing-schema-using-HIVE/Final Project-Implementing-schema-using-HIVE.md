@@ -135,7 +135,7 @@ Post-import, we conducted a series of queries to confirm the integrity and accur
 
 **Schema Mapping:** Aligning the CSV data types with those available in Hive required careful consideration to avoid data type mismatches that could lead to errors during data loading.
 
-**Data Validation:** Ensuring that the imported data faithfully represented the original source necessitated a meticulous validation process.
+**Data Validation:** Ensuring that the imported data is correctly representing the original source necessitated a meticulous validation process.
 
 [Car Data File](data/Car.csv)
 
@@ -147,6 +147,50 @@ Post-import, we conducted a series of queries to confirm the integrity and accur
 
 
 **Car Location**
+
+**Table Creation: CarLocation**
+
+**Process Outline:**
+
+Here we  focus on constructing the CarLocation table within the Hive data warehouse. This process underscores our ability to translate and manage geospatial data, crucial for dynamic querying and analytics within our domain.
+
+**Schema Design:**
+We began by crafting a schema that captures the real-time locations of cars, essential for tracking and deployment in transportation networks. The design process involved defining the table's structure to include identifiers and geographic coordinates.
+
+**HiveQL Table Definition:**
+We formulated the following HiveQL command to define the CarLocation table
+```
+CREATE TABLE CarLocation (
+    carlocationID STRING,
+    carID STRING,
+    current_lat FLOAT,
+    current_long FLOAT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+```
+This command constructs a table ready to ingest the location data, with each field delineated by a comma, in keeping with the CSV format of our incoming data file.
+
+**Data Ingestion:**
+The subsequent stage involved importing the location data from a CSV file housed in HDFS. This process is streamlined by the Hive interface, which simplifies data loading while ensuring the fidelity of the data to our defined schema.
+
+**Validation and Integrity Checks:**
+Post-import, we engaged in rigorous data validation efforts, querying the CarLocation table to verify the consistency and accuracy of the data importation process.
+
+**Rationale and Considerations:**
+
+1. Selecting TEXTFILE for storage was influenced by the direct import from a CSV format and allows for straightforward data debugging and manual review if needed.
+
+2. The data types chosen, such as STRING for identifiers and FLOAT for latitude and longitude, accommodate the necessary precision for geospatial data without incurring the storage overhead of more complex types.
+
+3. The use of commas to separate fields reflects our CSV source file, ensuring congruence between the data format and Hive's expectations.
+
+**Challenges Addressed:**
+
+**Geospatial Data Handling:** One of the challenges we navigated was the effective representation and storage of geospatial data, which often requires precise data types and storage considerations.
+**Data Import Workflow:** Importing data from CSV and ensuring its correctness in Hive presented a learning curve, necessitating attention to detail in schema mapping and data transformation.
 
 [Car Location Data File](data/CarLocation.csv)
 
