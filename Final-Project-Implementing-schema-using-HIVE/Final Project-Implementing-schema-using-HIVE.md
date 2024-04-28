@@ -46,7 +46,7 @@ File needs to be added in to HDFS
 When moving from a traditional RDBMS to Hive, it's essential to get acquainted with the Hive ecosystem and its query language, HiveQL. In this section, the concentration was on setting up the Passenger table as an example to demonstrate how to implement a typical table structure within Hive.
 
 #### Create Table :Passenger
-Process Overview:
+**Process Outline:**
 
 **Defining the Schema:** We started by identifying the necessary columns and data types based on our RDBMS schema. In the Hive context, we need to consider the data types that Hive supports, which might differ slightly from traditional SQL databases.
 
@@ -94,6 +94,48 @@ Another was dealing with the nuances of Hive's data import mechanisms, particula
 ![alt text](images/createPassengerTableStep03.png)
 
 **Car**
+
+**Table Creation: Car**
+
+This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
+
+**Process Outline:**
+
+**Defining the Table:**
+The Car table was conceived to encapsulate the various attributes of vehicles in our dataset. We commenced by defining the schema in the Hive Metastore, specifying column names and types that reflect our data model.
+
+**Table Creation in HiveQL:**
+Leveraging HiveQL, we executed the following statement to create the Car table, with consideration for Hive's data types and the nature of our data
+
+```
+CREATE TABLE IF NOT EXISTS Car (
+    car_id STRING,
+    car_vin_no STRING,
+    plate_number STRING,
+    make STRING,
+    model STRING,
+    seats TINYINT,
+    ubertype STRING,
+    driverID STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+```
+
+This creates a new table with a structure ready to accommodate the CSV data we intended to import, denoting a comma as the field delimiter consistent with our data format.
+
+**Data Import:**
+With the structure in place, we initiated the data import process by selecting the CSV file from HDFS. This file was pre-validated to ensure compatibility with our table's schema, both in terms of content and format.
+
+**Data Verification:**
+Post-import, we conducted a series of queries to confirm the integrity and accuracy of the data. This step was essential to ensure that the data loaded into Hive was free from any import-related anomalies.
+
+**Challenges Encountered:**
+
+**Schema Mapping:** Aligning the CSV data types with those available in Hive required careful consideration to avoid data type mismatches that could lead to errors during data loading.
+
+**Data Validation:** Ensuring that the imported data faithfully represented the original source necessitated a meticulous validation process.
 
 [Car Data File](data/Car.csv)
 
