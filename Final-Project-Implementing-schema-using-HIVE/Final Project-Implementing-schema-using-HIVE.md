@@ -45,7 +45,8 @@ File needs to be added in to HDFS
 ### Implementing RDBMS schema into Hive
 When moving from a traditional RDBMS to Hive, it's essential to get acquainted with the Hive ecosystem and its query language, HiveQL. In this section, the concentration was on setting up the Passenger table as an example to demonstrate how to implement a typical table structure within Hive.
 
-#### Create Table :Passenger
+#### Table Creation : Passenger
+
 **Process Outline:**
 
 **Defining the Schema:** We started by identifying the necessary columns and data types based on our RDBMS schema. In the Hive context, we need to consider the data types that Hive supports, which might differ slightly from traditional SQL databases.
@@ -78,9 +79,8 @@ This statement sets up a table that matches the columns of the RDBMS schema. We 
 **Challenges Overcome:**
 
 One challenge was ensuring that the data types chosen in HiveQL matched the data from our CSV file. Incorrect data types can result in errors or loss of precision.
+
 Another was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
-
-
 
 
 **Passenger**
@@ -93,9 +93,10 @@ Another was dealing with the nuances of Hive's data import mechanisms, particula
 
 ![alt text](images/createPassengerTableStep03.png)
 
+
 **Car**
 
-**Table Creation: Car**
+#### Table Creation : Car
 
 This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
 
@@ -122,7 +123,6 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE;
 ```
-
 This creates a new table with a structure ready to accommodate the CSV data we intended to import, denoting a comma as the field delimiter consistent with our data format.
 
 **Data Import:**
@@ -148,7 +148,7 @@ Post-import, we conducted a series of queries to confirm the integrity and accur
 
 **Car Location**
 
-**Table Creation: CarLocation**
+#### Table Creation : Car Location
 
 **Process Outline:**
 
@@ -209,12 +209,16 @@ The Driver table is a key part of our transportation data model in Hive, designe
 
 ![alt text](images/createDriverTableStep01.png)
 
-**Process Steps:**
+#### Table Creation : Driver
+
+**Process Outline:**
 
 **Designing the Schema:**
 We identified the essential attributes of a driver that need to be captured, based on our RDBMS schema and the nature of the queries we anticipate.
+
 **HiveQL Table Definition:**
-The following HiveQL statement was crafted to define the Driver table in our Hive database
+The following HiveQL statement was crafted to define the Driver table in our Hive database.
+
 ```
 CREATE TABLE Driver (
     driverID STRING,
@@ -259,16 +263,121 @@ After the import was completed, a series of data integrity checks were performed
 
 **Request**
 
+
+
+This table is pivotal for tracking user requests and managing the dispatch system within our transportation data model.
+
 [Request Data File](data/Request.csv)
+
+#### Table Creation : Request
+
+**Process Outline:**
+
+**Schema Definition:**
+
+We drafted a schema that details user ride requests, incorporating fields for identification, ride type, pickup and drop-off coordinates, and other relevant information.
+
+**HiveQL Table Construction:**
+We used the following HiveQL statement to create the Request table, which aligns with our designated data structure
+
+```
+CREATE TABLE Request (
+    requestID STRING,
+    ride_type STRING,
+    pickup_lat FLOAT,
+    pickup_long FLOAT,
+    pickup_address STRING,
+    drop_lat FLOAT,
+    drop_long FLOAT,
+    seats TINYINT,
+    userID STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+```
+This command defines the table in Hive with the appropriate data types and designates a comma as the field separator.
+
+**CSV Data Import:**
+
+Following the table creation, we imported the data from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
+
+**Data Integrity Assurance:**
+
+Post-import, we executed validation queries against the Request table. This step confirmed the accurate representation of our data within Hive and ensured that the import was successful without any loss or corruption of data.
 
 ![alt text](images/createRequestTableStep01.png)
 
+
 ![alt text](images/createRequestTableStep02.png)
+
+**Rationale for Data Types and Structure:**
+
+1. The STRING type was chosen for identifiers and addresses to handle variable-length text.
+   
+2.  FLOAT was selected for latitude and longitude to accommodate geographic coordinates with the required precision.
+ 
+3. TINYINT is suitable for the number of seats, which would typically be a small number and doesn't necessitate a larger integer type.
+
+**Challenges Addressed:**
+
+**Schema-Data Compatibility:** Careful mapping between the schema and the CSV data was crucial to prevent type mismatches and data import errors.
+
+**Data Quality Verification:**  After the data import, we meticulously verified the quality to ensure it met our accuracy standards.
+   
 
 ![alt text](images/createRequestTableStep03.png)
 
 
 **Request To Driver**
+
+#### Table Creation : Request_ To_ Driver
+
+ The Request_to_Driver table forms a key link between the service requests by users and the drivers who fulfill them. This table is essential for understanding and optimizing the assignment process in our transportation model.
+
+**Process Outline:**
+
+**Schema Designing:**
+
+This table is designed to track which driver accepted which request. Fields include unique identifiers for the request, the driver, and a status indicator for acceptance.
+
+**HiveQL Table Definition:**
+We crafted the following HiveQL statement to accurately define the Request_to_Driver table
+
+```
+CREATE TABLE Request_to_Driver (
+    requestdriverID STRING,
+    driverID STRING,
+    requestID STRING,
+    is_accepted BOOLEAN
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+```
+This creates a Hive table structured to capture relationships between ride requests and drivers, facilitating the analysis of driver response patterns and request fulfillment rates.
+
+**CSV Data Loading:**
+Once the table structure was in place, we loaded the data from a CSV file, ensuring each column corresponded correctly to the data types defined in the Hive table.
+
+**Data Integrity Validation:**
+
+Following the import, we conducted data integrity checks by querying the table. This step is crucial for ensuring that the imported data is accurate and properly formatted, reflecting true associations between requests and drivers.
+
+**Considerations and Rationale:**
+
+1.The STRING data type for identifiers provides the flexibility to handle alphanumeric data which is often used in real-world applications for IDs.
+
+2.The BOOLEAN type for the is_accepted field allows us to store true/false values effectively, representing whether a driver has accepted a request.
+
+**Challenges Tackled:**
+
+**Complex Data Relationships:**  Ensuring that the data imported reflects the many-to-many relationships inherent in ride requests and driver assignments.
+
+**Data Type Mappings:**  Mapping the boolean values correctly from CSV to Hive, given that CSV does not have a native boolean type, required some preprocessing of the data.
+
 
 [Request To Driver Data File](data/Request_to_Driver.csv)
 
@@ -279,6 +388,56 @@ After the import was completed, a series of data integrity checks were performed
 ![alt text](images/createRequestToDriverTableStep03.png)
 
 **Trip**
+
+This table is a significant entity that holds detailed records of each trip, encompassing aspects such as timings, duration, ratings, and fare, which are critical for operational analysis and financial reporting.
+
+#### Table Creation : Trip
+
+**Process Overview:**
+
+**Table Schema Definition:**
+
+We drafted a schema for the Trip table that captures a broad spectrum of trip-related data, designed to facilitate deep analytics on trip efficiency, driver performance, and revenue generation.
+
+**HiveQL Table Construction:**
+
+The following HiveQL statement was formulated for defining the Trip table
+
+```
+CREATE TABLE Trip (
+    trip_id STRING,
+    start_time STRING,
+    duration STRING,
+    driver_rating INT,
+    passenger_rating INT,
+    driver_id STRING,
+    request_id STRING,
+    total_fare DOUBLE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+```
+This command is tailored to match our data structure, ensuring the field types are compatible with the data we will be importing from the CSV file.
+
+**Data Import from CSV:**
+Once the table was defined, we imported the trip data from the CSV file located in the HDFS, using Hive's data import functionality that matches the columns of our CSV with the table schema we defined.
+
+**Data Validation:**
+Post-import, validation queries were performed against the Trip table to ensure the integrity and completeness of the data imported into Hive.
+
+**Considerations and Rationale:**
+
+1. STRING data type was chosen for trip_id, start_time, and request_id to accurately capture alphanumeric identifiers and timestamps.
+   
+2. INT and DOUBLE data types for ratings and fare, respectively, were selected to reflect the quantitative nature of this data while preserving precision for analytics.
+   
+**Challenges Encountered:**
+
+**Complex Data Formatting:** Dealing with various data formats, particularly for timestamps and duration, required careful planning during the import process.
+
+**Accuracy in Financial Data:** Ensuring that the total fare amounts were correctly imported and represented in Hive, given their importance for revenue analysis.
 
 [Trip Data File](data/Trip.csv)
 
