@@ -1,8 +1,8 @@
-# UBER : Using HIVE Schema
+# UBER Ride Sharing App (Hive Approach)
 ## Section: I Introduction
 **Introduction to Apache Hive**
 
-Apache Hive is a robust data warehousing solution built atop the Hadoop ecosystem, originally developed by Facebook. Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop environment. It converts SQL-like queries, known as HiveQL, into MapReduce jobs, making it ideal for SQL-knowledgeable users transitioning into big data roles.
+Apache Hive is a robust data warehousing solution built atop the Hadoop ecosystem, originally developed by Facebook (2008). Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop Distributed File System. HiveQL syntactically is similar to SQL allowing SQL-knowledgeable users to transition into big data roles. HiveQL converts the queries into MapReduce jobs, making it ideal for querying data in distributed environment.  
 
 **Overview of Apache Hive**
 
