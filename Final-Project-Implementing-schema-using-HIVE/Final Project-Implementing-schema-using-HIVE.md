@@ -43,8 +43,24 @@ Through this project, we aim to replicate and enhance the structured data model 
 File needs to be added in to HDFS 
 
 ### Implementing RDBMS schema into Hive
+When moving from a traditional RDBMS to Hive, it's essential to get acquainted with the Hive ecosystem and its query language, HiveQL. In this section, the concentration was on setting up the Passenger table as an example to demonstrate how to implement a typical table structure within Hive.
 
-#### Create Table 
+#### Create Table :Passenger
+Process Overview:
+
+**Defining the Schema:** We started by identifying the necessary columns and data types based on our RDBMS schema. In the Hive context, we need to consider the data types that Hive supports, which might differ slightly from traditional SQL databases.
+**Table Creation:** Using the Hive interface, we defined the Passenger table. Here's the HiveQL statement that encapsulates our table definition
+```
+```
+
+**Importing Data:**  With the structure in place, we imported the data from a CSV file into Hive. The interface allowed us to specify the delimiter and preview the data import to ensure accuracy.
+
+**Verification:** After importing the data, we executed sample queries to validate the integrity and correctness of the data within the Passenger table.
+
+**Challenges Overcome:**
+
+One challenge was ensuring that the data types chosen in HiveQL matched the data from our CSV file. Incorrect data types can result in errors or loss of precision.
+Another was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
 
 
 
