@@ -432,7 +432,7 @@ The following HiveQL statement was formulated for defining the Trip table
 ```
 CREATE TABLE Trip (
     trip_id STRING,
-    start_time STRING,
+    trip_date DATE,
     duration STRING,
     driver_rating INT,
     passenger_rating INT,
@@ -566,11 +566,12 @@ select pickup_address,count(*) as total_request from request group by pickup_add
 ````sql
 SET hivevar:requestDate = '2024-02-23';
 SET hivevar:driverId = 'DR356';
-Select trip_date,driver_id, sum (total_fare) as totalEarnings from trip 
+
+select trip_date,driver_id, sum (total_fare) as totalEarnings from trip 
 where driver_id=${hivevar:driverId} and trip_date = ${hivevar:requestDate} 
 group by driver_id,trip_date;
 ````
-![alt text](images/Q4_result.png)
+![alt text](images/Q5_result.png)
 
 ### HiveQL queries to perform data insertion, updating, deletion, and retrieval
 
