@@ -45,7 +45,7 @@ File needs to be added in to HDFS
 ### Implementing RDBMS schema into Hive
 When moving from a traditional RDBMS to Hive, it's essential to get acquainted with the Hive ecosystem and its query language, HiveQL. In this section, the concentration was on setting up the Passenger table as an example to demonstrate how to implement a typical table structure within Hive.
 
-#### Table Creation : Passenger
+#### Table: Passenger
 
 **Process Outline:**
 
@@ -74,17 +74,6 @@ This statement sets up a table that matches the columns of the RDBMS schema. We 
 
 **Importing Data:**  With the structure in place, we imported the data from a CSV file into Hive. The interface allowed us to specify the delimiter and preview the data import to ensure accuracy.
 
-**Verification:** After importing the data, we executed sample queries to validate the integrity and correctness of the data within the Passenger table.
-
-**Challenges Overcome:**
-
-One challenge was ensuring that the data types chosen in HiveQL matched the data from our CSV file. Incorrect data types can result in errors or loss of precision.
-
-Another was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
-
-
-**Passenger**
-
 [Passenger Data File](data/Passenger.csv)
 
 ![alt text](images/createPassengerTableStep01.png)
@@ -93,14 +82,27 @@ Another was dealing with the nuances of Hive's data import mechanisms, particula
 
 ![alt text](images/createPassengerTableStep03.png)
 
+**Alter Table**
+Query to add clusting buckets for passenger table
 
-**Car**
+```
+ALTER TABLE passenger CLUSTERED BY (userID)
+INTO 10 BUCKETS;
+```
 
-#### Table Creation : Car
+**Verification:** After importing the data, we executed sample queries to validate the integrity and correctness of the data within the Passenger table.
 
-This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
+**Challenges Overcome:**
+
+One challenge was ensuring that the data types chosen in HiveQL matched the data from our CSV file. Incorrect data types can result in errors or loss of precision.
+
+Another was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
+
+#### Table: Car
+
 
 **Process Outline:**
+This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
 
 **Defining the Table:**
 The Car table was conceived to encapsulate the various attributes of vehicles in our dataset. We commenced by defining the schema in the Hive Metastore, specifying column names and types that reflect our data model.
@@ -128,6 +130,22 @@ This creates a new table with a structure ready to accommodate the CSV data we i
 **Data Import:**
 With the structure in place, we initiated the data import process by selecting the CSV file from HDFS. This file was pre-validated to ensure compatibility with our table's schema, both in terms of content and format.
 
+[Car Data File](data/Car.csv)
+
+![alt text](images/createCarTableStep01.png)
+
+![alt text](images/createCarTableStep02.png)
+
+![alt text](images/createCarTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for car table
+
+```
+ALTER TABLE car CLUSTERED BY (car_id)
+INTO 10 BUCKETS;
+```
+
 **Data Verification:**
 Post-import, we conducted a series of queries to confirm the integrity and accuracy of the data. This step was essential to ensure that the data loaded into Hive was free from any import-related anomalies.
 
@@ -137,18 +155,7 @@ Post-import, we conducted a series of queries to confirm the integrity and accur
 
 **Data Validation:** Ensuring that the imported data is correctly representing the original source necessitated a meticulous validation process.
 
-[Car Data File](data/Car.csv)
-
-![alt text](images/createCarTableStep01.png)
-
-![alt text](images/createCarTableStep02.png)
-
-![alt text](images/createCarTableStep03.png)
-
-
-**Car Location**
-
-#### Table Creation : Car Location
+#### Table: Car Location
 
 **Process Outline:**
 
@@ -173,8 +180,24 @@ STORED AS TEXTFILE;
 ```
 This command constructs a table ready to ingest the location data, with each field delineated by a comma, in keeping with the CSV format of our incoming data file.
 
-**Data Ingestion:**
+**Data Import from CSV:**
 The subsequent stage involved importing the location data from a CSV file housed in HDFS. This process is streamlined by the Hive interface, which simplifies data loading while ensuring the fidelity of the data to our defined schema.
+
+[Car Location Data File](data/CarLocation.csv)
+
+![alt text](images/createCarLocationTableStep01.png)
+
+![alt text](images/createCarLocationTableStep02.png)
+
+![alt text](images/createCarLocationTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for carLocation table
+
+```
+ALTER TABLE carLocation CLUSTERED BY (carid)
+INTO 10 BUCKETS;
+```
 
 **Validation and Integrity Checks:**
 Post-import, we engaged in rigorous data validation efforts, querying the CarLocation table to verify the consistency and accuracy of the data importation process.
@@ -193,23 +216,9 @@ Post-import, we engaged in rigorous data validation efforts, querying the CarLoc
 
 **Data Import Workflow:** Importing data from CSV and ensuring its correctness in Hive presented a learning curve, necessitating attention to detail in schema mapping and data transformation.
 
-[Car Location Data File](data/CarLocation.csv)
-
-![alt text](images/createCarLocationTableStep01.png)
-
-![alt text](images/createCarLocationTableStep02.png)
-
-![alt text](images/createCarLocationTableStep03.png)
-
-**Driver**
+#### Table: Driver
 
 The Driver table is a key part of our transportation data model in Hive, designed to store detailed information about drivers, crucial for both operational management and analytical purposes.
-
-[Driver Data File](data/Driver.csv)
-
-![alt text](images/createDriverTableStep01.png)
-
-#### Table Creation : Driver
 
 **Process Outline:**
 
@@ -235,11 +244,25 @@ STORED AS TEXTFILE;
 ```
 This HiveQL command outlines the structure of the Driver table, indicating the use of commas as field separators, in line with the CSV format of our data.
 
-![alt text](images/createDriverTableStep02.png)
-
 **Data Import from CSV:**
 
 We proceeded with the data import process by selecting our CSV file located within the HDFS, specifying the file path and ensuring that the import data checkbox was selected. This imports the data into the Driver table post-creation.
+
+[Driver Data File](data/Driver.csv)
+
+![alt text](images/createDriverTableStep01.png)
+
+![alt text](images/createDriverTableStep02.png)
+
+![alt text](images/createDriverTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for driver table
+
+```
+ALTER TABLE driver CLUSTERED BY (driverid)
+INTO 10 BUCKETS;
+```
 
 **Data Verification:**
 After the import was completed, a series of data integrity checks were performed. We ran sample queries to ensure that the data was accurately reflected in Hive and that there were no discrepancies from the source CSV.
@@ -252,7 +275,6 @@ After the import was completed, a series of data integrity checks were performed
    
 3. The use of TEXTFILE format facilitates straightforward inspection and debugging of raw data.
 
-![alt text](images/createDriverTableStep03.png)
 
 **Challenges Encountered:**
 
@@ -260,16 +282,9 @@ After the import was completed, a series of data integrity checks were performed
 
 **Data Quality Assurance:**  Post-import, we needed to validate the data quality, which included checking for any import errors or data corruption.
 
-
-**Request**
-
-
+#### Table: Request
 
 This table is pivotal for tracking user requests and managing the dispatch system within our transportation data model.
-
-[Request Data File](data/Request.csv)
-
-#### Table Creation : Request
 
 **Process Outline:**
 
@@ -301,16 +316,28 @@ This command defines the table in Hive with the appropriate data types and desig
 
 **CSV Data Import:**
 
-Following the table creation, we imported the data from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
+We imported the data from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
+
+[Request Data File](data/Request.csv)
+
+![alt text](images/createRequestTableStep01.png)
+
+![alt text](images/createRequestTableStep02.png)
+
+![alt text](images/createRequestTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for request table
+
+```
+ALTER TABLE Request CLUSTERED BY (requestid)
+INTO 10 BUCKETS;
+```
 
 **Data Integrity Assurance:**
 
 Post-import, we executed validation queries against the Request table. This step confirmed the accurate representation of our data within Hive and ensured that the import was successful without any loss or corruption of data.
 
-![alt text](images/createRequestTableStep01.png)
-
-
-![alt text](images/createRequestTableStep02.png)
 
 **Rationale for Data Types and Structure:**
 
@@ -324,15 +351,9 @@ Post-import, we executed validation queries against the Request table. This step
 
 **Schema-Data Compatibility:** Careful mapping between the schema and the CSV data was crucial to prevent type mismatches and data import errors.
 
-**Data Quality Verification:**  After the data import, we meticulously verified the quality to ensure it met our accuracy standards.
-   
+**Data Quality Verification:**  After the data import, we meticulously verified the quality to ensure it met our accuracy standards. 
 
-![alt text](images/createRequestTableStep03.png)
-
-
-**Request To Driver**
-
-#### Table Creation : Request_ To_ Driver
+#### Table: Request To Driver
 
  The Request_to_Driver table forms a key link between the service requests by users and the drivers who fulfill them. This table is essential for understanding and optimizing the assignment process in our transportation model.
 
@@ -360,7 +381,23 @@ STORED AS TEXTFILE;
 This creates a Hive table structured to capture relationships between ride requests and drivers, facilitating the analysis of driver response patterns and request fulfillment rates.
 
 **CSV Data Loading:**
-Once the table structure was in place, we loaded the data from a CSV file, ensuring each column corresponded correctly to the data types defined in the Hive table.
+We loaded the data from a CSV file, ensuring each column corresponded correctly to the data types defined in the Hive table.
+
+[Request To Driver Data File](data/Request_to_Driver.csv)
+
+![alt text](images/createRequestToDriverTableStep01.png)
+
+![alt text](images/createRequestToDriverTableStep02.png)
+
+![alt text](images/createRequestToDriverTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for request to driver table
+
+```
+ALTER TABLE request_to_driver CLUSTERED BY (requestid)
+INTO 10 BUCKETS;
+```
 
 **Data Integrity Validation:**
 
@@ -378,20 +415,9 @@ Following the import, we conducted data integrity checks by querying the table. 
 
 **Data Type Mappings:**  Mapping the boolean values correctly from CSV to Hive, given that CSV does not have a native boolean type, required some preprocessing of the data.
 
-
-[Request To Driver Data File](data/Request_to_Driver.csv)
-
-![alt text](images/createRequestToDriverTableStep01.png)
-
-![alt text](images/createRequestToDriverTableStep02.png)
-
-![alt text](images/createRequestToDriverTableStep03.png)
-
-**Trip**
+#### Table: Trip
 
 This table is a significant entity that holds detailed records of each trip, encompassing aspects such as timings, duration, ratings, and fare, which are critical for operational analysis and financial reporting.
-
-#### Table Creation : Trip
 
 **Process Overview:**
 
@@ -422,7 +448,23 @@ STORED AS TEXTFILE;
 This command is tailored to match our data structure, ensuring the field types are compatible with the data we will be importing from the CSV file.
 
 **Data Import from CSV:**
-Once the table was defined, we imported the trip data from the CSV file located in the HDFS, using Hive's data import functionality that matches the columns of our CSV with the table schema we defined.
+We imported the trip data from the CSV file located in the HDFS, using Hive's data import functionality that matches the columns of our CSV with the table schema we defined.
+
+[Trip Data File](data/Trip.csv)
+
+![alt text](images/createTripTableStep01.png)
+
+![alt text](images/createTripTableStep02.png)
+
+![alt text](images/createTripTableStep03.png)
+
+**Alter Table**
+Query to add clusting buckets for trip table
+
+```
+ALTER TABLE trip CLUSTERED BY (trip_id)
+INTO 10 BUCKETS;
+```
 
 **Data Validation:**
 Post-import, validation queries were performed against the Trip table to ensure the integrity and completeness of the data imported into Hive.
@@ -439,44 +481,62 @@ Post-import, validation queries were performed against the Trip table to ensure 
 
 **Accuracy in Financial Data:** Ensuring that the total fare amounts were correctly imported and represented in Hive, given their importance for revenue analysis.
 
-[Trip Data File](data/Trip.csv)
-
-![alt text](images/createTripTableStep01.png)
-
-![alt text](images/createTripTableStep02.png)
-
-![alt text](images/createTripTableStep03.png)
-
-
-
-#### Alter Table
-
-Query to add clusting buckets for passenger table
-
-```
-ALTER TABLE Passenger CLUSTERED BY (userID)
-INTO 10 BUCKETS;
-```
-
 ### HiveQL statements
-Q1 Book a request to drivers 
+
+**Q1 Book a request to drivers** 
 
 Assumption: Below variable definitions come from the app
 
-```
--- Inserting Data in Request Table
-INSERT INTO TABLE Request VALUES ('REQ304',  'Uber Green', 40.000023459, -75.000023459,'11112 Sage Canyon Dr', 100.000023459, -75.000023459, 5,'PAS101');
+````sql
+SET hivevar:requestId = 'REQ304';
+SET hivevar:paxId = 'PAS101';
+SET hivevar:requestdriverid1 = 'REQ304DR201';
+SET hivevar:requestdriverid2 = 'REQ304DR202';
+SET hivevar:driverid1 = 'DR201';
+SET hivevar:driverid2 = 'DR202';
 
-SELECT * FROM Request where requestid='REQ304'
-```
+
+INSERT INTO TABLE Request VALUES (${hivevar:requestId}, 'Uber Green', 40.000023459, -75.000023459,'11112 Sage Canyon Dr', 100.000023459, -75.000023459, 5,${hivevar:paxId});
+
+INSERT INTO TABLE Request_to_driver VALUES (${hivevar:requestdriverid1},${hivevar:driverid1}, ${hivevar:requestId},false);
+
+INSERT INTO TABLE Request_to_driver VALUES (${hivevar:requestdriverid2},${hivevar:driverid1}, ${hivevar:requestId},false);
+````
+
 ![alt text](images/Q1_result.png)
 
-Q2 Update Driver response 
+````sql
+select * from Request_to_driver where requestdriverid in ('REQ304DR202','REQ304DR201')
+````
+![alt text](images/Q1_2_result.png)
 
-Q3 Update Car location
 
-Q4 Find Nearest Car
-```
+**Modifications and Rationale**
+
+**Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
+
+**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
+
+
+## Section: III Data Manipulation and Querying
+
+**Q2: Update Driver response** 
+
+````sql
+insert overwrite table request_to_driver 
+select requestdriverid,driverid,requestid, 
+case when requestdriverid ='REQ304DR201' then true else is_accepted end as is_accepted
+from request_to_driver ;
+````
+![alt text](images/Q2_1_result.png)
+````sql
+select * from Request_to_driver where requestdriverid = 'REQ304DR201'
+````
+![alt text](images/Q2_2_result.png)
+
+**Q3: Find Nearest Car**
+
+````sql
 SET hivevar:pax_lat = 72.0;
 SET hivevar:pax_long = -100.0;
 SET hivevar:Range = 20.0;
@@ -490,21 +550,17 @@ JOIN Car cc ON cc.car_id = cl.carid
 WHERE cl.current_lat BETWEEN (${hivevar:pax_lat} - ${hivevar:Range}) AND (${hivevar:pax_lat} + ${hivevar:Range})
   AND cl.current_long BETWEEN (${hivevar:pax_long} - ${hivevar:Range}) AND (${hivevar:pax_long} + ${hivevar:Range})
 GROUP BY cc.ubertype;
-```
-![alt text](images/Q1_result.png)
+````
+![alt text](images/Q3_result.png)
 
-Q5  Recommend most common pickup locations across all trips
+**Q4: Recommend most common pickup locations across all trips**
 
-Q6 Get driver earnings report for a day or date range
+````sql
+select pickup_address,count(*) as total_request from request group by pickup_address order by total_request desc LIMIT 1;
+````
+![alt text](images/Q4_result.png)
 
-**Modifications and Rationale**
-
-**Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
-
-**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
-
-
-## Section: III Data Manipulation and Querying
+**Q5: Get driver earnings report for a day or date range**
 
 ### HiveQL queries to perform data insertion, updating, deletion, and retrieval
 
