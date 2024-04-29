@@ -496,7 +496,8 @@ SET hivevar:driverid1 = 'DR201';
 SET hivevar:driverid2 = 'DR202';
 
 
-INSERT INTO TABLE Request VALUES (${hivevar:requestId}, 'Uber Green', 40.000023459, -75.000023459,'11112 Sage Canyon Dr', 100.000023459, -75.000023459, 5,${hivevar:paxId});
+INSERT INTO TABLE Request VALUES (${hivevar:requestId}, 'Uber Green', 40.000023459, -75.000023459,
+'11112 Sage Canyon Dr', 100.000023459, -75.000023459, 5,${hivevar:paxId});
 
 INSERT INTO TABLE Request_to_driver VALUES (${hivevar:requestdriverid1},${hivevar:driverid1}, ${hivevar:requestId},false);
 
@@ -561,6 +562,15 @@ select pickup_address,count(*) as total_request from request group by pickup_add
 ![alt text](images/Q4_result.png)
 
 **Q5: Get driver earnings report for a day or date range**
+
+````sql
+SET hivevar:requestDate = '2024-02-23';
+SET hivevar:driverId = 'DR356';
+Select trip_date,driver_id, sum (total_fare) as totalEarnings from trip 
+where driver_id=${hivevar:driverId} and trip_date = ${hivevar:requestDate} 
+group by driver_id,trip_date;
+````
+![alt text](images/Q4_result.png)
 
 ### HiveQL queries to perform data insertion, updating, deletion, and retrieval
 
