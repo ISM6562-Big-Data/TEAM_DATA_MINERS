@@ -18,25 +18,16 @@ The project's goal is to translate a traditional RDBMS schema into Apache Hive, 
 
 **Schema Adaptation and Optimization:**
 
-**Transition from RDBMS to Hive:** The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. The specialized functions of SQL are not supported in Hive. For instance, SELECT TOP 10 From TableName does not have a parallel in Hive, or when it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
+**Transition from RDBMS to Hive:** The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. The specialized functions of SQL are not supported in Hive. For instance, SQL statement SELECT TOP 10 From TableName does not have a parallel in Hive, or when it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
 
 **Optimization Techniques:**
-We will explore strategies such as partitioning and bucketing, which are crucial for improving data management and query performance in Hive.
+Query optimization techniques include bucketing based on hash function, partitioning based on column values, join optimization like placing larger table first, denormalization of data by avoiding joins, allocating required memory for the map-reduce tasks based on the data size, etc.   
 
 
-**Leveraging SQL-like Capabilities in Big Data:**
+**Performance and Scalability Analysis (Hive vs Cassandra)**
 
-Utilizing HiveQL will demonstrate the convergence of traditional SQL skills with big data technologies, easing the transition for those familiar with conventional databases and enhancing our strategic capabilities in data manipulation and query formulation.
+There are fundamental differences b/w Hive and Cassandra. Hive is a Table-oriented, inspired by traditional RDBMS concepts. Data is structured into tables with schemas. Cassandra on the other hand is a wide-column store (key-value oriented). Data is organized into rows identified by a key, and columns within a row can be dynamic. Hive utilizes Batch-oriented analytics over large, historical datasets. Cassandra is optimized for high-write throughput, fast reads, and real-time data scenarios.
 
-**Performance and Scalability Analysis**
-
-A thorough comparison of Hive’s performance with traditional RDBMS and Apache Cassandra will highlight the distinct advantages and potential limitations of Hive in handling large-scale data sets, focusing on scalability, efficiency, and throughput.
-
-**Hands-on Data Warehousing Experience:**
-
-The project serves as a practical application of data warehousing principles in the context of big data, preparing us for real-world scenarios where large-scale data management, processing, and analytics are crucial.
-
-Through this project, we aim to replicate and enhance the structured data model from traditional databases in Hive, deepening our understanding of big data operations and improving our skills in data architecture for advanced data-driven decision-making.
 
 ## Section: II Schema Implementation in Hive
 
