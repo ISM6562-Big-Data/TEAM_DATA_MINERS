@@ -2,7 +2,7 @@
 ## Section: I Introduction
 **Introduction to Apache Hive**
 
-Apache Hive is a robust data warehousing solution built atop the Hadoop ecosystem, originally developed by Facebook (2008). Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop Distributed File System. HiveQL syntactically is similar to SQL allowing SQL-knowledgeable users to transition into big data roles. HiveQL converts the queries into MapReduce jobs, making it ideal for querying data in distributed environment.  
+Apache Hive is a robust data warehousing solution built atop the Apache Hadoop ecosystem, originally developed by Facebook (2008). Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop Distributed File System. HiveQL syntactically is similar to SQL allowing SQL-knowledgeable users to transition into big data roles. HiveQL converts the queries into MapReduce jobs, making it ideal for querying data in distributed environment.  
 
 **Overview of Apache Hive**
 
@@ -14,11 +14,11 @@ Handling big data involves challenges like managing large volumes of data, ensur
 
 **Purpose of Implementing RDBMS Schema in Hive**
 
-The project's goal is to translate a traditional RDBMS schema into Apache Hive, providing a hands-on exploration of Hive's data warehousing capabilities within a big data context. This exercise is crafted to yield comprehensive learning outcomes
+The project's goal is to translate a traditional RDBMS schema into Apache Hive, providing a hands-on exploration of Hive's data warehousing capabilities using Cloudera supported Hive environment.
 
 **Schema Adaptation and Optimization:**
 
-**Transition from RDBMS to Hive:** We aim to understand how relational schemas can be adapted for big data environments, including necessary modifications for Hive optimization. 
+**Transition from RDBMS to Hive:** The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. The specialized functions of SQL are not supported in Hive. For instance, SELECT TOP 10 From TableName does not have a parallel in Hive, or when it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
 
 **Optimization Techniques:**
 We will explore strategies such as partitioning and bucketing, which are crucial for improving data management and query performance in Hive.
