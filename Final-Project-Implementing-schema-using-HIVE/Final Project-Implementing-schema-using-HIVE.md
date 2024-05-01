@@ -31,18 +31,14 @@ There are fundamental differences b/w Hive and Cassandra. Hive is a Table-orient
 
 ## Section: II Schema Implementation in Hive
 
-File needs to be added in to HDFS 
-
-### Implementing RDBMS schema into Hive
-When moving from a traditional RDBMS to Hive, it's essential to get acquainted with the Hive ecosystem and its query language, HiveQL. In this section, the concentration was on setting up the Passenger table as an example to demonstrate how to implement a typical table structure within Hive.
-
+Similar to RDBMS schema, Hive requires a table schema to be first updated in Hive prior to uploading the data. However, the data format may or may not be similar to that in the RDBMS schema.
 #### Table: Passenger
 
 **Process Outline:**
 
-**Defining the Schema:** We started by identifying the necessary columns and data types based on our RDBMS schema. In the Hive context, we need to consider the data types that Hive supports, which might differ slightly from traditional SQL databases.
+**STEP 1: Defining the Schema:** 
 
-**Table Creation:** Using the Hive interface, we defined the Passenger table. Here's the HiveQL statement that encapsulates our table definition
+Using the Apache Hive interface, we defined the tables in HiveQL. Here's the Passanger Table HiveQL statement that encapsulates the table definition:
 
 ```
 CREATE TABLE Passenger (
@@ -61,9 +57,10 @@ FIELDS TERMINATED BY ','
 STORED AS TEXTFILE;
 
 ```
-This statement sets up a table that matches the columns of the RDBMS schema. We have chosen a text-based storage format, using commas as delimiters, which is frequently used for importing data from CSV files.
+This statement sets up a table that matches the columns of the RDBMS schema. A text-based storage format is choosen, using commas as delimiters, which is frequently used for importing data from CSV files.
 
-**Importing Data:**  With the structure in place, we imported the data from a CSV file into Hive. The interface allowed us to specify the delimiter and preview the data import to ensure accuracy.
+**STEP 2: Populating the Database:**  
+With the schema structure defined in Hive, the next step is importing the data from a CSV file into Hive. The HiveQL interface allows to specify the delimiter and preview the data import for accuracy.
 
 [Passenger Data File](data/Passenger.csv)
 
@@ -81,16 +78,16 @@ ALTER TABLE passenger CLUSTERED BY (userID)
 INTO 10 BUCKETS;
 ```
 
-**Verification:** After importing the data, we executed sample queries to validate the integrity and correctness of the data within the Passenger table.
+**STEP 3: Verification:** 
+After populating the database, sample queries were executed to validate the integrity and correctness of the data within the tables.
 
-**Challenges Overcome:**
+**Challenges:**
 
-One challenge was ensuring that the data types chosen in HiveQL matched the data from our CSV file. Incorrect data types can result in errors or loss of precision.
+1) Data format types chosen in HiveQL must match the data from our CSV file. Incorrect data types can result in errors or loss of precision.
 
-Another was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
+2) Another challenge is was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
 
 #### Table: Car
-
 
 **Process Outline:**
 This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
