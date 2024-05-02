@@ -597,7 +597,7 @@ The project of implementing an RDBMS schema in Hive was both challenging and enl
 
 ## Section: VI Conclusion
 
-The project allowed us to deeply explore Apache Hive's capabilities and limitations within the context of big data warehousing. The hands-on experience has been invaluable in teaching us about the architectural considerations and performance optimizations necessary for effectively utilizing Hive in real-world data warehousing scenarios.
+The project allowed explores Apache Hive's capabilities and limitations within the context of big data warehousing and big data analysis. 
 
 **Insights Gained:** We have come to appreciate Hive's role in big data analytics, particularly its robust handling of large-scale data analysis and its integration with the Hadoop ecosystem.
 
