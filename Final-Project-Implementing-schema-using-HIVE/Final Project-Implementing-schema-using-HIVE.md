@@ -38,7 +38,7 @@ Similar to RDBMS schema, Hive requires a table schema to be first updated in Hiv
 
 **STEP 1: Defining the Schema:** 
 
-Using the Apache Hive interface, we defined the tables in HiveQL. Here's the Passanger Table HiveQL statement that encapsulates the table definition:
+Using the Apache Hive interface, we defined the tables in HiveQL. Here's the Passenger Table HiveQL statement that encapsulates the table definition:
 
 ```
 CREATE TABLE Passenger (
@@ -145,15 +145,10 @@ Post-import, we conducted a series of queries to confirm the integrity and accur
 
 #### Table: Car Location
 
-**Process Outline:**
-
-Here we  focus on constructing the CarLocation table within the Hive data warehouse. This process underscores our ability to translate and manage geospatial data, crucial for dynamic querying and analytics within our domain.
-
 **Schema Design:**
-We began by crafting a schema that captures the real-time locations of cars, essential for tracking and deployment in transportation networks. The design process involved defining the table's structure to include identifiers and geographic coordinates.
+The schema captures the real-time locations of cars, essential for tracking and deployment in transportation networks. Therefore, the design process involves defining the table's structure to include identifiers and geographic coordinates.
 
 **HiveQL Table Definition:**
-We formulated the following HiveQL command to define the CarLocation table
 ```
 CREATE TABLE CarLocation (
     carlocationID STRING,
@@ -169,7 +164,7 @@ STORED AS TEXTFILE;
 This command constructs a table ready to ingest the location data, with each field delineated by a comma, in keeping with the CSV format of our incoming data file.
 
 **Data Import from CSV:**
-The subsequent stage involved importing the location data from a CSV file housed in HDFS. This process is streamlined by the Hive interface, which simplifies data loading while ensuring the fidelity of the data to our defined schema.
+The subsequent stage involved importing the location data from a CSV file housed in HDFS. This process is streamlined by the Hive interface, which simplifies data loading while ensuring the fidelity of the data to the defined schema.
 
 [Car Location Data File](data/CarLocation.csv)
 
@@ -188,7 +183,7 @@ INTO 10 BUCKETS;
 ```
 
 **Validation and Integrity Checks:**
-Post-import, we engaged in rigorous data validation efforts, querying the CarLocation table to verify the consistency and accuracy of the data importation process.
+Post-import, data upload validation checks are performed by querying the CarLocation table to verify the consistency and accuracy of the imported data.
 
 **Rationale and Considerations:**
 
@@ -200,18 +195,13 @@ Post-import, we engaged in rigorous data validation efforts, querying the CarLoc
 
 **Challenges Addressed:**
 
-**Geospatial Data Handling:** One of the challenges we navigated was the effective representation and storage of geospatial data, which often requires precise data types and storage considerations.
+**Geospatial Data Handling:** One of the challenges was the effective representation and storage of geospatial data (lattitude and longitude), which often requires precise data types and storage considerations.
 
 **Data Import Workflow:** Importing data from CSV and ensuring its correctness in Hive presented a learning curve, necessitating attention to detail in schema mapping and data transformation.
 
 #### Table: Driver
 
-The Driver table is a key part of our transportation data model in Hive, designed to store detailed information about drivers, crucial for both operational management and analytical purposes.
-
-**Process Outline:**
-
-**Designing the Schema:**
-We identified the essential attributes of a driver that need to be captured, based on our RDBMS schema and the nature of the queries we anticipate.
+The Driver table is a key part of our transportation data model, designed to store detailed information about drivers. This table is crucial for both operational management and analytical purposes.
 
 **HiveQL Table Definition:**
 The following HiveQL statement was crafted to define the Driver table in our Hive database.
@@ -234,7 +224,7 @@ This HiveQL command outlines the structure of the Driver table, indicating the u
 
 **Data Import from CSV:**
 
-We proceeded with the data import process by selecting our CSV file located within the HDFS, specifying the file path and ensuring that the import data checkbox was selected. This imports the data into the Driver table post-creation.
+The Hive database is populated using data from the CSV file located within the HDFS. The file path is specified in the interface to import the data. This imports the data into the Driver table post-creation.
 
 [Driver Data File](data/Driver.csv)
 
@@ -253,35 +243,34 @@ INTO 10 BUCKETS;
 ```
 
 **Data Verification:**
-After the import was completed, a series of data integrity checks were performed. We ran sample queries to ensure that the data was accurately reflected in Hive and that there were no discrepancies from the source CSV.
+After the import was completed, a series of data integrity checks are performed. Sample queries are run to ensure that the data import in Hive was successful. 
 
 **Rationale for Data Types and Structure:**
 
-1. We chose STRING for most fields to ensure that all textual data, including potentially alphanumeric identifiers, are accurately captured.
+1. STRING format is specified for most types of data-fields to ensure that all text based data, is accurately captured.
    
-2. FLOAT was selected for the overall_rating to represent driver ratings with decimal precision.
+2. FLOAT format is specified for the overall_rating field to represent driver ratings with decimal precision.
    
-3. The use of TEXTFILE format facilitates straightforward inspection and debugging of raw data.
+3. TEXTFILE file format is specified to allow for straightforward inspection and debugging of raw data.
 
 
 **Challenges Encountered:**
 
-**Ensuring Data Type Compatibility:**  Matching the CSV data types with those supported by Hive and ensuring accurate data representation was a key challenge.
+**Ensuring Data Type Compatibility:**  CSV data must match the data type specified in Hive a key challenge.
 
-**Data Quality Assurance:**  Post-import, we needed to validate the data quality, which included checking for any import errors or data corruption.
+**Data Quality Assurance:**  Post-import, data validation to check the data quality, which included checking for any import errors or data corruption is of paramount importance.
 
 #### Table: Request
 
-This table is pivotal for tracking user requests and managing the dispatch system within our transportation data model.
+This table is pivotal for tracking user requests and managing the dispatch system within the transportation data model for the Uber application schema.
 
-**Process Outline:**
 
 **Schema Definition:**
 
-We drafted a schema that details user ride requests, incorporating fields for identification, ride type, pickup and drop-off coordinates, and other relevant information.
+The schema contains fields like user ride requests, user identification, ride type, pickup and drop-off location coordinates, and other relevant information for trip request information.
 
 **HiveQL Table Construction:**
-We used the following HiveQL statement to create the Request table, which aligns with our designated data structure
+The following HiveQL statement to create the Request table is used:
 
 ```
 CREATE TABLE Request (
@@ -304,7 +293,7 @@ This command defines the table in Hive with the appropriate data types and desig
 
 **CSV Data Import:**
 
-We imported the data from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
+The data is imported from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
 
 [Request Data File](data/Request.csv)
 
@@ -324,26 +313,26 @@ INTO 10 BUCKETS;
 
 **Data Integrity Assurance:**
 
-Post-import, we executed validation queries against the Request table. This step confirmed the accurate representation of our data within Hive and ensured that the import was successful without any loss or corruption of data.
+Post-import, data validation checks are performed on the Request table. This step confirmed the accurate representation of our data within Hive.
 
 
 **Rationale for Data Types and Structure:**
 
-1. The STRING type was chosen for identifiers and addresses to handle variable-length text.
+1. The STRING format type was chosen for identifiers and addresses to allow for variable-length text.
    
-2.  FLOAT was selected for latitude and longitude to accommodate geographic coordinates with the required precision.
+2.  FLOAT format type is specified for latitude and longitude to accommodate geographic coordinates with the required precision.
  
-3. TINYINT is suitable for the number of seats, which would typically be a small number and doesn't necessitate a larger integer type.
+3. TINYINT is specified for the number of seats, which would typically be a small number and doesn't necessitate a larger integer data type.
 
 **Challenges Addressed:**
 
-**Schema-Data Compatibility:** Careful mapping between the schema and the CSV data was crucial to prevent type mismatches and data import errors.
+**Schema-Data Compatibility:** Careful mapping between the schema and the CSV data is crucial to prevent type mismatches and data import errors.
 
-**Data Quality Verification:**  After the data import, we meticulously verified the quality to ensure it met our accuracy standards. 
+**Data Quality Verification:**  After the data import, data quality checks are important to ensure the data populated in the database met our accuracy standards. 
 
 #### Table: Request To Driver
 
- The Request_to_Driver table forms a key link between the service requests by users and the drivers who fulfill them. This table is essential for understanding and optimizing the assignment process in our transportation model.
+The Request_to_Driver table is a key link between the service requests by users and the drivers. This table is essential for understanding and optimizing the assignment process in the transportation model.
 
 **Process Outline:**
 
@@ -352,8 +341,6 @@ Post-import, we executed validation queries against the Request table. This step
 This table is designed to track which driver accepted which request. Fields include unique identifiers for the request, the driver, and a status indicator for acceptance.
 
 **HiveQL Table Definition:**
-We crafted the following HiveQL statement to accurately define the Request_to_Driver table
-
 ```
 CREATE TABLE Request_to_Driver (
     requestdriverID STRING,
@@ -369,7 +356,7 @@ STORED AS TEXTFILE;
 This creates a Hive table structured to capture relationships between ride requests and drivers, facilitating the analysis of driver response patterns and request fulfillment rates.
 
 **CSV Data Loading:**
-We loaded the data from a CSV file, ensuring each column corresponded correctly to the data types defined in the Hive table.
+The data from a CSV file is uploaded using the Hive interface, ensuring each column corresponded correctly to the data types defined in the Hive table.
 
 [Request To Driver Data File](data/Request_to_Driver.csv)
 
@@ -389,11 +376,11 @@ INTO 10 BUCKETS;
 
 **Data Integrity Validation:**
 
-Following the import, we conducted data integrity checks by querying the table. This step is crucial for ensuring that the imported data is accurate and properly formatted, reflecting true associations between requests and drivers.
+Following the import, the data integrity query checks are performed on the table. This step is crucial for ensuring that the imported data is accurate and properly formatted.
 
 **Considerations and Rationale:**
 
-1.The STRING data type for identifiers provides the flexibility to handle alphanumeric data which is often used in real-world applications for IDs.
+1.The STRING format data-type is specified for identifiers. This allows flexibility to handle alphanumeric data which is often used in real-world applications for IDs.
 
 2.The BOOLEAN type for the is_accepted field allows us to store true/false values effectively, representing whether a driver has accepted a request.
 
