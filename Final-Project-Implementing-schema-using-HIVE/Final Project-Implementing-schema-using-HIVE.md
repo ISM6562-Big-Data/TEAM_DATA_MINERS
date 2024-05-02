@@ -12,13 +12,9 @@ Hive is tailored for handling structured data on HDFS (Hadoop Distributed File S
 
 Handling big data involves challenges like managing large volumes of data, ensuring quick data processing, and accommodating various data types. Hive addresses these through its ability to manage petabytes of data and its scalable architecture, which supports efficient parallel processing across multiple servers.
 
-**Purpose of Implementing RDBMS Schema in Hive**
+**Project Purpose: Hive Implementation**
 
-The project's goal is to translate a traditional RDBMS schema into Apache Hive, providing a hands-on exploration of Hive's data warehousing capabilities using Cloudera supported Hive environment.
-
-**Schema Adaptation and Optimization:**
-
-**Transition from RDBMS to Hive:** The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. The specialized functions of SQL are not supported in Hive. For instance, SQL statement SELECT TOP 10 From TableName does not have a parallel in Hive, or when it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
+The project's goal is to translate a traditional RDBMS schema and RDBMS queries into Apache Hive query language. This further helps in obtaining hands-on experience of Hive's data warehousing capabilities using Cloudera supported Hive environment.
 
 **Optimization Techniques:**
 Query optimization techniques include bucketing based on hash function, partitioning based on column values, join optimization like placing larger table first, denormalization of data by avoiding joins, allocating required memory for the map-reduce tasks based on the data size, etc.   
@@ -30,15 +26,10 @@ There are fundamental differences b/w Hive and Cassandra. Hive is a Table-orient
 
 
 ## Section: II Schema Implementation in Hive
-
 Similar to RDBMS schema, Hive requires a table schema to be first updated in Hive prior to uploading the data. However, the data format may or may not be similar to that in the RDBMS schema.
-#### Table: Passenger
 
-**Process Outline:**
-
-**STEP 1: Defining the Schema:** 
-
-Using the Apache Hive interface, we defined the tables in HiveQL. Here's the Passenger Table HiveQL statement that encapsulates the table definition:
+### HiveQL Implementation Steps (Create Tables and Data Type Choices):
+A sample table using the Create Statement in Hive is shown below (note, for the current project purpose, Cloudera Hive interface is used to upload the data into the Hive Database).
 
 ```
 CREATE TABLE Passenger (
@@ -59,8 +50,11 @@ STORED AS TEXTFILE;
 ```
 This statement sets up a table that matches the columns of the RDBMS schema. A text-based storage format is choosen, using commas as delimiters, which is frequently used for importing data from CSV files.
 
-**STEP 2: Populating the Database:**  
+**Populating the Database:**  
 With the schema structure defined in Hive, the next step is importing the data from a CSV file into Hive. The HiveQL interface allows to specify the delimiter and preview the data import for accuracy.
+
+#### Table: Passenger
+This table holds all the passenger information. For instance, passenger name, location, ratings, etc.
 
 [Passenger Data File](data/Passenger.csv)
 
@@ -78,45 +72,8 @@ ALTER TABLE passenger CLUSTERED BY (userID)
 INTO 10 BUCKETS;
 ```
 
-**STEP 3: Verification:** 
-After populating the database, sample queries were executed to validate the integrity and correctness of the data within the tables.
-
-**Challenges:**
-
-1) Data format types chosen in HiveQL must match the data from our CSV file. Incorrect data types can result in errors or loss of precision.
-
-2) Another challenge is was dealing with the nuances of Hive's data import mechanisms, particularly the handling of different file formats and delimiters.
-
-#### Table: Car
-
-**Process Outline:**
-This step is a pivotal transition from theory to practice in managing structured data within a big data ecosystem.
-
-**Defining the Table:**
-The Car table was conceived to encapsulate the various attributes of vehicles in our dataset. We commenced by defining the schema in the Hive Metastore, specifying column names and types that reflect our data model.
-
-**Table Creation in HiveQL:**
-Leveraging HiveQL, we executed the following statement to create the Car table, with consideration for Hive's data types and the nature of our data
-
-```
-CREATE TABLE Car (
-    car_id STRING,
-    car_vin_no STRING,
-    plate_number STRING,
-    make STRING,
-    model STRING,
-    seats TINYINT,
-    ubertype STRING,
-    driverID STRING
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-```
-This creates a new table with a structure ready to accommodate the CSV data we intended to import, denoting a comma as the field delimiter consistent with our data format.
-
-**Data Import:**
-With the structure in place, we initiated the data import process by selecting the CSV file from HDFS. This file was pre-validated to ensure compatibility with our table's schema, both in terms of content and format.
+#### Table: Car 
+This table holds all the driver car information. For instance, car make, model, vin, etc.
 
 [Car Data File](data/Car.csv)
 
@@ -134,37 +91,8 @@ ALTER TABLE car CLUSTERED BY (car_id)
 INTO 10 BUCKETS;
 ```
 
-**Data Verification:**
-Post-import, we conducted a series of queries to confirm the integrity and accuracy of the data. This step was essential to ensure that the data loaded into Hive was free from any import-related anomalies.
-
-**Challenges Encountered:**
-
-**Schema Mapping:** Aligning the CSV data types with those available in Hive required careful consideration to avoid data type mismatches that could lead to errors during data loading.
-
-**Data Validation:** Ensuring that the imported data is correctly representing the original source necessitated a meticulous validation process.
-
 #### Table: Car Location
-
-**Schema Design:**
 The schema captures the real-time locations of cars, essential for tracking and deployment in transportation networks. Therefore, the design process involves defining the table's structure to include identifiers and geographic coordinates.
-
-**HiveQL Table Definition:**
-```
-CREATE TABLE CarLocation (
-    carlocationID STRING,
-    carID STRING,
-    current_lat FLOAT,
-    current_long FLOAT
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-
-```
-This command constructs a table ready to ingest the location data, with each field delineated by a comma, in keeping with the CSV format of our incoming data file.
-
-**Data Import from CSV:**
-The subsequent stage involved importing the location data from a CSV file housed in HDFS. This process is streamlined by the Hive interface, which simplifies data loading while ensuring the fidelity of the data to the defined schema.
 
 [Car Location Data File](data/CarLocation.csv)
 
@@ -181,51 +109,8 @@ Query to add clusting buckets for carLocation table
 ALTER TABLE carLocation CLUSTERED BY (carid)
 INTO 10 BUCKETS;
 ```
-
-**Validation and Integrity Checks:**
-Post-import, data upload validation checks are performed by querying the CarLocation table to verify the consistency and accuracy of the imported data.
-
-**Rationale and Considerations:**
-
-1. Selecting TEXTFILE for storage was influenced by the direct import from a CSV format and allows for straightforward data debugging and manual review if needed.
-
-2. The data types chosen, such as STRING for identifiers and FLOAT for latitude and longitude, accommodate the necessary precision for geospatial data without incurring the storage overhead of more complex types.
-
-3. The use of commas to separate fields reflects our CSV source file, ensuring congruence between the data format and Hive's expectations.
-
-**Challenges Addressed:**
-
-**Geospatial Data Handling:** One of the challenges was the effective representation and storage of geospatial data (lattitude and longitude), which often requires precise data types and storage considerations.
-
-**Data Import Workflow:** Importing data from CSV and ensuring its correctness in Hive presented a learning curve, necessitating attention to detail in schema mapping and data transformation.
-
 #### Table: Driver
-
 The Driver table is a key part of our transportation data model, designed to store detailed information about drivers. This table is crucial for both operational management and analytical purposes.
-
-**HiveQL Table Definition:**
-The following HiveQL statement was crafted to define the Driver table in our Hive database.
-
-```
-CREATE TABLE Driver (
-    driverID STRING,
-    first_name STRING,
-    last_name STRING,
-    overall_rating FLOAT,
-    gender STRING,
-    mobile_number STRING,
-    email STRING
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-```
-This HiveQL command outlines the structure of the Driver table, indicating the use of commas as field separators, in line with the CSV format of our data.
-
-**Data Import from CSV:**
-
-The Hive database is populated using data from the CSV file located within the HDFS. The file path is specified in the interface to import the data. This imports the data into the Driver table post-creation.
-
 [Driver Data File](data/Driver.csv)
 
 ![alt text](images/createDriverTableStep01.png)
@@ -242,58 +127,9 @@ ALTER TABLE driver CLUSTERED BY (driverid)
 INTO 10 BUCKETS;
 ```
 
-**Data Verification:**
-After the import was completed, a series of data integrity checks are performed. Sample queries are run to ensure that the data import in Hive was successful. 
-
-**Rationale for Data Types and Structure:**
-
-1. STRING format is specified for most types of data-fields to ensure that all text based data, is accurately captured.
-   
-2. FLOAT format is specified for the overall_rating field to represent driver ratings with decimal precision.
-   
-3. TEXTFILE file format is specified to allow for straightforward inspection and debugging of raw data.
-
-
-**Challenges Encountered:**
-
-**Ensuring Data Type Compatibility:**  CSV data must match the data type specified in Hive a key challenge.
-
-**Data Quality Assurance:**  Post-import, data validation to check the data quality, which included checking for any import errors or data corruption is of paramount importance.
-
 #### Table: Request
-
 This table is pivotal for tracking user requests and managing the dispatch system within the transportation data model for the Uber application schema.
 
-
-**Schema Definition:**
-
-The schema contains fields like user ride requests, user identification, ride type, pickup and drop-off location coordinates, and other relevant information for trip request information.
-
-**HiveQL Table Construction:**
-The following HiveQL statement to create the Request table is used:
-
-```
-CREATE TABLE Request (
-    requestID STRING,
-    ride_type STRING,
-    pickup_lat FLOAT,
-    pickup_long FLOAT,
-    pickup_address STRING,
-    drop_lat FLOAT,
-    drop_long FLOAT,
-    seats TINYINT,
-    userID STRING
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-
-```
-This command defines the table in Hive with the appropriate data types and designates a comma as the field separator.
-
-**CSV Data Import:**
-
-The data is imported from our CSV file located in the HDFS. The file path was specified, and the import data option was checked to ensure that the table was populated with the incoming data.
 
 [Request Data File](data/Request.csv)
 
@@ -311,52 +147,11 @@ ALTER TABLE Request CLUSTERED BY (requestid)
 INTO 10 BUCKETS;
 ```
 
-**Data Integrity Assurance:**
-
-Post-import, data validation checks are performed on the Request table. This step confirmed the accurate representation of our data within Hive.
-
-
-**Rationale for Data Types and Structure:**
-
-1. The STRING format type was chosen for identifiers and addresses to allow for variable-length text.
-   
-2.  FLOAT format type is specified for latitude and longitude to accommodate geographic coordinates with the required precision.
- 
-3. TINYINT is specified for the number of seats, which would typically be a small number and doesn't necessitate a larger integer data type.
-
-**Challenges Addressed:**
-
-**Schema-Data Compatibility:** Careful mapping between the schema and the CSV data is crucial to prevent type mismatches and data import errors.
-
-**Data Quality Verification:**  After the data import, data quality checks are important to ensure the data populated in the database met our accuracy standards. 
-
 #### Table: Request To Driver
-
 The Request_to_Driver table is a key link between the service requests by users and the drivers. This table is essential for understanding and optimizing the assignment process in the transportation model.
 
-**Process Outline:**
-
-**Schema Designing:**
-
-This table is designed to track which driver accepted which request. Fields include unique identifiers for the request, the driver, and a status indicator for acceptance.
-
-**HiveQL Table Definition:**
-```
-CREATE TABLE Request_to_Driver (
-    requestdriverID STRING,
-    driverID STRING,
-    requestID STRING,
-    is_accepted BOOLEAN
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-
-```
 This creates a Hive table structured to capture relationships between ride requests and drivers, facilitating the analysis of driver response patterns and request fulfillment rates.
 
-**CSV Data Loading:**
-The data from a CSV file is uploaded using the Hive interface, ensuring each column corresponded correctly to the data types defined in the Hive table.
 
 [Request To Driver Data File](data/Request_to_Driver.csv)
 
@@ -374,56 +169,8 @@ ALTER TABLE request_to_driver CLUSTERED BY (requestid)
 INTO 10 BUCKETS;
 ```
 
-**Data Integrity Validation:**
-
-Following the import, the data integrity query checks are performed on the table. This step is crucial for ensuring that the imported data is accurate and properly formatted.
-
-**Considerations and Rationale:**
-
-1.The STRING format data-type is specified for identifiers. This allows flexibility to handle alphanumeric data which is often used in real-world applications for IDs.
-
-2.The BOOLEAN type for the is_accepted field allows us to store true/false values effectively, representing whether a driver has accepted a request.
-
-**Challenges Tackled:**
-
-**Complex Data Relationships:**  Ensuring that the data imported reflects the many-to-many relationships inherent in ride requests and driver assignments.
-
-**Data Type Mappings:**  Mapping the boolean values correctly from CSV to Hive, given that CSV does not have a native boolean type, required some preprocessing of the data.
-
 #### Table: Trip
-
 This table is a significant entity that holds detailed records of each trip, encompassing aspects such as timings, duration, ratings, and fare, which are critical for operational analysis and financial reporting.
-
-**Process Overview:**
-
-**Table Schema Definition:**
-
-We drafted a schema for the Trip table that captures a broad spectrum of trip-related data, designed to facilitate deep analytics on trip efficiency, driver performance, and revenue generation.
-
-**HiveQL Table Construction:**
-
-The following HiveQL statement was formulated for defining the Trip table
-
-```
-CREATE TABLE Trip (
-    trip_id STRING,
-    trip_date DATE,
-    duration STRING,
-    driver_rating INT,
-    passenger_rating INT,
-    driver_id STRING,
-    request_id STRING,
-    total_fare DOUBLE
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-STORED AS TEXTFILE;
-
-```
-This command is tailored to match our data structure, ensuring the field types are compatible with the data we will be importing from the CSV file.
-
-**Data Import from CSV:**
-We imported the trip data from the CSV file located in the HDFS, using Hive's data import functionality that matches the columns of our CSV with the table schema we defined.
 
 [Trip Data File](data/Trip.csv)
 
@@ -441,22 +188,15 @@ ALTER TABLE trip CLUSTERED BY (trip_id)
 INTO 10 BUCKETS;
 ```
 
-**Data Validation:**
-Post-import, validation queries were performed against the Trip table to ensure the integrity and completeness of the data imported into Hive.
+### Modifications and Rationale
 
-**Considerations and Rationale:**
+**Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
 
-1. STRING data type was chosen for trip_id, start_time, and request_id to accurately capture alphanumeric identifiers and timestamps.
-   
-2. INT and DOUBLE data types for ratings and fare, respectively, were selected to reflect the quantitative nature of this data while preserving precision for analytics.
-   
-**Challenges Encountered:**
+**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
 
-**Complex Data Formatting:** Dealing with various data formats, particularly for timestamps and duration, required careful planning during the import process.
 
-**Accuracy in Financial Data:** Ensuring that the total fare amounts were correctly imported and represented in Hive, given their importance for revenue analysis.
+## Section III: Data Manipulation and Querying:
 
-### HiveQL statements
 
 **Q1 Book a request to drivers** 
 
@@ -486,15 +226,6 @@ select * from Request_to_driver where requestdriverid in ('REQ304DR202','REQ304D
 ````
 ![alt text](images/Q1_2_result.png)
 
-
-**Modifications and Rationale**
-
-**Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
-
-**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
-
-
-## Section: III Data Manipulation and Querying
 
 **Q2: Update Driver response** 
 
@@ -548,63 +279,71 @@ group by driver_id,trip_date;
 ````
 ![alt text](images/Q5_result.png)
 
-### HiveQL queries to perform data insertion, updating, deletion, and retrieval
 
 ## Section: IV Performance Considerations
 
+### Hive Performance Variables
 In transitioning the RDBMS schema to Apache Hive, evaluating performance considerations is crucial. Hive, structured atop Hadoop, offers unique advantages and challenges when it comes to processing and managing big data. Here are the key performance factors we examined:
 
-**Query Execution Time:**
+#### Query Execution Time:
 
-**Batch Processing vs. Real-Time:** Hive is optimized for batch processing rather than real-time query execution. We analyzed the response times of typical queries and observed that while Hive handles complex analytical queries across large datasets efficiently, it is slower compared to traditional RDBMS for quick, transactional queries.
+**Batch Processing vs. Real-Time:** Hive is optimized for batch processing rather than real-time query execution. The response times of typical queries of Hive Queries running on large datasets is observed to be slower when compared to traditional RDBMS transactional queries. The likely reason is Hive first converts each query to a Map Reduce job and then aggregates the results.
 
-**Effect of Partitioning and Bucketing:** Implementing partitioning and bucketing significantly improved query performance by minimizing the amount of data read during query execution. This was particularly noticeable in data-heavy operations such as joins and aggregations.
+**Effect of Partitioning and Bucketing:** Implementing partitioning and bucketing significantly improves the query performance by minimizing the data reads during query execution. This is particularly noticeable in data-heavy operations such as joins and aggregations.
 
-**Data Throughput:**
+#### Data Throughput:
 
-**Handling Large Volumes:** One of Hive's strengths is its ability to process large volumes of data. We tested data throughput under various scenarios to determine how well Hive performs under load, especially when compared to RDBMS and Cassandra. Hive's performance shines in scenarios involving massive datasets that are well-partitioned.
+**Handling Large Volumes:** One of Hive's strengths is its ability to process large volumes of data. Hive's performance shines in scenarios involving massive datasets distributed across multiple nodes which are well-partitioned and adequatly bucketed.
 
-**Resource Utilization:**
+### Comparison with RDBMS and Cassandra:
 
-**MapReduce Efficiency:** Hive queries translate into MapReduce jobs, and thus the efficiency of these jobs heavily influences overall performance. We explored optimizations such as tuning the number of mappers and reducers to enhance resource utilization.
+#### RDBMS Comparison: 
+1) Unlike RDBMS systems, which may struggle with horizontal scaling, Hive scales out effectively due to its Hadoop backbone.
+2) ACID Properties are supported in RDBMS during query operation while Hive does not support all the ACID properties. Therefore, RDBMS systems provide robust transaction support, which Hive lacks. This affects the way updates and real-time data manipulations are handled, typically making RDBMS more suitable for transaction-heavy applications.
+3) Traditional RDBMS systems use a normalized data model, which reduces data redundancy but often requires complex joins that can degrade query performance in big data scenarios.
+4) RDBMS systems extensively use indexes to speed up query performance. While Hive also supports indexing, its implementation is not as mature or effective as that found in traditional databases.
 
-**Comparison with RDBMS and Cassandra:**
+#### Cassandra Comparison:
+1) Cassandra provides high availability and fault tolerance through data replication across multiple nodes, which is beneficial for read-heavy applications but introduces latency in writes.
+2) Cassandra excels in write performance due to its log-structured merge-tree storage mechanism, making it more suitable for write-intensive applications than Hive.
+3) Cassandra's column-family data model offers flexibility in handling semi-structured data and it can efficiently perform read/write operations without the overhead of joins. However, while Hive is schema-flexible to an extent, it requires careful planning of schema design to optimize performance.
 
-**Scalability:** Unlike RDBMS systems, which may struggle with horizontal scaling, Hive scales out effectively due to its Hadoop backbone.
-
-**Write Efficiency:** While Cassandra excels in write-heavy scenarios due to its design, Hive is less efficient in this respect but offers superior capabilities for complex analytical tasks over large datasets.
 
 ## Section: V Challenges and Learnings
-The project of implementing an RDBMS schema in Hive was both challenging and enlightening. Here are some of the key challenges we faced and the learnings we derived from them:
+The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. Here are some of the key challenges faced while working with Hive Query Language:
 
-**Schema Translation Complexity:**
+### Challenge: 
+The following challenges were faced during Hive query and database implementation:
 
-**Challenge:** Adapting relational schemas to fit Hive's model required thoughtful consideration, especially in deciding how to handle data normalization and denormalization.
+1) Translating relational database schemas and queries to work in accordance with Hive's requirements is challenging.
+2) Optimizing HiveQL queries for performance requires a different approach compared to traditional SQL queries.
 
-**Learning:** We learned the importance of schema design in big data environments and how strategic decisions like partitioning can impact performance.
+### Learning: 
+The following are the learnings from this exercise:
 
-**Query Optimization:**
+1) The specialized functions of SQL are not supported in Hive. For instance, SQL statement SELECT TOP 10 From TableName does not have a parallel in Hive.
+2) When it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
+3) There is no default autoincrement function of column values is in HiveQL.
+4) In the current version of Hive, constraints of Foreign Key and Primary Key are not supported.
+5) HiveQL uses Map Reduce functionality for all the queries, it distributes the queries to multiple nodes and then combines them using a reduce function to allow for parallel processing.
+6) Only SELECT queries were executed using the Map Reduce functionality. Other Hive Statements like SET to HIVEVAR did not go through Map Reduce route.
 
-**Challenge:** Optimizing HiveQL queries for performance required a different approach compared to traditional SQL queries.
-
-**Learning:** We gained practical experience in writing efficient HiveQL and understanding the underlying mechanics of how Hive processes these queries.
-
-**Handling Updates and Deletes:**
-
-**Challenge:** Hive’s traditional limitations on transactional features like updates and deletes posed difficulties.
-
-**Learning:** We explored Hive’s newer capabilities, such as ACID transactions and Merge statements, to handle data modifications more effectively.
+### Future Project Implications: 
+These learnings can help with improved Hive schema design, enhanced external data validation processes, and scalable data warehouses. For future projects, Hive can be used to query on large datasets, and it can be used to run large number of queries in batches on distrbuted data. 
 
 ## Section: VI Conclusion
 
-The project allowed explores Apache Hive's capabilities and limitations within the context of big data warehousing and big data analysis. 
+The current project explores Apache Hive's capabilities and limitations within the context of big data warehousing and big data analysis. 
 
-**Insights Gained:** We have come to appreciate Hive's role in big data analytics, particularly its robust handling of large-scale data analysis and its integration with the Hadoop ecosystem.
+**Key Outcomes:** The following are the key outcomes of the current project:
+1) Hive Database is prepared using Cloudera Hive Interface.
+2) Uber application data is uploaded on the Hive database.
+3) Several HiveQL queries are run to develop insights from the uploaded data.
+4) Hive queries are compared with SQL queries in terms of syntax, effeciency, and use cases.
+5) Use case of Hive queries, Cassandra, and SQL is clearly distinguished. 
 
-**Real-world Applications:**  The knowledge gained through this project enhances our ability to design and implement data solutions that are scalable, efficient, and suitable for the evolving needs of businesses handling large volumes of data.
+**Real-world Applications:**  Some of the real world applications where Hive is used as a data warehousing solution are Walmart, Visa, OCBC Bank, Visa, etc. Hive is popular with its map reduce architecture and distributed systems. Real world implementation of Hive is facing competion from Impala and robust Spark distribution infrastructure.
 
-**Comparative Reflection:** Comparing Hive with Cassandra and traditional RDBMS has provided us with a broader perspective on data management technologies, informing our future choices in selecting the right tool for specific data scenarios.
+**Comparative Reflection:** Cassandra is more popular with real time updated databases like Uber, Lyft. Cassandra requires well designed schema to perform queries. However, the silver lining for Cassandra is it provides ACID properties. 
 
-In conclusion, the project not only reinforced our understanding of data warehousing principles but also prepared us to tackle complex data challenges in our future careers, leveraging Apache Hive and other big data technologies
 
-## Section: VII Appendix
