@@ -344,6 +344,8 @@ The current project explores Apache Hive's capabilities and limitations within t
 
 **Real-world Applications:**  Some of the real world applications where Hive is used as a data warehousing solution are Walmart, Visa, OCBC Bank, Visa, etc. Hive is popular with its map reduce architecture and distributed systems. Real world implementation of Hive is facing competion from Impala and robust Spark distribution infrastructure.
 
-**Comparative Reflection:** Cassandra is more popular with real time updated databases like Uber, Lyft. Cassandra requires well designed schema to perform queries. However, the silver lining for Cassandra is it provides ACID properties. 
+**Comparative Reflection:** Cassandra is more popular with real time updated databases like Uber, Lyft. Cassandra requires well designed schema to perform queries. However, the silver lining for Cassandra is it provides ACID properties.
+
+This project has highlighted that the choice between Hive and Cassandra should be driven by specific application needs—Cassandra for scenarios demanding low latency operations and Hive for cost-effective, in-depth analytical processing on big data. 
 
 
