@@ -2,7 +2,7 @@
 ## Section: I Introduction
 **Introduction to Apache Hive**
 
-Apache Hive is a robust data warehousing solution built atop the Apache Hadoop ecosystem, originally developed by Facebook (2008). Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop Distributed File System. HiveQL syntactically is similar to SQL allowing SQL-knowledgeable users to transition into big data roles. HiveQL converts the queries into MapReduce jobs, making it ideal for querying data in distributed environment.  
+Apache Hive is a robust data warehousing solution built atop the Apache Hadoop ecosystem, originally developed by Facebook (2008). Hive facilitates easy querying, data summarization, and analysis of vast datasets distributed across a Hadoop Distributed File System. HiveQL syntactically is like SQL allowing SQL-knowledgeable users to transition into big data roles. HiveQL converts the queries into MapReduce jobs, making it ideal for querying data in a distributed environment.    
 
 **Overview of Apache Hive**
 
@@ -26,12 +26,12 @@ There are fundamental differences b/w Hive and Cassandra. Hive is a Table-orient
 
 
 ## Section: II Schema Implementation in Hive
-Similar to RDBMS schema, Hive requires a table schema to be first updated in Hive prior to uploading the data. However, the data format may or may not be similar to that in the RDBMS schema.
+Like RDBMS schema, Hive requires a table schema to be first updated in Hive prior to uploading the data. However, the data format may or may not be like that in the RDBMS schema.
 
 ### HiveQL Implementation Steps (Create Tables and Data Type Choices):
 A sample table using the Create Statement in Hive is shown below (note, for the current project purpose, Cloudera Hive interface is used to upload the data into the Hive Database).
 
-```
+````sql
 CREATE TABLE Passenger (
     requestID STRING,
     ride_type STRING,
@@ -47,11 +47,11 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE;
 
-```
-This statement sets up a table that matches the columns of the RDBMS schema. A text-based storage format is choosen, using commas as delimiters, which is frequently used for importing data from CSV files.
+````
+This statement sets up a table that matches the columns of the RDBMS schema. A text-based storage format is chosen, using commas as delimiters, which is frequently used for importing data from CSV files
 
 **Populating the Database:**  
-With the schema structure defined in Hive, the next step is importing the data from a CSV file into Hive. The HiveQL interface allows to specify the delimiter and preview the data import for accuracy.
+With the schema structure defined in Hive, the next step is importing the data from a CSV file into Hive. The HiveQL interface allows you to specify the delimiter and preview the data import for accuracy.
 
 #### Table: Passenger
 This table holds all the passenger information. For instance, passenger name, location, ratings, etc.
@@ -65,12 +65,12 @@ This table holds all the passenger information. For instance, passenger name, lo
 ![alt text](images/createPassengerTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for passenger table
+Query to add clustering buckets for passenger table
 
-```
+````sql
 ALTER TABLE passenger CLUSTERED BY (userID)
 INTO 10 BUCKETS;
-```
+````
 
 #### Table: Car 
 This table holds all the driver car information. For instance, car make, model, vin, etc.
@@ -84,12 +84,12 @@ This table holds all the driver car information. For instance, car make, model, 
 ![alt text](images/createCarTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for car table
+Query to add clustering buckets for car table
 
-```
+````sql
 ALTER TABLE car CLUSTERED BY (car_id)
 INTO 10 BUCKETS;
-```
+````
 
 #### Table: Car Location
 The schema captures the real-time locations of cars, essential for tracking and deployment in transportation networks. Therefore, the design process involves defining the table's structure to include identifiers and geographic coordinates.
@@ -103,12 +103,12 @@ The schema captures the real-time locations of cars, essential for tracking and 
 ![alt text](images/createCarLocationTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for carLocation table
+Query to add clustering buckets for carLocation table
 
-```
+````sql
 ALTER TABLE carLocation CLUSTERED BY (carid)
 INTO 10 BUCKETS;
-```
+````
 #### Table: Driver
 The Driver table is a key part of our transportation data model, designed to store detailed information about drivers. This table is crucial for both operational management and analytical purposes.
 [Driver Data File](data/Driver.csv)
@@ -120,12 +120,12 @@ The Driver table is a key part of our transportation data model, designed to sto
 ![alt text](images/createDriverTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for driver table
+Query to add clustering buckets for driver table
 
-```
+````sql
 ALTER TABLE driver CLUSTERED BY (driverid)
 INTO 10 BUCKETS;
-```
+````
 
 #### Table: Request
 This table is pivotal for tracking user requests and managing the dispatch system within the transportation data model for the Uber application schema.
@@ -140,12 +140,12 @@ This table is pivotal for tracking user requests and managing the dispatch syste
 ![alt text](images/createRequestTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for request table
+Query to add clustering buckets for request table
 
-```
+````sql
 ALTER TABLE Request CLUSTERED BY (requestid)
 INTO 10 BUCKETS;
-```
+````
 
 #### Table: Request To Driver
 The Request_to_Driver table is a key link between the service requests by users and the drivers. This table is essential for understanding and optimizing the assignment process in the transportation model.
@@ -162,12 +162,12 @@ This creates a Hive table structured to capture relationships between ride reque
 ![alt text](images/createRequestToDriverTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for request to driver table
+Query to add clustering buckets for request to driver table
 
-```
+````sql
 ALTER TABLE request_to_driver CLUSTERED BY (requestid)
 INTO 10 BUCKETS;
-```
+````
 
 #### Table: Trip
 This table is a significant entity that holds detailed records of each trip, encompassing aspects such as timings, duration, ratings, and fare, which are critical for operational analysis and financial reporting.
@@ -181,12 +181,12 @@ This table is a significant entity that holds detailed records of each trip, enc
 ![alt text](images/createTripTableStep03.png)
 
 **Alter Table**
-Query to add clusting buckets for trip table
+Query to add clustering buckets for trip table
 
-```
+````sql
 ALTER TABLE trip CLUSTERED BY (trip_id)
 INTO 10 BUCKETS;
-```
+````
 
 ### Modifications and Rationale
 
@@ -197,10 +197,13 @@ INTO 10 BUCKETS;
 
 ## Section III: Data Manipulation and Querying:
 
+Below are some HiveQL queries that could be used to in the application, and these highlight the insertion, updating and retrieval operation in Hive table
 
 **Q1 Book a request to drivers** 
 
-Assumption: Below variable definitions come from the app
+This query insert the user's Uber requests into the "*Request*" table and corresponding "*Request to Drive*" table
+
+*Assumption: Below variables are passed in from the app*
 
 ````sql
 SET hivevar:requestId = 'REQ304';
@@ -289,11 +292,11 @@ In transitioning the RDBMS schema to Apache Hive, evaluating performance conside
 
 **Batch Processing vs. Real-Time:** Hive is optimized for batch processing rather than real-time query execution. The response times of typical queries of Hive Queries running on large datasets is observed to be slower when compared to traditional RDBMS transactional queries. The likely reason is Hive first converts each query to a Map Reduce job and then aggregates the results.
 
-**Effect of Partitioning and Bucketing:** Implementing partitioning and bucketing significantly improves the query performance by minimizing the data reads during query execution. This is particularly noticeable in data-heavy operations such as joins and aggregations.
+**Effect of Partitioning and Bucketing:** Implementing partitioning and bucketing significantly improves query performance by minimizing the data reads during query execution. This is particularly noticeable in data-heavy operations such as joins and aggregations.
 
 #### Data Throughput:
 
-**Handling Large Volumes:** One of Hive's strengths is its ability to process large volumes of data. Hive's performance shines in scenarios involving massive datasets distributed across multiple nodes which are well-partitioned and adequatly bucketed.
+**Handling Large Volumes:** One of Hive's strengths is its ability to process large volumes of data. Hive's performance shines in scenarios involving massive datasets distributed across multiple nodes which are well-partitioned and adequately bucketed.
 
 ### Comparison with RDBMS and Cassandra:
 
@@ -306,11 +309,11 @@ In transitioning the RDBMS schema to Apache Hive, evaluating performance conside
 #### Cassandra Comparison:
 1) Cassandra provides high availability and fault tolerance through data replication across multiple nodes, which is beneficial for read-heavy applications but introduces latency in writes.
 2) Cassandra excels in write performance due to its log-structured merge-tree storage mechanism, making it more suitable for write-intensive applications than Hive.
-3) Cassandra's column-family data model offers flexibility in handling semi-structured data and it can efficiently perform read/write operations without the overhead of joins. However, while Hive is schema-flexible to an extent, it requires careful planning of schema design to optimize performance.
+3) Cassandra's column-family data model offers flexibility in handling semi-structured data, and it can efficiently perform read/write operations without the overhead of joins. However, while Hive is schema-flexible to an extent, it requires careful planning of schema design to optimize performance.
 
 
 ## Section: V Challenges and Learnings
-The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is similar to Structure Query Language with few exceptions. Here are some of the key challenges faced while working with Hive Query Language:
+The transition to Apache HiveQL does not require a steep learning curve as the Hive Query Language is like Structure Query Language with few exceptions. Here are some of the key challenges faced while working with Hive Query Language:
 
 ### Challenge: 
 The following challenges were faced during Hive query and database implementation:
@@ -325,11 +328,11 @@ The following are the learnings from this exercise:
 2) When it comes to updating the data in HiveQL one essentially replaces entire tables or partitions with updated data, like INSERT OVERWRITE to replace the existing table/partition with data from your staging table.
 3) There is no default autoincrement function of column values is in HiveQL.
 4) In the current version of Hive, constraints of Foreign Key and Primary Key are not supported.
-5) HiveQL uses Map Reduce functionality for all the queries, it distributes the queries to multiple nodes and then combines them using a reduce function to allow for parallel processing.
+5) HiveQL uses Map Reduce functionalities for all the queries, it distributes the queries to multiple nodes and then combines them using a reduce function to allow for parallel processing.
 6) Only SELECT queries were executed using the Map Reduce functionality. Other Hive Statements like SET to HIVEVAR did not go through Map Reduce route.
 
 ### Future Project Implications: 
-These learnings can help with improved Hive schema design, enhanced external data validation processes, and scalable data warehouses. For future projects, Hive can be used to query on large datasets, and it can be used to run large number of queries in batches on distrbuted data. 
+These learnings can help with improved Hive schema design, enhanced external data validation processes, and scalable data warehouses. For future projects, Hive can be used to query large datasets, and it can be used to run large number of queries in batches on distributed data. 
 
 ## Section: VI Conclusion
 
@@ -339,12 +342,12 @@ The current project explores Apache Hive's capabilities and limitations within t
 1) Hive Database is prepared using Cloudera Hive Interface.
 2) Uber application data is uploaded on the Hive database.
 3) Several HiveQL queries are run to develop insights from the uploaded data.
-4) Hive queries are compared with SQL queries in terms of syntax, effeciency, and use cases.
+4) Hive queries are compared with SQL queries in terms of syntax, efficiency, and use cases.
 5) Use case of Hive queries, Cassandra, and SQL is clearly distinguished. 
 
-**Real-world Applications:**  Some of the real world applications where Hive is used as a data warehousing solution are Walmart, Visa, OCBC Bank, Visa, etc. Hive is popular with its map reduce architecture and distributed systems. Real world implementation of Hive is facing competion from Impala and robust Spark distribution infrastructure.
+**Real-world Applications:**  Some of the real-world applications where Hive is used as a data warehousing solution are Walmart, Visa, OCBC Bank, Visa, etc. Hive is popular with its map reduce architecture and distributed systems. Real world implementation of Hive is facing competition from Impala and robust Spark distribution infrastructure.
 
-**Comparative Reflection:** Cassandra is more popular with real time updated databases like Uber, Lyft. Cassandra requires well designed schema to perform queries. However, the silver lining for Cassandra is it provides ACID properties.
+**Comparative Reflection:** Cassandra is more popular with real time updated databases like Uber and Lyft. Cassandra requires well designed schema to perform queries. However, the silver lining for Cassandra is it provides ACID properties.
 
 This project has highlighted that the choice between Hive and Cassandra should be driven by specific application needs—Cassandra for scenarios demanding low latency operations and Hive for cost-effective, in-depth analytical processing on big data. 
 
