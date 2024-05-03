@@ -199,7 +199,7 @@ INTO 10 BUCKETS;
 
 Below are some HiveQL queries that could be used to in the application, and these highlight the insertion, updating and retrieval operation in Hive table.
 
-### Find Query
+### Retrieval Query
 
 **Most common pickup locations**: This query provides the driver the high demand and commonly used pickup locations from the previous trip. ( Drive address is ignored in query for simplicity)   
 
@@ -286,7 +286,7 @@ select * from Request_to_driver where requestdriverid = 'REQ304DR201'
 
 ### Delete Queries
 
-**Delete car location**: This query will be used by the application to remove the car from the carlocation
+**Delete car location**: This query is used by the application to remove a given carlocationId from the carlocation table.
 
 ![alt text](images/Q6_0_result.png)
 
@@ -297,7 +297,7 @@ delete from carlocation where carlocationid='CL701';
 ````
 ![alt text](images/Q6_1_result.png)
 
-However for the current Hive version 1.1 a workaround with insert override statement was used to perform the equivalent delete operation. Below is the execution of the same.
+However, for the current Hive version 1.1 a workaround with insert override statement was used to perform the equivalent delete operation. Below is the execution of the same.
 
 ````sql
 INSERT OVERWRITE TABLE carlocation
