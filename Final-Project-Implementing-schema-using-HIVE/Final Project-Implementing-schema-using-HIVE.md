@@ -192,7 +192,7 @@ INTO 10 BUCKETS;
 
 **Partitioning** helps in optimizing query performance by reducing the amount of data scanned during query execution.
 
-**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together.
+**Bucketing**  improves join performance, a common operation in data warehousing by clustering data that will frequently be queried together. In the current project, a bucket of size 10 is used to improve the query performance. 
 
 
 ## Section III: Data Manipulation and Querying:
