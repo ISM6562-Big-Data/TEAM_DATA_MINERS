@@ -284,8 +284,27 @@ select * from Request_to_driver where requestdriverid = 'REQ304DR201'
 ![alt text](images/Q2_2_result.png)
 
 
+### Delete Queries
 
+**Delete car location**: This query will be used by the application to remove the car from the carlocation
 
+![alt text](images/Q6_0_result.png)
+
+Delete query is not supported in Hive version 1.1, below is the standard delete query which is supported in more recent versions of Hive
+
+````sql
+delete from carlocation where carlocationid='CL701';
+````
+![alt text](images/Q6_1_result.png)
+
+However for the current Hive version 1.1 a workaround with insert override statement was used to perform the equivalent delete operation. Below is the execution of the same.
+
+````sql
+INSERT OVERWRITE TABLE carlocation
+SELECT * FROM carlocation WHERE carlocationid <> 'CL701';
+````
+![alt text](images/Q6_2_result.png)
+![alt text](images/Q6_3_result.png)
 
 
 ## Section: IV Performance Considerations
